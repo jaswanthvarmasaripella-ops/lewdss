@@ -1,0 +1,176 @@
+{
+  "dataset_name": "dataset_v1_features",
+  "milestone": "Phase 2 (Dataset Construction)",
+  "total_samples": 576,
+  "positive_count": 144,
+  "background_count": 432,
+  "positive_to_background_ratio": "1:3.00",
+  "district_quotas": {
+    "Kodagu": 27,
+    "Idukki": 153,
+    "Wayanad": 54,
+    "East Sikkim": 28,
+    "West Sikkim": 55,
+    "East Khasi Hills": 115
+  },
+  "district_sample_counts": {
+    "0": {
+      "East Khasi Hills": 115,
+      "East Sikkim": 28,
+      "Idukki": 153,
+      "Kodagu": 27,
+      "Wayanad": 54,
+      "West Sikkim": 55
+    },
+    "1": {
+      "East Khasi Hills": 21,
+      "East Sikkim": 32,
+      "Idukki": 51,
+      "Kodagu": 9,
+      "Wayanad": 18,
+      "West Sikkim": 13
+    }
+  },
+  "sampler_summary": {
+    "total_target_quota": 432,
+    "total_sampled": 432,
+    "total_deficit": 0,
+    "seed": 42,
+    "min_dist_to_pos_km": 5.0,
+    "min_dist_to_bkg_km": 3.0,
+    "district_breakdown": {
+      "Kodagu": {
+        "target_quota": 27,
+        "sampled_count": 27,
+        "deficit": 0,
+        "attempts": 70,
+        "min_dist_to_pos_km": 5.0,
+        "min_dist_to_bkg_km": 3.0
+      },
+      "Idukki": {
+        "target_quota": 153,
+        "sampled_count": 153,
+        "deficit": 0,
+        "attempts": 1415,
+        "min_dist_to_pos_km": 5.0,
+        "min_dist_to_bkg_km": 3.0
+      },
+      "Wayanad": {
+        "target_quota": 54,
+        "sampled_count": 54,
+        "deficit": 0,
+        "attempts": 417,
+        "min_dist_to_pos_km": 5.0,
+        "min_dist_to_bkg_km": 3.0
+      },
+      "East Sikkim": {
+        "target_quota": 28,
+        "sampled_count": 28,
+        "deficit": 0,
+        "attempts": 1010,
+        "min_dist_to_pos_km": 5.0,
+        "min_dist_to_bkg_km": 3.0
+      },
+      "West Sikkim": {
+        "target_quota": 55,
+        "sampled_count": 55,
+        "deficit": 0,
+        "attempts": 621,
+        "min_dist_to_pos_km": 5.0,
+        "min_dist_to_bkg_km": 3.0
+      },
+      "East Khasi Hills": {
+        "target_quota": 115,
+        "sampled_count": 115,
+        "deficit": 0,
+        "attempts": 674,
+        "min_dist_to_pos_km": 5.0,
+        "min_dist_to_bkg_km": 3.0
+      }
+    }
+  },
+  "feature_columns": [
+    "sample_id",
+    "is_positive",
+    "event_id",
+    "event_date",
+    "lon",
+    "lat",
+    "district",
+    "region",
+    "match_type",
+    "elevation_m",
+    "slope_deg",
+    "rain_3d_mm",
+    "rain_7d_mm",
+    "rain_15d_mm",
+    "slope_max_1km",
+    "slope_p90_1km",
+    "elev_relief_1km",
+    "slope_max_3km",
+    "slope_p90_3km",
+    "elev_relief_3km",
+    "slope_max_5km",
+    "slope_p90_5km",
+    "elev_relief_5km",
+    "rain_3km_mean_3d",
+    "rain_3km_mean_7d",
+    "rain_3km_mean_15d",
+    "dem_available",
+    "rain_available"
+  ],
+  "validation_checks": {
+    "total_events": 576,
+    "dem_coverage": 576,
+    "dem_coverage_pct": 100.0,
+    "rain_coverage": 576,
+    "rain_coverage_pct": 100.0,
+    "elevation_min": 12.586188316345215,
+    "elevation_max": 5869.53857421875,
+    "elevation_mean": 1293.1115969452594,
+    "elevation_below_neg50": 0,
+    "slope_min": 0.0,
+    "slope_max": 64.87462951032492,
+    "slope_mean": 19.450423495025998,
+    "slope_above_85": 0,
+    "rain_3d_min": 0.0,
+    "rain_3d_max": 500.23333740234375,
+    "rain_3d_mean": 90.70639494351215,
+    "rain_3d_negative": 0,
+    "rain_7d_min": 0.0,
+    "rain_7d_max": 607.9016914367676,
+    "rain_7d_mean": 156.5231767487195,
+    "rain_7d_negative": 0,
+    "rain_15d_min": 0.0,
+    "rain_15d_max": 795.648401260376,
+    "rain_15d_mean": 263.7580434907642,
+    "rain_15d_negative": 0,
+    "match_type_counts": {
+      "in_polygon": 576
+    },
+    "district_counts": {
+      "Idukki": 204,
+      "East Khasi Hills": 136,
+      "Wayanad": 72,
+      "West Sikkim": 68,
+      "East Sikkim": 60,
+      "Kodagu": 36
+    }
+  },
+  "spatial_constraints": {
+    "polygon_containment": "strict in-polygon",
+    "min_dist_to_positive_km": 5.0,
+    "min_dist_to_background_km": 3.0
+  },
+  "temporal_protocol": {
+    "method": "date-paired co-occurrence",
+    "source": "historical district positive event dates",
+    "monsoon_months": "June 1 to September 30 (2004-2022)",
+    "rainfall_raster_check": "15-day CHIRPS crop window verified"
+  },
+  "reproducibility": {
+    "master_seed": 42,
+    "hash_algorithm": "deterministic"
+  },
+  "pu_learning_disclaimer": "Background points are unlabeled (s = 0), not confirmed negatives (y = 0). Model scores represent a Relative Landslide Susceptibility Index (RLSI), not calibrated absolute probabilities."
+}

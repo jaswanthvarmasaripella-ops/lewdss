@@ -1,0 +1,4330 @@
+{
+  "metadata": {
+    "title": "Phase 3 Model Experiment Results Manifest",
+    "project": "LEWDSS \u2014 SIH26001",
+    "execution_timestamp": "2026-10-22 12:33:11",
+    "elapsed_seconds": 126.91,
+    "master_random_seed": 42,
+    "dataset_rows": 576,
+    "positives": 144,
+    "background": 432,
+    "total_experiments_logged": 48,
+    "metric_disclaimer": "All metrics are evaluated against binary sampled background labels (s in {0, 1}). Background points are unlabeled landscape locations, NOT confirmed negatives. Scores represent a Relative Landslide Susceptibility Index (RLSI), NOT calibrated real-world probabilities."
+  },
+  "within_region_aggregates": {
+    "LogisticRegression": {
+      "FS1_Point": {
+        "n_within_region_folds": 6,
+        "pr_auc_mean": 0.2887,
+        "pr_auc_std": 0.1741,
+        "roc_auc_mean": 0.4571,
+        "roc_auc_std": 0.1252,
+        "recall_mean": 0.8048,
+        "recall_std": 0.2103,
+        "nominal_precision_mean": 0.2686,
+        "nominal_precision_std": 0.1296,
+        "nominal_f1_mean": 0.3927,
+        "nominal_f1_std": 0.1497,
+        "brier_score_mean": 0.2739,
+        "brier_score_std": 0.0314
+      },
+      "FS2_Zonal": {
+        "n_within_region_folds": 6,
+        "pr_auc_mean": 0.2724,
+        "pr_auc_std": 0.1539,
+        "roc_auc_mean": 0.4502,
+        "roc_auc_std": 0.0776,
+        "recall_mean": 0.8697,
+        "recall_std": 0.1795,
+        "nominal_precision_mean": 0.28,
+        "nominal_precision_std": 0.1349,
+        "nominal_f1_mean": 0.4107,
+        "nominal_f1_std": 0.1553,
+        "brier_score_mean": 0.3231,
+        "brier_score_std": 0.0919
+      },
+      "FS3_Full": {
+        "n_within_region_folds": 6,
+        "pr_auc_mean": 0.2777,
+        "pr_auc_std": 0.1518,
+        "roc_auc_mean": 0.4681,
+        "roc_auc_std": 0.0762,
+        "recall_mean": 0.8697,
+        "recall_std": 0.1795,
+        "nominal_precision_mean": 0.2788,
+        "nominal_precision_std": 0.1344,
+        "nominal_f1_mean": 0.4098,
+        "nominal_f1_std": 0.1551,
+        "brier_score_mean": 0.321,
+        "brier_score_std": 0.0874
+      }
+    },
+    "RandomForest": {
+      "FS1_Point": {
+        "n_within_region_folds": 6,
+        "pr_auc_mean": 0.3494,
+        "pr_auc_std": 0.1497,
+        "roc_auc_mean": 0.5214,
+        "roc_auc_std": 0.094,
+        "recall_mean": 0.3398,
+        "recall_std": 0.2396,
+        "nominal_precision_mean": 0.2603,
+        "nominal_precision_std": 0.2065,
+        "nominal_f1_mean": 0.2265,
+        "nominal_f1_std": 0.1209,
+        "brier_score_mean": 0.276,
+        "brier_score_std": 0.0458
+      },
+      "FS2_Zonal": {
+        "n_within_region_folds": 6,
+        "pr_auc_mean": 0.3147,
+        "pr_auc_std": 0.1812,
+        "roc_auc_mean": 0.4879,
+        "roc_auc_std": 0.1244,
+        "recall_mean": 0.1543,
+        "recall_std": 0.1018,
+        "nominal_precision_mean": 0.2249,
+        "nominal_precision_std": 0.23,
+        "nominal_f1_mean": 0.1452,
+        "nominal_f1_std": 0.0882,
+        "brier_score_mean": 0.2672,
+        "brier_score_std": 0.0427
+      },
+      "FS3_Full": {
+        "n_within_region_folds": 6,
+        "pr_auc_mean": 0.3373,
+        "pr_auc_std": 0.182,
+        "roc_auc_mean": 0.5241,
+        "roc_auc_std": 0.1201,
+        "recall_mean": 0.2826,
+        "recall_std": 0.2193,
+        "nominal_precision_mean": 0.2191,
+        "nominal_precision_std": 0.2459,
+        "nominal_f1_mean": 0.2105,
+        "nominal_f1_std": 0.1746,
+        "brier_score_mean": 0.2609,
+        "brier_score_std": 0.0395
+      }
+    }
+  },
+  "cross_region_transfer_summaries": {
+    "LogisticRegression": {
+      "FS1_Point": {
+        "Fold_TR1": {
+          "test_region": "Cross-Region Transfer (A -> B)",
+          "pr_auc": 0.23104662517157643,
+          "roc_auc": 0.448270584634221,
+          "recall": 0.45454545454545453,
+          "nominal_precision": 0.19736842105263158,
+          "nominal_f1": 0.27522935779816515,
+          "target_recall_met": false
+        },
+        "Fold_TR2": {
+          "test_region": "Cross-Region Transfer (B -> A)",
+          "pr_auc": 0.239182173637359,
+          "roc_auc": 0.44690992767915844,
+          "recall": 0.7051282051282052,
+          "nominal_precision": 0.24017467248908297,
+          "nominal_f1": 0.3583061889250814,
+          "target_recall_met": false
+        }
+      },
+      "FS2_Zonal": {
+        "Fold_TR1": {
+          "test_region": "Cross-Region Transfer (A -> B)",
+          "pr_auc": 0.2496892328577296,
+          "roc_auc": 0.4501071319253137,
+          "recall": 0.4696969696969697,
+          "nominal_precision": 0.2012987012987013,
+          "nominal_f1": 0.28181818181818186,
+          "target_recall_met": false
+        },
+        "Fold_TR2": {
+          "test_region": "Cross-Region Transfer (B -> A)",
+          "pr_auc": 0.22628234988676782,
+          "roc_auc": 0.4774819197896121,
+          "recall": 0.44871794871794873,
+          "nominal_precision": 0.23972602739726026,
+          "nominal_f1": 0.3125,
+          "target_recall_met": false
+        }
+      },
+      "FS3_Full": {
+        "Fold_TR1": {
+          "test_region": "Cross-Region Transfer (A -> B)",
+          "pr_auc": 0.2383192276436242,
+          "roc_auc": 0.4425313743495562,
+          "recall": 0.4090909090909091,
+          "nominal_precision": 0.1875,
+          "nominal_f1": 0.2571428571428571,
+          "target_recall_met": false
+        },
+        "Fold_TR2": {
+          "test_region": "Cross-Region Transfer (B -> A)",
+          "pr_auc": 0.22497062691624042,
+          "roc_auc": 0.4718387026079334,
+          "recall": 0.5384615384615384,
+          "nominal_precision": 0.2485207100591716,
+          "nominal_f1": 0.34008097165991896,
+          "target_recall_met": false
+        }
+      }
+    },
+    "RandomForest": {
+      "FS1_Point": {
+        "Fold_TR1": {
+          "test_region": "Cross-Region Transfer (A -> B)",
+          "pr_auc": 0.24018431031682624,
+          "roc_auc": 0.3751147842056933,
+          "recall": 0.21212121212121213,
+          "nominal_precision": 0.18666666666666668,
+          "nominal_f1": 0.19858156028368795,
+          "target_recall_met": false
+        },
+        "Fold_TR2": {
+          "test_region": "Cross-Region Transfer (B -> A)",
+          "pr_auc": 0.21920220863887974,
+          "roc_auc": 0.43877383300460227,
+          "recall": 0.32051282051282054,
+          "nominal_precision": 0.1953125,
+          "nominal_f1": 0.24271844660194175,
+          "target_recall_met": false
+        }
+      },
+      "FS2_Zonal": {
+        "Fold_TR1": {
+          "test_region": "Cross-Region Transfer (A -> B)",
+          "pr_auc": 0.20230347088433395,
+          "roc_auc": 0.3930211202938476,
+          "recall": 0.045454545454545456,
+          "nominal_precision": 0.12,
+          "nominal_f1": 0.06593406593406592,
+          "target_recall_met": false
+        },
+        "Fold_TR2": {
+          "test_region": "Cross-Region Transfer (B -> A)",
+          "pr_auc": 0.2316945525291833,
+          "roc_auc": 0.4822759149682227,
+          "recall": 0.01282051282051282,
+          "nominal_precision": 0.041666666666666664,
+          "nominal_f1": 0.019607843137254898,
+          "target_recall_met": false
+        }
+      },
+      "FS3_Full": {
+        "Fold_TR1": {
+          "test_region": "Cross-Region Transfer (A -> B)",
+          "pr_auc": 0.20366391807313902,
+          "roc_auc": 0.3800887664524028,
+          "recall": 0.09090909090909091,
+          "nominal_precision": 0.1935483870967742,
+          "nominal_f1": 0.1237113402061856,
+          "target_recall_met": false
+        },
+        "Fold_TR2": {
+          "test_region": "Cross-Region Transfer (B -> A)",
+          "pr_auc": 0.22853689125250637,
+          "roc_auc": 0.4607714223098838,
+          "recall": 0.14102564102564102,
+          "nominal_precision": 0.1864406779661017,
+          "nominal_f1": 0.16058394160583941,
+          "target_recall_met": false
+        }
+      }
+    }
+  },
+  "individual_experiments": [
+    {
+      "experiment_id": "EXP_LogisticRegression_FS1_Point_Fold_A1",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_A1",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 240,
+        "train_pos": 60,
+        "train_bkg": 180,
+        "test_total": 72,
+        "test_pos": 18,
+        "test_bkg": 54
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.44,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 1.0,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.427,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.3261652880976533,
+        "roc_auc": 0.6069958847736625,
+        "nominal_precision": 0.2608695652173913,
+        "recall": 1.0,
+        "nominal_f1": 0.41379310344827586,
+        "brier_score": 0.24690524669971303,
+        "tp": 18,
+        "fp": 51,
+        "fn": 0,
+        "tn": 3,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 7,
+        "n_bootstraps_successful": 499,
+        "pr_auc_95ci": [
+          0.18896018338517695,
+          0.5215375634738606
+        ],
+        "roc_auc_95ci": [
+          0.4300907029478458,
+          0.7547129021099965
+        ],
+        "recall_95ci": [
+          1.0,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS1_Point_Fold_A1.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS1_Point_Fold_A2",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_A2",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Idukki"
+      ],
+      "sample_counts": {
+        "train_total": 108,
+        "train_pos": 27,
+        "train_bkg": 81,
+        "test_total": 204,
+        "test_pos": 51,
+        "test_bkg": 153
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.46,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.963,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.416,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.22190654889433437,
+        "roc_auc": 0.4122773292323465,
+        "nominal_precision": 0.23636363636363636,
+        "recall": 0.7647058823529411,
+        "nominal_f1": 0.3611111111111111,
+        "brier_score": 0.2660280528402215,
+        "tp": 39,
+        "fp": 126,
+        "fn": 12,
+        "tn": 27,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.10513341818369756,
+          0.4054276767150525
+        ],
+        "roc_auc_95ci": [
+          0.26916910290789225,
+          0.5461864375461934
+        ],
+        "recall_95ci": [
+          0.5806451612903226,
+          0.858314732142857
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS1_Point_Fold_A2.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS1_Point_Fold_A3",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_A3",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Idukki"
+      ],
+      "test_districts": [
+        "Kodagu"
+      ],
+      "sample_counts": {
+        "train_total": 276,
+        "train_pos": 69,
+        "train_bkg": 207,
+        "test_total": 36,
+        "test_pos": 9,
+        "test_bkg": 27
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.46,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8261,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4385,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.24842383820878444,
+        "roc_auc": 0.4691358024691358,
+        "nominal_precision": 0.24,
+        "recall": 0.6666666666666666,
+        "nominal_f1": 0.3529411764705882,
+        "brier_score": 0.2608271649211486,
+        "tp": 6,
+        "fp": 19,
+        "fn": 3,
+        "tn": 8,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 3,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.18329228243021345,
+          0.45
+        ],
+        "roc_auc_95ci": [
+          0.4,
+          0.6666666666666667
+        ],
+        "recall_95ci": [
+          0.5,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS1_Point_Fold_A3.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS1_Point_Fold_B1",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_B1",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 204,
+        "train_pos": 34,
+        "train_bkg": 170,
+        "test_total": 60,
+        "test_pos": 32,
+        "test_bkg": 28
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.48,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8824,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.355,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.6510559452215592,
+        "roc_auc": 0.5915178571428571,
+        "nominal_precision": 0.543859649122807,
+        "recall": 0.96875,
+        "nominal_f1": 0.6966292134831461,
+        "brier_score": 0.2445273272759086,
+        "tp": 31,
+        "fp": 26,
+        "fn": 1,
+        "tn": 2,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.2688836372313678,
+          0.8919762708808178
+        ],
+        "roc_auc_95ci": [
+          0.38218628958760537,
+          0.7629668473418474
+        ],
+        "recall_95ci": [
+          0.877375,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS1_Point_Fold_B1.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS1_Point_Fold_B2",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_B2",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "West Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 196,
+        "train_pos": 53,
+        "train_bkg": 143,
+        "test_total": 68,
+        "test_pos": 13,
+        "test_bkg": 55
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.46,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8679,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.5542,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.13139799602447394,
+        "roc_auc": 0.23216783216783218,
+        "nominal_precision": 0.19402985074626866,
+        "recall": 1.0,
+        "nominal_f1": 0.325,
+        "brier_score": 0.3360037067816762,
+        "tp": 13,
+        "fp": 54,
+        "fn": 0,
+        "tn": 1,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 491,
+        "pr_auc_95ci": [
+          0.042045033358042994,
+          0.3423458585150651
+        ],
+        "roc_auc_95ci": [
+          0.031746031746031744,
+          0.3983866770752016
+        ],
+        "recall_95ci": [
+          1.0,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS1_Point_Fold_B2.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS1_Point_Fold_B3",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_B3",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim"
+      ],
+      "test_districts": [
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 128,
+        "train_pos": 45,
+        "train_bkg": 83,
+        "test_total": 136,
+        "test_pos": 21,
+        "test_bkg": 115
+      },
+      "selected_hyperparameters": {
+        "C": 0.1,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.5,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8222,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.7048,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.15341114292754146,
+        "roc_auc": 0.4302277432712215,
+        "nominal_precision": 0.13636363636363635,
+        "recall": 0.42857142857142855,
+        "nominal_f1": 0.20689655172413793,
+        "brier_score": 0.2890448436200616,
+        "tp": 9,
+        "fp": 57,
+        "fn": 12,
+        "tn": 58,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.07931088774356232,
+          0.32814764182365425
+        ],
+        "roc_auc_95ci": [
+          0.21541383304997166,
+          0.7588311653355256
+        ],
+        "recall_95ci": [
+          0.09518649193548387,
+          0.8666666666666667
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS1_Point_Fold_B3.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS1_Point_Fold_TR1",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_TR1",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (A -> B)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "test_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 312,
+        "train_pos": 78,
+        "train_bkg": 234,
+        "test_total": 264,
+        "test_pos": 66,
+        "test_bkg": 198
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.46,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8077,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.42,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.23104662517157643,
+        "roc_auc": 0.448270584634221,
+        "nominal_precision": 0.19736842105263158,
+        "recall": 0.45454545454545453,
+        "nominal_f1": 0.27522935779816515,
+        "brier_score": 0.2440996088908009,
+        "tp": 30,
+        "fp": 122,
+        "fn": 36,
+        "tn": 76,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.12856735363175223,
+          0.47986284259733675
+        ],
+        "roc_auc_95ci": [
+          0.262039284058072,
+          0.6452361810906935
+        ],
+        "recall_95ci": [
+          0.2616544934899968,
+          0.6227294685990338
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS1_Point_Fold_TR1.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS1_Point_Fold_TR2",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_TR2",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (B -> A)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 264,
+        "train_pos": 66,
+        "train_bkg": 198,
+        "test_total": 312,
+        "test_pos": 78,
+        "test_bkg": 234
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.47,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8485,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4667,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.239182173637359,
+        "roc_auc": 0.44690992767915844,
+        "nominal_precision": 0.24017467248908297,
+        "recall": 0.7051282051282052,
+        "nominal_f1": 0.3583061889250814,
+        "brier_score": 0.2672688402342213,
+        "tp": 55,
+        "fp": 174,
+        "fn": 23,
+        "tn": 60,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.15747254895377777,
+          0.39123969460578745
+        ],
+        "roc_auc_95ci": [
+          0.36597646592340344,
+          0.5251157407407407
+        ],
+        "recall_95ci": [
+          0.5783488244942592,
+          0.7852848101265822
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS1_Point_Fold_TR2.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS2_Zonal_Fold_A1",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_A1",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 240,
+        "train_pos": 60,
+        "train_bkg": 180,
+        "test_total": 72,
+        "test_pos": 18,
+        "test_bkg": 54
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.43,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.95,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4351,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.24997448102148534,
+        "roc_auc": 0.46604938271604934,
+        "nominal_precision": 0.2571428571428571,
+        "recall": 1.0,
+        "nominal_f1": 0.40909090909090906,
+        "brier_score": 0.25701054007260843,
+        "tp": 18,
+        "fp": 52,
+        "fn": 0,
+        "tn": 2,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 7,
+        "n_bootstraps_successful": 499,
+        "pr_auc_95ci": [
+          0.11462779386707603,
+          0.4788823261546297
+        ],
+        "roc_auc_95ci": [
+          0.26395348837209304,
+          0.6162210242587601
+        ],
+        "recall_95ci": [
+          1.0,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS2_Zonal_Fold_A1.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS2_Zonal_Fold_A2",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_A2",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Idukki"
+      ],
+      "sample_counts": {
+        "train_total": 108,
+        "train_pos": 27,
+        "train_bkg": 81,
+        "test_total": 204,
+        "test_pos": 51,
+        "test_bkg": 153
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.45,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8519,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4842,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.21972826535701934,
+        "roc_auc": 0.41919774445726005,
+        "nominal_precision": 0.2604166666666667,
+        "recall": 0.9803921568627451,
+        "nominal_f1": 0.411522633744856,
+        "brier_score": 0.3008787138447023,
+        "tp": 50,
+        "fp": 142,
+        "fn": 1,
+        "tn": 11,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.10395739147814835,
+          0.39811806802577365
+        ],
+        "roc_auc_95ci": [
+          0.29037835995325284,
+          0.5297143541324576
+        ],
+        "recall_95ci": [
+          0.9358098833218943,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS2_Zonal_Fold_A2.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS2_Zonal_Fold_A3",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_A3",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Idukki"
+      ],
+      "test_districts": [
+        "Kodagu"
+      ],
+      "sample_counts": {
+        "train_total": 276,
+        "train_pos": 69,
+        "train_bkg": 207,
+        "test_total": 36,
+        "test_pos": 9,
+        "test_bkg": 27
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.46,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8406,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4531,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.24933239143676494,
+        "roc_auc": 0.4814814814814815,
+        "nominal_precision": 0.3,
+        "recall": 0.6666666666666666,
+        "nominal_f1": 0.41379310344827586,
+        "brier_score": 0.25005829581494055,
+        "tp": 6,
+        "fp": 14,
+        "fn": 3,
+        "tn": 13,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 3,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.209280303030303,
+          0.41666666666666663
+        ],
+        "roc_auc_95ci": [
+          0.3,
+          0.75
+        ],
+        "recall_95ci": [
+          0.5,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS2_Zonal_Fold_A3.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS2_Zonal_Fold_B1",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_B1",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 204,
+        "train_pos": 34,
+        "train_bkg": 170,
+        "test_total": 60,
+        "test_pos": 32,
+        "test_bkg": 28
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.47,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8529,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.3295,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.6049202959100409,
+        "roc_auc": 0.5747767857142857,
+        "nominal_precision": 0.5517241379310345,
+        "recall": 1.0,
+        "nominal_f1": 0.7111111111111111,
+        "brier_score": 0.2430459811035876,
+        "tp": 32,
+        "fp": 26,
+        "fn": 0,
+        "tn": 2,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.21956025922356812,
+          0.8460604998277006
+        ],
+        "roc_auc_95ci": [
+          0.3401401458739069,
+          0.7413793103448275
+        ],
+        "recall_95ci": [
+          1.0,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS2_Zonal_Fold_B1.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS2_Zonal_Fold_B2",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_B2",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "West Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 196,
+        "train_pos": 53,
+        "train_bkg": 143,
+        "test_total": 68,
+        "test_pos": 13,
+        "test_bkg": 55
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.45,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8302,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.5605,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.1432478576589209,
+        "roc_auc": 0.3146853146853147,
+        "nominal_precision": 0.19402985074626866,
+        "recall": 1.0,
+        "nominal_f1": 0.325,
+        "brier_score": 0.3947191347556902,
+        "tp": 13,
+        "fp": 54,
+        "fn": 0,
+        "tn": 1,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 491,
+        "pr_auc_95ci": [
+          0.03430509527754764,
+          0.44804171833276096
+        ],
+        "roc_auc_95ci": [
+          0.043478260869565244,
+          0.5648574561403509
+        ],
+        "recall_95ci": [
+          1.0,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS2_Zonal_Fold_B2.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS2_Zonal_Fold_B3",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_B3",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim"
+      ],
+      "test_districts": [
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 128,
+        "train_pos": 45,
+        "train_bkg": 83,
+        "test_total": 136,
+        "test_pos": 21,
+        "test_bkg": 115
+      },
+      "selected_hyperparameters": {
+        "C": 0.1,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.52,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.7273,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.16743993763843573,
+        "roc_auc": 0.4451345755693582,
+        "nominal_precision": 0.11650485436893204,
+        "recall": 0.5714285714285714,
+        "nominal_f1": 0.19354838709677422,
+        "brier_score": 0.49318173305974566,
+        "tp": 12,
+        "fp": 91,
+        "fn": 9,
+        "tn": 24,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.08470212939992294,
+          0.32173333979626717
+        ],
+        "roc_auc_95ci": [
+          0.23427700348432057,
+          0.7339351506871998
+        ],
+        "recall_95ci": [
+          0.2,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS2_Zonal_Fold_B3.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS2_Zonal_Fold_TR1",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_TR1",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (A -> B)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "test_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 312,
+        "train_pos": 78,
+        "train_bkg": 234,
+        "test_total": 264,
+        "test_pos": 66,
+        "test_bkg": 198
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.44,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9359,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4411,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.2496892328577296,
+        "roc_auc": 0.4501071319253137,
+        "nominal_precision": 0.2012987012987013,
+        "recall": 0.4696969696969697,
+        "nominal_f1": 0.28181818181818186,
+        "brier_score": 0.24704893733047406,
+        "tp": 31,
+        "fp": 123,
+        "fn": 35,
+        "tn": 75,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.15058553880587888,
+          0.5049319294612573
+        ],
+        "roc_auc_95ci": [
+          0.2733334070775039,
+          0.6530257467591041
+        ],
+        "recall_95ci": [
+          0.2454741379310345,
+          0.7728801843317972
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS2_Zonal_Fold_TR1.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS2_Zonal_Fold_TR2",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_TR2",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (B -> A)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 264,
+        "train_pos": 66,
+        "train_bkg": 198,
+        "test_total": 312,
+        "test_pos": 78,
+        "test_bkg": 234
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.46,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8182,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4557,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.22628234988676782,
+        "roc_auc": 0.4774819197896121,
+        "nominal_precision": 0.23972602739726026,
+        "recall": 0.44871794871794873,
+        "nominal_f1": 0.3125,
+        "brier_score": 0.23469167980311567,
+        "tp": 35,
+        "fp": 111,
+        "fn": 43,
+        "tn": 123,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.12968901918063008,
+          0.41484563029307636
+        ],
+        "roc_auc_95ci": [
+          0.37253937007874016,
+          0.5797609371186498
+        ],
+        "recall_95ci": [
+          0.2,
+          0.6486486486486487
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS2_Zonal_Fold_TR2.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS3_Full_Fold_A1",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_A1",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 240,
+        "train_pos": 60,
+        "train_bkg": 180,
+        "test_total": 72,
+        "test_pos": 18,
+        "test_bkg": 54
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.44,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9167,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4348,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.2638551384770227,
+        "roc_auc": 0.5123456790123457,
+        "nominal_precision": 0.2647058823529412,
+        "recall": 1.0,
+        "nominal_f1": 0.4186046511627907,
+        "brier_score": 0.25746747513742807,
+        "tp": 18,
+        "fp": 50,
+        "fn": 0,
+        "tn": 4,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 7,
+        "n_bootstraps_successful": 499,
+        "pr_auc_95ci": [
+          0.13344716091723965,
+          0.48202126498993875
+        ],
+        "roc_auc_95ci": [
+          0.336189726941385,
+          0.6346045072257759
+        ],
+        "recall_95ci": [
+          1.0,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS3_Full_Fold_A1.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS3_Full_Fold_A2",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_A2",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Idukki"
+      ],
+      "sample_counts": {
+        "train_total": 108,
+        "train_pos": 27,
+        "train_bkg": 81,
+        "test_total": 204,
+        "test_pos": 51,
+        "test_bkg": 153
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.45,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8519,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4842,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.22138001137615226,
+        "roc_auc": 0.4226579520697168,
+        "nominal_precision": 0.2604166666666667,
+        "recall": 0.9803921568627451,
+        "nominal_f1": 0.411522633744856,
+        "brier_score": 0.2987403676314014,
+        "tp": 50,
+        "fp": 142,
+        "fn": 1,
+        "tn": 11,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.10461267372061658,
+          0.4011243570183839
+        ],
+        "roc_auc_95ci": [
+          0.29332370340216185,
+          0.5307961973438473
+        ],
+        "recall_95ci": [
+          0.9358098833218943,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS3_Full_Fold_A2.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS3_Full_Fold_A3",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_A3",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Idukki"
+      ],
+      "test_districts": [
+        "Kodagu"
+      ],
+      "sample_counts": {
+        "train_total": 276,
+        "train_pos": 69,
+        "train_bkg": 207,
+        "test_total": 36,
+        "test_pos": 9,
+        "test_bkg": 27
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.46,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8406,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4659,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.2600431240592623,
+        "roc_auc": 0.5020576131687242,
+        "nominal_precision": 0.2857142857142857,
+        "recall": 0.6666666666666666,
+        "nominal_f1": 0.4,
+        "brier_score": 0.2521673217377344,
+        "tp": 6,
+        "fp": 15,
+        "fn": 3,
+        "tn": 12,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 3,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.21028836754643204,
+          0.45
+        ],
+        "roc_auc_95ci": [
+          0.3333333333333333,
+          0.75
+        ],
+        "recall_95ci": [
+          0.5,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS3_Full_Fold_A3.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS3_Full_Fold_B1",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_B1",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 204,
+        "train_pos": 34,
+        "train_bkg": 170,
+        "test_total": 60,
+        "test_pos": 32,
+        "test_bkg": 28
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.47,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8529,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.3353,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.603353983871606,
+        "roc_auc": 0.5803571428571428,
+        "nominal_precision": 0.5517241379310345,
+        "recall": 1.0,
+        "nominal_f1": 0.7111111111111111,
+        "brier_score": 0.24308797847438193,
+        "tp": 32,
+        "fp": 26,
+        "fn": 0,
+        "tn": 2,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.2222886246081835,
+          0.854157368431084
+        ],
+        "roc_auc_95ci": [
+          0.34714285714285714,
+          0.7388917573298912
+        ],
+        "recall_95ci": [
+          1.0,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS3_Full_Fold_B1.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS3_Full_Fold_B2",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_B2",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "West Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 196,
+        "train_pos": 53,
+        "train_bkg": 143,
+        "test_total": 68,
+        "test_pos": 13,
+        "test_bkg": 55
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.43,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8113,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.5375,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.14798330393387985,
+        "roc_auc": 0.3384615384615385,
+        "nominal_precision": 0.19117647058823528,
+        "recall": 1.0,
+        "nominal_f1": 0.32098765432098764,
+        "brier_score": 0.3959306307315539,
+        "tp": 13,
+        "fp": 55,
+        "fn": 0,
+        "tn": 0,
+        "target_recall_met_test": true,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 491,
+        "pr_auc_95ci": [
+          0.03783450704225352,
+          0.46129690034050846
+        ],
+        "roc_auc_95ci": [
+          0.043478260869565244,
+          0.573344298245614
+        ],
+        "recall_95ci": [
+          1.0,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS3_Full_Fold_B2.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS3_Full_Fold_B3",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_B3",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim"
+      ],
+      "test_districts": [
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 128,
+        "train_pos": 45,
+        "train_bkg": 83,
+        "test_total": 136,
+        "test_pos": 21,
+        "test_bkg": 115
+      },
+      "selected_hyperparameters": {
+        "C": 0.1,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.52,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.7273,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.16954914017196968,
+        "roc_auc": 0.45258799171842645,
+        "nominal_precision": 0.1188118811881188,
+        "recall": 0.5714285714285714,
+        "nominal_f1": 0.19672131147540983,
+        "brier_score": 0.4786146510443421,
+        "tp": 12,
+        "fp": 89,
+        "fn": 9,
+        "tn": 26,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.08651128344606024,
+          0.3016680931488643
+        ],
+        "roc_auc_95ci": [
+          0.24526117513922394,
+          0.7416363934621807
+        ],
+        "recall_95ci": [
+          0.2,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS3_Full_Fold_B3.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS3_Full_Fold_TR1",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_TR1",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (A -> B)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "test_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 312,
+        "train_pos": 78,
+        "train_bkg": 234,
+        "test_total": 264,
+        "test_pos": 66,
+        "test_bkg": 198
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.45,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8462,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4356,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.2383192276436242,
+        "roc_auc": 0.4425313743495562,
+        "nominal_precision": 0.1875,
+        "recall": 0.4090909090909091,
+        "nominal_f1": 0.2571428571428571,
+        "brier_score": 0.2501737278713206,
+        "tp": 27,
+        "fp": 117,
+        "fn": 39,
+        "tn": 81,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.1392263657296547,
+          0.4759978646993557
+        ],
+        "roc_auc_95ci": [
+          0.2682537612102355,
+          0.6482326357568103
+        ],
+        "recall_95ci": [
+          0.1978154348713761,
+          0.6826147816349384
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS3_Full_Fold_TR1.joblib"
+    },
+    {
+      "experiment_id": "EXP_LogisticRegression_FS3_Full_Fold_TR2",
+      "model_family": "LogisticRegression",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_TR2",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (B -> A)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 264,
+        "train_pos": 66,
+        "train_bkg": 198,
+        "test_total": 312,
+        "test_pos": 78,
+        "test_bkg": 234
+      },
+      "selected_hyperparameters": {
+        "C": 0.01,
+        "solver": "lbfgs",
+        "class_weight": "balanced"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.44,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8485,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.4609,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.22497062691624042,
+        "roc_auc": 0.4718387026079334,
+        "nominal_precision": 0.2485207100591716,
+        "recall": 0.5384615384615384,
+        "nominal_f1": 0.34008097165991896,
+        "brier_score": 0.2407770696262572,
+        "tp": 42,
+        "fp": 127,
+        "fn": 36,
+        "tn": 107,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.13020585402224044,
+          0.42232423062255736
+        ],
+        "roc_auc_95ci": [
+          0.3754352415036798,
+          0.5683987672343878
+        ],
+        "recall_95ci": [
+          0.29310344827586204,
+          0.7071691176470588
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/LogisticRegression_FS3_Full_Fold_TR2.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS1_Point_Fold_A1",
+      "model_family": "RandomForest",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_A1",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 240,
+        "train_pos": 60,
+        "train_bkg": 180,
+        "test_total": 72,
+        "test_pos": 18,
+        "test_bkg": 54
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 5,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.52,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9167,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9244,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.2601118410371993,
+        "roc_auc": 0.5092592592592593,
+        "nominal_precision": 0.2777777777777778,
+        "recall": 0.2777777777777778,
+        "nominal_f1": 0.2777777777777778,
+        "brier_score": 0.2306224004592513,
+        "tp": 5,
+        "fp": 13,
+        "fn": 13,
+        "tn": 41,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 7,
+        "n_bootstraps_successful": 499,
+        "pr_auc_95ci": [
+          0.09666475512304828,
+          0.5417260839589723
+        ],
+        "roc_auc_95ci": [
+          0.3404077881152461,
+          0.6288546108742005
+        ],
+        "recall_95ci": [
+          0.11736111111111112,
+          0.375
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS1_Point_Fold_A1.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS1_Point_Fold_A2",
+      "model_family": "RandomForest",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_A2",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Idukki"
+      ],
+      "sample_counts": {
+        "train_total": 108,
+        "train_pos": 27,
+        "train_bkg": 81,
+        "test_total": 204,
+        "test_pos": 51,
+        "test_bkg": 153
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "min_samples_leaf": 5,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.45,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8889,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.8136,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.27421767641340583,
+        "roc_auc": 0.4600153787004998,
+        "nominal_precision": 0.21839080459770116,
+        "recall": 0.37254901960784315,
+        "nominal_f1": 0.2753623188405797,
+        "brier_score": 0.2453426475010433,
+        "tp": 19,
+        "fp": 68,
+        "fn": 32,
+        "tn": 85,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.14098923909353947,
+          0.4547028499779416
+        ],
+        "roc_auc_95ci": [
+          0.3594692584732137,
+          0.5571188890972743
+        ],
+        "recall_95ci": [
+          0.20566222570532916,
+          0.5529166666666666
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS1_Point_Fold_A2.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS1_Point_Fold_A3",
+      "model_family": "RandomForest",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_A3",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Idukki"
+      ],
+      "test_districts": [
+        "Kodagu"
+      ],
+      "sample_counts": {
+        "train_total": 276,
+        "train_pos": 69,
+        "train_bkg": 207,
+        "test_total": 36,
+        "test_pos": 9,
+        "test_bkg": 27
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.52,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8841,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9104,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.2542448292448293,
+        "roc_auc": 0.4567901234567901,
+        "nominal_precision": 0.0,
+        "recall": 0.0,
+        "nominal_f1": 0.0,
+        "brier_score": 0.22004355318778887,
+        "tp": 0,
+        "fp": 2,
+        "fn": 9,
+        "tn": 25,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 3,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.125,
+          0.75
+        ],
+        "roc_auc_95ci": [
+          0.3333333333333333,
+          0.8
+        ],
+        "recall_95ci": [
+          0.0,
+          0.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS1_Point_Fold_A3.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS1_Point_Fold_B1",
+      "model_family": "RandomForest",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_B1",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 204,
+        "train_pos": 34,
+        "train_bkg": 170,
+        "test_total": 60,
+        "test_pos": 32,
+        "test_bkg": 28
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.63,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8235,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9032,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.642986854052108,
+        "roc_auc": 0.62109375,
+        "nominal_precision": 0.6666666666666666,
+        "recall": 0.125,
+        "nominal_f1": 0.21052631578947367,
+        "brier_score": 0.29963223997837857,
+        "tp": 4,
+        "fp": 2,
+        "fn": 28,
+        "tn": 26,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.2035840470721775,
+          0.9319242568386837
+        ],
+        "roc_auc_95ci": [
+          0.331751998001998,
+          0.8023382611241217
+        ],
+        "recall_95ci": [
+          0.0,
+          0.1696594179724976
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS1_Point_Fold_B1.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS1_Point_Fold_B2",
+      "model_family": "RandomForest",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_B2",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "West Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 196,
+        "train_pos": 53,
+        "train_bkg": 143,
+        "test_total": 68,
+        "test_pos": 13,
+        "test_bkg": 55
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "min_samples_leaf": 5,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.62,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8302,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.7928,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.4441693473141178,
+        "roc_auc": 0.6713286713286714,
+        "nominal_precision": 0.28125,
+        "recall": 0.6923076923076923,
+        "nominal_f1": 0.4,
+        "brier_score": 0.32854003923501185,
+        "tp": 9,
+        "fp": 23,
+        "fn": 4,
+        "tn": 32,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 491,
+        "pr_auc_95ci": [
+          0.06455026455026455,
+          0.7
+        ],
+        "roc_auc_95ci": [
+          0.46874999999999994,
+          0.9467657342657343
+        ],
+        "recall_95ci": [
+          0.625,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS1_Point_Fold_B2.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS1_Point_Fold_B3",
+      "model_family": "RandomForest",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_B3",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim"
+      ],
+      "test_districts": [
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 128,
+        "train_pos": 45,
+        "train_bkg": 83,
+        "test_total": 136,
+        "test_pos": 21,
+        "test_bkg": 115
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 5,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.5,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8444,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.8352,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.2208014714100871,
+        "roc_auc": 0.40973084886128364,
+        "nominal_precision": 0.11764705882352941,
+        "recall": 0.5714285714285714,
+        "nominal_f1": 0.1951219512195122,
+        "brier_score": 0.33195324634175066,
+        "tp": 12,
+        "fp": 90,
+        "fn": 9,
+        "tn": 25,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.07627717491436652,
+          0.4518638957199535
+        ],
+        "roc_auc_95ci": [
+          0.17000777000777,
+          0.8061332182916306
+        ],
+        "recall_95ci": [
+          0.21875,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS1_Point_Fold_B3.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS1_Point_Fold_TR1",
+      "model_family": "RandomForest",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_TR1",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (A -> B)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "test_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 312,
+        "train_pos": 78,
+        "train_bkg": 234,
+        "test_total": 264,
+        "test_pos": 66,
+        "test_bkg": 198
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.46,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9744,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9268,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.24018431031682624,
+        "roc_auc": 0.3751147842056933,
+        "nominal_precision": 0.18666666666666668,
+        "recall": 0.21212121212121213,
+        "nominal_f1": 0.19858156028368795,
+        "brier_score": 0.2573976473211275,
+        "tp": 14,
+        "fp": 61,
+        "fn": 52,
+        "tn": 137,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.10613637898050085,
+          0.3881737080715221
+        ],
+        "roc_auc_95ci": [
+          0.25487032640483004,
+          0.5433142922968505
+        ],
+        "recall_95ci": [
+          0.06912263210368894,
+          0.45084677419354835
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS1_Point_Fold_TR1.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS1_Point_Fold_TR2",
+      "model_family": "RandomForest",
+      "feature_set": "FS1_Point",
+      "n_features": 5,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm"
+      ],
+      "fold_id": "Fold_TR2",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (B -> A)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 264,
+        "train_pos": 66,
+        "train_bkg": 198,
+        "test_total": 312,
+        "test_pos": 78,
+        "test_bkg": 234
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.56,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.803,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.803,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.21920220863887974,
+        "roc_auc": 0.43877383300460227,
+        "nominal_precision": 0.1953125,
+        "recall": 0.32051282051282054,
+        "nominal_f1": 0.24271844660194175,
+        "brier_score": 0.3048057099875429,
+        "tp": 25,
+        "fp": 103,
+        "fn": 53,
+        "tn": 131,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.14399087225582693,
+          0.36748671498846336
+        ],
+        "roc_auc_95ci": [
+          0.3564280402253305,
+          0.5252293851141259
+        ],
+        "recall_95ci": [
+          0.20467552026286967,
+          0.5135135135135135
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS1_Point_Fold_TR2.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS2_Zonal_Fold_A1",
+      "model_family": "RandomForest",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_A1",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 240,
+        "train_pos": 60,
+        "train_bkg": 180,
+        "test_total": 72,
+        "test_pos": 18,
+        "test_bkg": 54
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 5,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.48,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.95,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.912,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.3268544789432659,
+        "roc_auc": 0.6347736625514404,
+        "nominal_precision": 0.2,
+        "recall": 0.05555555555555555,
+        "nominal_f1": 0.08695652173913045,
+        "brier_score": 0.1839870024683694,
+        "tp": 1,
+        "fp": 4,
+        "fn": 17,
+        "tn": 50,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 7,
+        "n_bootstraps_successful": 499,
+        "pr_auc_95ci": [
+          0.21224183331263388,
+          0.6313067884496456
+        ],
+        "roc_auc_95ci": [
+          0.4446064518708027,
+          0.8627450980392156
+        ],
+        "recall_95ci": [
+          0.0,
+          0.25
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS2_Zonal_Fold_A1.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS2_Zonal_Fold_A2",
+      "model_family": "RandomForest",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_A2",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Idukki"
+      ],
+      "sample_counts": {
+        "train_total": 108,
+        "train_pos": 27,
+        "train_bkg": 81,
+        "test_total": 204,
+        "test_pos": 51,
+        "test_bkg": 153
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "min_samples_leaf": 5,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.55,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8148,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.88,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.20802411434352938,
+        "roc_auc": 0.3984364987825195,
+        "nominal_precision": 0.19298245614035087,
+        "recall": 0.21568627450980393,
+        "nominal_f1": 0.20370370370370372,
+        "brier_score": 0.2730911730767522,
+        "tp": 11,
+        "fp": 46,
+        "fn": 40,
+        "tn": 107,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.1300814451201047,
+          0.3266330529364902
+        ],
+        "roc_auc_95ci": [
+          0.2820131634669678,
+          0.5523873451683714
+        ],
+        "recall_95ci": [
+          0.0776395173453997,
+          0.375
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS2_Zonal_Fold_A2.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS2_Zonal_Fold_A3",
+      "model_family": "RandomForest",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_A3",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Idukki"
+      ],
+      "test_districts": [
+        "Kodagu"
+      ],
+      "sample_counts": {
+        "train_total": 276,
+        "train_pos": 69,
+        "train_bkg": 207,
+        "test_total": 36,
+        "test_pos": 9,
+        "test_bkg": 27
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.52,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.913,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.913,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.213602270086038,
+        "roc_auc": 0.37860082304526754,
+        "nominal_precision": 0.0,
+        "recall": 0.0,
+        "nominal_f1": 0.0,
+        "brier_score": 0.25152395576676334,
+        "tp": 0,
+        "fp": 5,
+        "fn": 9,
+        "tn": 22,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 3,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.1111111111111111,
+          0.5833333333333333
+        ],
+        "roc_auc_95ci": [
+          0.16666666666666666,
+          0.8
+        ],
+        "recall_95ci": [
+          0.0,
+          0.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS2_Zonal_Fold_A3.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS2_Zonal_Fold_B1",
+      "model_family": "RandomForest",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_B1",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 204,
+        "train_pos": 34,
+        "train_bkg": 170,
+        "test_total": 60,
+        "test_pos": 32,
+        "test_bkg": 28
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.5,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9706,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9706,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.7054205425715082,
+        "roc_auc": 0.6752232142857143,
+        "nominal_precision": 0.7142857142857143,
+        "recall": 0.15625,
+        "nominal_f1": 0.25641025641025644,
+        "brier_score": 0.27440961938015845,
+        "tp": 5,
+        "fp": 2,
+        "fn": 27,
+        "tn": 26,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.36796758739483193,
+          0.9038860031417485
+        ],
+        "roc_auc_95ci": [
+          0.48314185049019603,
+          0.7946046488619833
+        ],
+        "recall_95ci": [
+          0.051250000000000004,
+          0.26632996632996603
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS2_Zonal_Fold_B1.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS2_Zonal_Fold_B2",
+      "model_family": "RandomForest",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_B2",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "West Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 196,
+        "train_pos": 53,
+        "train_bkg": 143,
+        "test_total": 68,
+        "test_pos": 13,
+        "test_bkg": 55
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.6,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8302,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.8713,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.25982449506367555,
+        "roc_auc": 0.47972027972027975,
+        "nominal_precision": 0.16666666666666666,
+        "recall": 0.3076923076923077,
+        "nominal_f1": 0.21621621621621623,
+        "brier_score": 0.3064654671928547,
+        "tp": 4,
+        "fp": 20,
+        "fn": 9,
+        "tn": 35,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 491,
+        "pr_auc_95ci": [
+          0.034582275961586306,
+          0.5556640946451059
+        ],
+        "roc_auc_95ci": [
+          0.17412935323383086,
+          0.9047619047619048
+        ],
+        "recall_95ci": [
+          0.0,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS2_Zonal_Fold_B2.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS2_Zonal_Fold_B3",
+      "model_family": "RandomForest",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_B3",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim"
+      ],
+      "test_districts": [
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 128,
+        "train_pos": 45,
+        "train_bkg": 83,
+        "test_total": 136,
+        "test_pos": 21,
+        "test_bkg": 115
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "min_samples_leaf": 5,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.58,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8444,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9048,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.1747729140853904,
+        "roc_auc": 0.3608695652173913,
+        "nominal_precision": 0.07547169811320754,
+        "recall": 0.19047619047619047,
+        "nominal_f1": 0.10810810810810811,
+        "brier_score": 0.3136653737483084,
+        "tp": 4,
+        "fp": 49,
+        "fn": 17,
+        "tn": 66,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.07551535926811313,
+          0.3554419489775419
+        ],
+        "roc_auc_95ci": [
+          0.16656941348025062,
+          0.6593195807506885
+        ],
+        "recall_95ci": [
+          0.0,
+          0.4642307692307691
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS2_Zonal_Fold_B3.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS2_Zonal_Fold_TR1",
+      "model_family": "RandomForest",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_TR1",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (A -> B)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "test_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 312,
+        "train_pos": 78,
+        "train_bkg": 234,
+        "test_total": 264,
+        "test_pos": 66,
+        "test_bkg": 198
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.52,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8333,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.7429,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.20230347088433395,
+        "roc_auc": 0.3930211202938476,
+        "nominal_precision": 0.12,
+        "recall": 0.045454545454545456,
+        "nominal_f1": 0.06593406593406592,
+        "brier_score": 0.2297890679198335,
+        "tp": 3,
+        "fp": 22,
+        "fn": 63,
+        "tn": 176,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.10250826893909934,
+          0.34234789352061806
+        ],
+        "roc_auc_95ci": [
+          0.30001289081689914,
+          0.5349293690754757
+        ],
+        "recall_95ci": [
+          0.0,
+          0.12063636363636361
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS2_Zonal_Fold_TR1.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS2_Zonal_Fold_TR2",
+      "model_family": "RandomForest",
+      "feature_set": "FS2_Zonal",
+      "n_features": 14,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km"
+      ],
+      "fold_id": "Fold_TR2",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (B -> A)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 264,
+        "train_pos": 66,
+        "train_bkg": 198,
+        "test_total": 312,
+        "test_pos": 78,
+        "test_bkg": 234
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.51,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9545,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9403,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.2316945525291833,
+        "roc_auc": 0.4822759149682227,
+        "nominal_precision": 0.041666666666666664,
+        "recall": 0.01282051282051282,
+        "nominal_f1": 0.019607843137254898,
+        "brier_score": 0.22214700591571657,
+        "tp": 1,
+        "fp": 23,
+        "fn": 77,
+        "tn": 211,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.1393346162333567,
+          0.40797022245738307
+        ],
+        "roc_auc_95ci": [
+          0.39306358428818633,
+          0.5574219453875605
+        ],
+        "recall_95ci": [
+          0.0,
+          0.047265624999999985
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS2_Zonal_Fold_TR2.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS3_Full_Fold_A1",
+      "model_family": "RandomForest",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_A1",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 240,
+        "train_pos": 60,
+        "train_bkg": 180,
+        "test_total": 72,
+        "test_pos": 18,
+        "test_bkg": 54
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 5,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.51,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9167,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9244,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.35290932073095105,
+        "roc_auc": 0.6491769547325104,
+        "nominal_precision": 0.0,
+        "recall": 0.0,
+        "nominal_f1": 0.0,
+        "brier_score": 0.18188602264855405,
+        "tp": 0,
+        "fp": 4,
+        "fn": 18,
+        "tn": 50,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 7,
+        "n_bootstraps_successful": 499,
+        "pr_auc_95ci": [
+          0.19117378874499397,
+          0.6470956367119025
+        ],
+        "roc_auc_95ci": [
+          0.46159878535437127,
+          0.8682583454281567
+        ],
+        "recall_95ci": [
+          0.0,
+          0.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS3_Full_Fold_A1.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS3_Full_Fold_A2",
+      "model_family": "RandomForest",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_A2",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Kodagu"
+      ],
+      "test_districts": [
+        "Idukki"
+      ],
+      "sample_counts": {
+        "train_total": 108,
+        "train_pos": 27,
+        "train_bkg": 81,
+        "test_total": 204,
+        "test_pos": 51,
+        "test_bkg": 153
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.41,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 1.0,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9818,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.24473495299918735,
+        "roc_auc": 0.5203127002434962,
+        "nominal_precision": 0.28846153846153844,
+        "recall": 0.5882352941176471,
+        "nominal_f1": 0.3870967741935483,
+        "brier_score": 0.24569897879073216,
+        "tp": 30,
+        "fp": 74,
+        "fn": 21,
+        "tn": 79,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.15071969167888724,
+          0.36605995286483556
+        ],
+        "roc_auc_95ci": [
+          0.3943515204424731,
+          0.6745070087906866
+        ],
+        "recall_95ci": [
+          0.4166666666666667,
+          0.7728801843317972
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS3_Full_Fold_A2.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS3_Full_Fold_A3",
+      "model_family": "RandomForest",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_A3",
+      "tier": "within_region",
+      "region": "Region A (Western Ghats)",
+      "train_districts": [
+        "Wayanad",
+        "Idukki"
+      ],
+      "test_districts": [
+        "Kodagu"
+      ],
+      "sample_counts": {
+        "train_total": 276,
+        "train_pos": 69,
+        "train_bkg": 207,
+        "test_total": 36,
+        "test_pos": 9,
+        "test_bkg": 27
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.53,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8696,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.8163,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.21349953313263326,
+        "roc_auc": 0.38271604938271603,
+        "nominal_precision": 0.0,
+        "recall": 0.0,
+        "nominal_f1": 0.0,
+        "brier_score": 0.26498296675057414,
+        "tp": 0,
+        "fp": 7,
+        "fn": 9,
+        "tn": 20,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 3,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.1111111111111111,
+          0.45
+        ],
+        "roc_auc_95ci": [
+          0.18333333333333332,
+          0.6
+        ],
+        "recall_95ci": [
+          0.0,
+          0.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS3_Full_Fold_A3.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS3_Full_Fold_B1",
+      "model_family": "RandomForest",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_B1",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 204,
+        "train_pos": 34,
+        "train_bkg": 170,
+        "test_total": 60,
+        "test_pos": 32,
+        "test_bkg": 28
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.47,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 1.0,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9577,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.6987762632081606,
+        "roc_auc": 0.6506696428571429,
+        "nominal_precision": 0.7142857142857143,
+        "recall": 0.3125,
+        "nominal_f1": 0.43478260869565216,
+        "brier_score": 0.28024153409602987,
+        "tp": 10,
+        "fp": 4,
+        "fn": 22,
+        "tn": 24,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.2320352071439028,
+          0.9250098646591183
+        ],
+        "roc_auc_95ci": [
+          0.4153846153846154,
+          0.7842822774659182
+        ],
+        "recall_95ci": [
+          0.0,
+          0.41433823529411756
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS3_Full_Fold_B1.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS3_Full_Fold_B2",
+      "model_family": "RandomForest",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_B2",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "West Sikkim"
+      ],
+      "sample_counts": {
+        "train_total": 196,
+        "train_pos": 53,
+        "train_bkg": 143,
+        "test_total": 68,
+        "test_pos": 13,
+        "test_bkg": 55
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.59,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.8302,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.8713,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.3815347692180799,
+        "roc_auc": 0.5916083916083916,
+        "nominal_precision": 0.2222222222222222,
+        "recall": 0.46153846153846156,
+        "nominal_f1": 0.3,
+        "brier_score": 0.2932429382497798,
+        "tp": 6,
+        "fp": 21,
+        "fn": 7,
+        "tn": 34,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 6,
+        "n_bootstraps_successful": 491,
+        "pr_auc_95ci": [
+          0.054335626799394916,
+          0.6348407847049151
+        ],
+        "roc_auc_95ci": [
+          0.390133779264214,
+          0.9119828259172521
+        ],
+        "recall_95ci": [
+          0.3333333333333333,
+          1.0
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS3_Full_Fold_B2.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS3_Full_Fold_B3",
+      "model_family": "RandomForest",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_B3",
+      "tier": "within_region",
+      "region": "Region B (Northeast)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim"
+      ],
+      "test_districts": [
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 128,
+        "train_pos": 45,
+        "train_bkg": 83,
+        "test_total": 136,
+        "test_pos": 21,
+        "test_bkg": 115
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 5,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.51,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9333,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9438,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.13220758517082754,
+        "roc_auc": 0.34989648033126286,
+        "nominal_precision": 0.08974358974358974,
+        "recall": 0.3333333333333333,
+        "nominal_f1": 0.1414141414141414,
+        "brier_score": 0.29908198637181704,
+        "tp": 7,
+        "fp": 71,
+        "fn": 14,
+        "tn": 44,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.07777052057795444,
+          0.23498583535848722
+        ],
+        "roc_auc_95ci": [
+          0.20474475071327888,
+          0.614193699048913
+        ],
+        "recall_95ci": [
+          0.16666666666666666,
+          0.7015624999999994
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS3_Full_Fold_B3.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS3_Full_Fold_TR1",
+      "model_family": "RandomForest",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_TR1",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (A -> B)",
+      "train_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "test_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "train_total": 312,
+        "train_pos": 78,
+        "train_bkg": 234,
+        "test_total": 264,
+        "test_pos": 66,
+        "test_bkg": 198
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.51,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9487,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.961,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.20366391807313902,
+        "roc_auc": 0.3800887664524028,
+        "nominal_precision": 0.1935483870967742,
+        "recall": 0.09090909090909091,
+        "nominal_f1": 0.1237113402061856,
+        "brier_score": 0.23673189681818504,
+        "tp": 6,
+        "fp": 25,
+        "fn": 60,
+        "tn": 173,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.10119615153737377,
+          0.3488469620989873
+        ],
+        "roc_auc_95ci": [
+          0.29660150852695577,
+          0.5170240881043217
+        ],
+        "recall_95ci": [
+          0.0,
+          0.2819182389937106
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS3_Full_Fold_TR1.joblib"
+    },
+    {
+      "experiment_id": "EXP_RandomForest_FS3_Full_Fold_TR2",
+      "model_family": "RandomForest",
+      "feature_set": "FS3_Full",
+      "n_features": 17,
+      "features": [
+        "elevation_m",
+        "slope_deg",
+        "rain_3d_mm",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "slope_max_1km",
+        "slope_p90_1km",
+        "elev_relief_1km",
+        "slope_max_3km",
+        "slope_p90_3km",
+        "elev_relief_3km",
+        "slope_max_5km",
+        "slope_p90_5km",
+        "elev_relief_5km",
+        "rain_3km_mean_3d",
+        "rain_3km_mean_7d",
+        "rain_3km_mean_15d"
+      ],
+      "fold_id": "Fold_TR2",
+      "tier": "cross_region",
+      "region": "Cross-Region Transfer (B -> A)",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "test_districts": [
+        "Idukki",
+        "Kodagu",
+        "Wayanad"
+      ],
+      "sample_counts": {
+        "train_total": 264,
+        "train_pos": 66,
+        "train_bkg": 198,
+        "test_total": 312,
+        "test_pos": 78,
+        "test_bkg": 234
+      },
+      "selected_hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "class_weight": "balanced_subsample"
+      },
+      "threshold_optimization": {
+        "tau_star": 0.46,
+        "target_recall_threshold": 0.8,
+        "achieved_train_recall": 0.9848,
+        "target_recall_met_train": true,
+        "best_train_nominal_f1": 0.9353,
+        "limitation_note": null
+      },
+      "test_metrics": {
+        "pr_auc": 0.22853689125250637,
+        "roc_auc": 0.4607714223098838,
+        "nominal_precision": 0.1864406779661017,
+        "recall": 0.14102564102564102,
+        "nominal_f1": 0.16058394160583941,
+        "brier_score": 0.23259472145633941,
+        "tp": 11,
+        "fp": 48,
+        "fn": 67,
+        "tn": 186,
+        "target_recall_met_test": false,
+        "metric_basis": "sampled_background_labels"
+      },
+      "spatial_cluster_bootstrap": {
+        "sampling_unit": "spatial_coordinate_cluster",
+        "n_spatial_clusters": 8,
+        "n_bootstraps_successful": 500,
+        "pr_auc_95ci": [
+          0.13781427250405873,
+          0.39629978478574557
+        ],
+        "roc_auc_95ci": [
+          0.3698066253669702,
+          0.5278995291173125
+        ],
+        "recall_95ci": [
+          0.03172883064516129,
+          0.329220779220779
+        ],
+        "limitations": "Cluster bootstrap resamples spatial coordinate blocks to respect spatial dependence. Confidence intervals are illustrative asymptotic approximations due to finite cluster counts per district."
+      },
+      "checkpoint_path": "models/checkpoints/RandomForest_FS3_Full_Fold_TR2.joblib"
+    }
+  ]
+}

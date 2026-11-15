@@ -1,0 +1,37 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing & cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Large raw raster files (downloadable via src/data/chirps_downloader.py)
+data/raw/rainfall/*.tif
+data/raw/rainfall/*.tif.gz
+data/raw/region_a/*.tif
+data/raw/region_a/*.tif.gz
+data/raw/region_a/*.gpkg
+data/raw/region_b/*.tif
+data/raw/region_b/*.tif.gz
+data/raw/region_b/*.gpkg
+data/raw/boundaries/india_districts_all.geojson
+
+# Temporary scratch folder
+scratch/
+
+# Preserve essential geojson and data
+!data/raw/boundaries/target_districts.geojson

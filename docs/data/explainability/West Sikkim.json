@@ -1,0 +1,7 @@
+{
+  "district": "West Sikkim",
+  "fold_id": "Fold_B2",
+  "reference_basis": "training_fold_background_only",
+  "causality_disclaimer": "SHAP values quantify mathematical feature attribution in the statistical model. They do NOT establish physical geotechnical causation (e.g. soil pore-water pressure, bedrock fractures, or shear strength).",
+  "analyses": []
+}

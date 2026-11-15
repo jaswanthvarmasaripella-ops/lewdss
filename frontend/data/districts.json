@@ -1,0 +1,126 @@
+{
+  "target_districts": [
+    {
+      "district_name": "Wayanad",
+      "region": "Region A (Western Ghats)",
+      "state": "Kerala",
+      "primary_fold": "Fold_A1",
+      "train_districts": [
+        "Idukki",
+        "Kodagu"
+      ],
+      "sample_counts": {
+        "total": 72,
+        "documented_landslides": 18,
+        "landscape_background": 54
+      },
+      "historical_date_range": {
+        "start": "2007-06-22",
+        "end": "2019-08-08",
+        "provenance": "NASA Global Landslide Catalog (2004-2022 monsoon)"
+      }
+    },
+    {
+      "district_name": "Idukki",
+      "region": "Region A (Western Ghats)",
+      "state": "Kerala",
+      "primary_fold": "Fold_A2",
+      "train_districts": [
+        "Wayanad",
+        "Kodagu"
+      ],
+      "sample_counts": {
+        "total": 204,
+        "documented_landslides": 51,
+        "landscape_background": 153
+      },
+      "historical_date_range": {
+        "start": "2004-08-04",
+        "end": "2022-08-29",
+        "provenance": "NASA Global Landslide Catalog (2004-2022 monsoon)"
+      }
+    },
+    {
+      "district_name": "Kodagu",
+      "region": "Region A (Western Ghats)",
+      "state": "Karnataka",
+      "primary_fold": "Fold_A3",
+      "train_districts": [
+        "Wayanad",
+        "Idukki"
+      ],
+      "sample_counts": {
+        "total": 36,
+        "documented_landslides": 9,
+        "landscape_background": 27
+      },
+      "historical_date_range": {
+        "start": "2006-07-04",
+        "end": "2018-09-22",
+        "provenance": "NASA Global Landslide Catalog (2004-2022 monsoon)"
+      }
+    },
+    {
+      "district_name": "East Sikkim",
+      "region": "Region B (Northeast)",
+      "state": "Sikkim",
+      "primary_fold": "Fold_B1",
+      "train_districts": [
+        "West Sikkim",
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "total": 60,
+        "documented_landslides": 32,
+        "landscape_background": 28
+      },
+      "historical_date_range": {
+        "start": "2006-08-03",
+        "end": "2018-09-15",
+        "provenance": "NASA Global Landslide Catalog (2004-2022 monsoon)"
+      }
+    },
+    {
+      "district_name": "West Sikkim",
+      "region": "Region B (Northeast)",
+      "state": "Sikkim",
+      "primary_fold": "Fold_B2",
+      "train_districts": [
+        "East Sikkim",
+        "East Khasi Hills"
+      ],
+      "sample_counts": {
+        "total": 68,
+        "documented_landslides": 13,
+        "landscape_background": 55
+      },
+      "historical_date_range": {
+        "start": "2007-08-02",
+        "end": "2017-09-20",
+        "provenance": "NASA Global Landslide Catalog (2004-2022 monsoon)"
+      }
+    },
+    {
+      "district_name": "East Khasi Hills",
+      "region": "Region B (Northeast)",
+      "state": "Meghalaya",
+      "primary_fold": "Fold_B3",
+      "train_districts": [
+        "East Sikkim",
+        "West Sikkim"
+      ],
+      "sample_counts": {
+        "total": 136,
+        "documented_landslides": 21,
+        "landscape_background": 115
+      },
+      "historical_date_range": {
+        "start": "2004-10-09",
+        "end": "2019-07-09",
+        "provenance": "NASA Global Landslide Catalog (2004-2022 monsoon)"
+      }
+    }
+  ],
+  "total_districts": 6,
+  "disclaimer": "EXPERIMENTAL RELATIVE SUSCEPTIBILITY ESTIMATE \u2014 Research prototype output only. Scores represent a Relative Landslide Susceptibility Index (RLSI) ranking terrain-rainfall combinations relative to landscape background. They are NOT calibrated real-world probabilities of slope collapse, and display categories are project-defined, not official warning levels."
+}

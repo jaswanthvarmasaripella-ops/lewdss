@@ -1,0 +1,320 @@
+{
+  "district": "East Sikkim",
+  "fold_id": "Fold_B1",
+  "reference_basis": "training_fold_background_only",
+  "causality_disclaimer": "SHAP values quantify mathematical feature attribution in the statistical model. They do NOT establish physical geotechnical causation (e.g. soil pore-water pressure, bedrock fractures, or shear strength).",
+  "analyses": [
+    {
+      "model_family": "LogisticRegression",
+      "feature_set": "FS1_Point",
+      "fold_id": "Fold_B1",
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "n_test_samples": 60,
+      "n_test_positives": 32,
+      "n_test_background": 28,
+      "reference_background_samples": 170,
+      "base_value": -0.0386,
+      "feature_attribution_ranking": [
+        {
+          "feature": "elevation_m",
+          "mean_abs_shap": 0.08022,
+          "rank": 1
+        },
+        {
+          "feature": "rain_15d_mm",
+          "mean_abs_shap": 0.07748,
+          "rank": 2
+        },
+        {
+          "feature": "rain_3d_mm",
+          "mean_abs_shap": 0.06037,
+          "rank": 3
+        },
+        {
+          "feature": "slope_deg",
+          "mean_abs_shap": 0.04238,
+          "rank": 4
+        },
+        {
+          "feature": "rain_7d_mm",
+          "mean_abs_shap": 0.02463,
+          "rank": 5
+        }
+      ],
+      "top_features": [
+        "elevation_m",
+        "rain_15d_mm",
+        "rain_3d_mm",
+        "slope_deg",
+        "rain_7d_mm"
+      ],
+      "attribution_vs_causation_notice": "SHAP measures statistical model attribution, not physical geotechnical causation. It quantifies how features shift the model's output relative to the training-fold background."
+    },
+    {
+      "model_family": "LogisticRegression",
+      "feature_set": "FS3_Full",
+      "fold_id": "Fold_B1",
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "n_test_samples": 60,
+      "n_test_positives": 32,
+      "n_test_background": 28,
+      "reference_background_samples": 170,
+      "base_value": -0.06583,
+      "feature_attribution_ranking": [
+        {
+          "feature": "elevation_m",
+          "mean_abs_shap": 0.09288,
+          "rank": 1
+        },
+        {
+          "feature": "rain_15d_mm",
+          "mean_abs_shap": 0.0599,
+          "rank": 2
+        },
+        {
+          "feature": "rain_3km_mean_15d",
+          "mean_abs_shap": 0.05655,
+          "rank": 3
+        },
+        {
+          "feature": "rain_3d_mm",
+          "mean_abs_shap": 0.03944,
+          "rank": 4
+        },
+        {
+          "feature": "slope_max_3km",
+          "mean_abs_shap": 0.03228,
+          "rank": 5
+        },
+        {
+          "feature": "elev_relief_1km",
+          "mean_abs_shap": 0.03161,
+          "rank": 6
+        },
+        {
+          "feature": "rain_3km_mean_3d",
+          "mean_abs_shap": 0.02999,
+          "rank": 7
+        },
+        {
+          "feature": "slope_p90_3km",
+          "mean_abs_shap": 0.02612,
+          "rank": 8
+        },
+        {
+          "feature": "slope_max_5km",
+          "mean_abs_shap": 0.02553,
+          "rank": 9
+        },
+        {
+          "feature": "slope_p90_5km",
+          "mean_abs_shap": 0.02149,
+          "rank": 10
+        },
+        {
+          "feature": "slope_max_1km",
+          "mean_abs_shap": 0.02145,
+          "rank": 11
+        },
+        {
+          "feature": "elev_relief_3km",
+          "mean_abs_shap": 0.02043,
+          "rank": 12
+        },
+        {
+          "feature": "slope_deg",
+          "mean_abs_shap": 0.02002,
+          "rank": 13
+        },
+        {
+          "feature": "elev_relief_5km",
+          "mean_abs_shap": 0.01848,
+          "rank": 14
+        },
+        {
+          "feature": "rain_7d_mm",
+          "mean_abs_shap": 0.0129,
+          "rank": 15
+        },
+        {
+          "feature": "rain_3km_mean_7d",
+          "mean_abs_shap": 0.01032,
+          "rank": 16
+        },
+        {
+          "feature": "slope_p90_1km",
+          "mean_abs_shap": 0.00873,
+          "rank": 17
+        }
+      ],
+      "top_features": [
+        "elevation_m",
+        "rain_15d_mm",
+        "rain_3km_mean_15d",
+        "rain_3d_mm",
+        "slope_max_3km"
+      ],
+      "attribution_vs_causation_notice": "SHAP measures statistical model attribution, not physical geotechnical causation. It quantifies how features shift the model's output relative to the training-fold background."
+    },
+    {
+      "model_family": "RandomForest",
+      "feature_set": "FS1_Point",
+      "fold_id": "Fold_B1",
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "n_test_samples": 60,
+      "n_test_positives": 32,
+      "n_test_background": 28,
+      "reference_background_samples": 170,
+      "base_value": 0.161,
+      "feature_attribution_ranking": [
+        {
+          "feature": "elevation_m",
+          "mean_abs_shap": 0.14912,
+          "rank": 1
+        },
+        {
+          "feature": "rain_7d_mm",
+          "mean_abs_shap": 0.0521,
+          "rank": 2
+        },
+        {
+          "feature": "rain_15d_mm",
+          "mean_abs_shap": 0.0468,
+          "rank": 3
+        },
+        {
+          "feature": "rain_3d_mm",
+          "mean_abs_shap": 0.04525,
+          "rank": 4
+        },
+        {
+          "feature": "slope_deg",
+          "mean_abs_shap": 0.03187,
+          "rank": 5
+        }
+      ],
+      "top_features": [
+        "elevation_m",
+        "rain_7d_mm",
+        "rain_15d_mm",
+        "rain_3d_mm",
+        "slope_deg"
+      ],
+      "attribution_vs_causation_notice": "SHAP measures statistical model attribution, not physical geotechnical causation. It quantifies how features shift the model's output relative to the training-fold background."
+    },
+    {
+      "model_family": "RandomForest",
+      "feature_set": "FS3_Full",
+      "fold_id": "Fold_B1",
+      "test_districts": [
+        "East Sikkim"
+      ],
+      "n_test_samples": 60,
+      "n_test_positives": 32,
+      "n_test_background": 28,
+      "reference_background_samples": 170,
+      "base_value": 0.15745,
+      "feature_attribution_ranking": [
+        {
+          "feature": "elevation_m",
+          "mean_abs_shap": 0.10462,
+          "rank": 1
+        },
+        {
+          "feature": "rain_3km_mean_7d",
+          "mean_abs_shap": 0.02791,
+          "rank": 2
+        },
+        {
+          "feature": "rain_7d_mm",
+          "mean_abs_shap": 0.02457,
+          "rank": 3
+        },
+        {
+          "feature": "elev_relief_1km",
+          "mean_abs_shap": 0.01984,
+          "rank": 4
+        },
+        {
+          "feature": "elev_relief_5km",
+          "mean_abs_shap": 0.01791,
+          "rank": 5
+        },
+        {
+          "feature": "slope_deg",
+          "mean_abs_shap": 0.01762,
+          "rank": 6
+        },
+        {
+          "feature": "rain_3d_mm",
+          "mean_abs_shap": 0.01513,
+          "rank": 7
+        },
+        {
+          "feature": "rain_3km_mean_15d",
+          "mean_abs_shap": 0.01496,
+          "rank": 8
+        },
+        {
+          "feature": "rain_3km_mean_3d",
+          "mean_abs_shap": 0.01494,
+          "rank": 9
+        },
+        {
+          "feature": "rain_15d_mm",
+          "mean_abs_shap": 0.01439,
+          "rank": 10
+        },
+        {
+          "feature": "slope_p90_1km",
+          "mean_abs_shap": 0.01437,
+          "rank": 11
+        },
+        {
+          "feature": "slope_p90_3km",
+          "mean_abs_shap": 0.01273,
+          "rank": 12
+        },
+        {
+          "feature": "elev_relief_3km",
+          "mean_abs_shap": 0.01082,
+          "rank": 13
+        },
+        {
+          "feature": "slope_max_5km",
+          "mean_abs_shap": 0.00909,
+          "rank": 14
+        },
+        {
+          "feature": "slope_max_3km",
+          "mean_abs_shap": 0.00855,
+          "rank": 15
+        },
+        {
+          "feature": "slope_p90_5km",
+          "mean_abs_shap": 0.00825,
+          "rank": 16
+        },
+        {
+          "feature": "slope_max_1km",
+          "mean_abs_shap": 0.0065,
+          "rank": 17
+        }
+      ],
+      "top_features": [
+        "elevation_m",
+        "rain_3km_mean_7d",
+        "rain_7d_mm",
+        "elev_relief_1km",
+        "elev_relief_5km"
+      ],
+      "attribution_vs_causation_notice": "SHAP measures statistical model attribution, not physical geotechnical causation. It quantifies how features shift the model's output relative to the training-fold background."
+    }
+  ]
+}
