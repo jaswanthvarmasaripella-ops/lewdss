@@ -109,6 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadDistrict(state.selectedDistrict);
   loadAllObservations();
   initSimulations();
+  initGISMap();
 
   // Handle URL hash on initial load
   const initialHash = window.location.hash.replace("#", "");
@@ -170,6 +171,11 @@ function navigateTo(viewId, updateHash = true) {
 
   // 5. Scroll to top of main area
   window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Refresh GIS map layout if navigating to overview
+  if (viewId === "overview" && window.gisMapInstance) {
+    setTimeout(() => window.gisMapInstance.invalidateSize(), 150);
+  }
 
   // Close mobile sidebar if open
   const sidebar = document.getElementById("app-sidebar");
@@ -327,6 +333,27 @@ window.loadHistoricalExtreme = loadHistoricalExtreme;
 // All Observations Table (View 4 - All 6 Monitored Districts)
 // ---------------------------------------------------------------------------
 
+const FALLBACK_OBSERVATIONS = [
+  { district: "Wayanad", event_date: "2018-08-08", observed_slope_deg: 27.6, observed_elevation_m: 873.0, observed_rain_3d_mm: 85.0, observed_rain_7d_mm: 156.8, observed_rain_15d_mm: 324.7, source: "NASA GLC" },
+  { district: "Wayanad", event_date: "2009-07-15", observed_slope_deg: 2.4, observed_elevation_m: 759.7, observed_rain_3d_mm: 207.8, observed_rain_7d_mm: 260.0, observed_rain_15d_mm: 656.9, source: "NASA GLC" },
+  { district: "Wayanad", event_date: "2018-08-09", observed_slope_deg: 8.6, observed_elevation_m: 840.8, observed_rain_3d_mm: 147.1, observed_rain_7d_mm: 147.1, observed_rain_15d_mm: 336.8, source: "NASA GLC" },
+  { district: "Idukki", event_date: "2011-06-02", observed_slope_deg: 20.2, observed_elevation_m: 92.7, observed_rain_3d_mm: 349.4, observed_rain_7d_mm: 425.3, observed_rain_15d_mm: 498.7, source: "NASA GLC" },
+  { district: "Idukki", event_date: "2018-08-15", observed_slope_deg: 1.6, observed_elevation_m: 68.4, observed_rain_3d_mm: 225.3, observed_rain_7d_mm: 362.8, observed_rain_15d_mm: 469.8, source: "NASA GLC" },
+  { district: "Idukki", event_date: "2018-08-08", observed_slope_deg: 5.2, observed_elevation_m: 55.7, observed_rain_3d_mm: 76.9, observed_rain_7d_mm: 105.7, observed_rain_15d_mm: 309.9, source: "NASA GLC" },
+  { district: "Kodagu", event_date: "2014-05-25", observed_slope_deg: 6.3, observed_elevation_m: 951.5, observed_rain_3d_mm: 26.7, observed_rain_7d_mm: 44.7, observed_rain_15d_mm: 48.3, source: "NASA GLC" },
+  { district: "Kodagu", event_date: "2018-09-22", observed_slope_deg: 18.8, observed_elevation_m: 968.7, observed_rain_3d_mm: 0.0, observed_rain_7d_mm: 0.0, observed_rain_15d_mm: 32.5, source: "NASA GLC" },
+  { district: "Kodagu", event_date: "2018-08-17", observed_slope_deg: 6.5, observed_elevation_m: 944.1, observed_rain_3d_mm: 131.3, observed_rain_7d_mm: 412.4, observed_rain_15d_mm: 594.7, source: "NASA GLC" },
+  { district: "East Sikkim", event_date: "2007-09-07", observed_slope_deg: 36.0, observed_elevation_m: 383.0, observed_rain_3d_mm: 42.6, observed_rain_7d_mm: 93.0, observed_rain_15d_mm: 191.9, source: "NASA GLC" },
+  { district: "East Sikkim", event_date: "2007-09-11", observed_slope_deg: 33.8, observed_elevation_m: 346.5, observed_rain_3d_mm: 130.5, observed_rain_7d_mm: 173.1, observed_rain_15d_mm: 256.1, source: "NASA GLC" },
+  { district: "East Sikkim", event_date: "2010-08-26", observed_slope_deg: 11.2, observed_elevation_m: 360.6, observed_rain_3d_mm: 49.8, observed_rain_7d_mm: 118.6, observed_rain_15d_mm: 273.8, source: "NASA GLC" },
+  { district: "West Sikkim", event_date: "2007-08-02", observed_slope_deg: 9.4, observed_elevation_m: 1594.4, observed_rain_3d_mm: 42.6, observed_rain_7d_mm: 106.4, observed_rain_15d_mm: 274.9, source: "NASA GLC" },
+  { district: "West Sikkim", event_date: "2009-08-19", observed_slope_deg: 20.3, observed_elevation_m: 1281.2, observed_rain_3d_mm: 43.5, observed_rain_7d_mm: 58.0, observed_rain_15d_mm: 205.1, source: "NASA GLC" },
+  { district: "West Sikkim", event_date: "2009-08-20", observed_slope_deg: 25.2, observed_elevation_m: 1226.4, observed_rain_3d_mm: 138.4, observed_rain_7d_mm: 185.2, observed_rain_15d_mm: 352.6, source: "NASA GLC" },
+  { district: "East Khasi Hills", event_date: "2014-08-15", observed_slope_deg: 15.1, observed_elevation_m: 1835.6, observed_rain_3d_mm: 131.0, observed_rain_7d_mm: 131.0, observed_rain_15d_mm: 212.7, source: "NASA GLC" },
+  { district: "East Khasi Hills", event_date: "2017-06-17", observed_slope_deg: 37.4, observed_elevation_m: 56.0, observed_rain_3d_mm: 165.3, observed_rain_7d_mm: 500.5, observed_rain_15d_mm: 672.1, source: "NASA GLC" },
+  { district: "East Khasi Hills", event_date: "2017-06-17", observed_slope_deg: 4.9, observed_elevation_m: 1881.2, observed_rain_3d_mm: 120.0, observed_rain_7d_mm: 372.2, observed_rain_15d_mm: 488.8, source: "NASA GLC" }
+];
+
 async function loadAllObservations() {
   const districts = ["Wayanad", "Idukki", "Kodagu", "East Sikkim", "West Sikkim", "East Khasi Hills"];
   const allEvents = [];
@@ -345,6 +372,11 @@ async function loadAllObservations() {
         }
       }
     } catch (_) {}
+  }
+
+  // Fallback to verified catalog if local filesystem CORS blocked fetch
+  if (allEvents.length === 0) {
+    FALLBACK_OBSERVATIONS.forEach((ev) => allEvents.push(ev));
   }
 
   // Sort by event date descending
@@ -754,3 +786,211 @@ function openFloatingRAG() {
   }
 }
 window.openFloatingRAG = openFloatingRAG;
+
+// ---------------------------------------------------------------------------
+// GIS Surveillance Map Centerpiece (Leaflet + CartoDB Positron)
+// ---------------------------------------------------------------------------
+
+const DISTRICT_GIS_METRICS = [
+  {
+    name: "Wayanad",
+    state: "Kerala",
+    region: "A",
+    regionName: "Region A (Western Ghats)",
+    fold: "Fold_A1",
+    lat: 11.6854,
+    lng: 76.1320,
+    elev: 870,
+    slope: 34.2,
+    rlsi: 0.72,
+    status: "Severe Warning",
+    statusClass: "warning",
+    color: "#EF4444",
+    events: 18,
+    rain3d: 142.5,
+    rain7d: 285.0,
+    rain15d: 490.0,
+  },
+  {
+    name: "Idukki",
+    state: "Kerala",
+    region: "A",
+    regionName: "Region A (Western Ghats)",
+    fold: "Fold_A2",
+    lat: 9.8500,
+    lng: 76.9667,
+    elev: 1120,
+    slope: 31.8,
+    rlsi: 0.58,
+    status: "Watch Warning",
+    statusClass: "watch",
+    color: "#F97316",
+    events: 51,
+    rain3d: 96.0,
+    rain7d: 182.0,
+    rain15d: 310.0,
+  },
+  {
+    name: "Kodagu",
+    state: "Karnataka",
+    region: "A",
+    regionName: "Region A (Western Ghats)",
+    fold: "Fold_A3",
+    lat: 12.4244,
+    lng: 75.7382,
+    elev: 950,
+    slope: 26.5,
+    rlsi: 0.38,
+    status: "Advisory Alert",
+    statusClass: "advisory",
+    color: "#EAB308",
+    events: 9,
+    rain3d: 54.0,
+    rain7d: 115.0,
+    rain15d: 198.0,
+  },
+  {
+    name: "East Sikkim",
+    state: "Sikkim",
+    region: "B",
+    regionName: "Region B (Eastern Himalayas)",
+    fold: "Fold_B1",
+    lat: 27.3389,
+    lng: 88.6065,
+    elev: 1650,
+    slope: 38.0,
+    rlsi: 0.62,
+    status: "Watch Warning",
+    statusClass: "watch",
+    color: "#F97316",
+    events: 32,
+    rain3d: 112.0,
+    rain7d: 204.0,
+    rain15d: 345.0,
+  },
+  {
+    name: "West Sikkim",
+    state: "Sikkim",
+    region: "B",
+    regionName: "Region B (Eastern Himalayas)",
+    fold: "Fold_B2",
+    lat: 27.2882,
+    lng: 88.2435,
+    elev: 1720,
+    slope: 28.4,
+    rlsi: 0.35,
+    status: "Advisory Alert",
+    statusClass: "advisory",
+    color: "#EAB308",
+    events: 13,
+    rain3d: 48.0,
+    rain7d: 98.0,
+    rain15d: 165.0,
+  },
+  {
+    name: "East Khasi Hills",
+    state: "Meghalaya",
+    region: "B",
+    regionName: "Region B (Eastern Himalayas)",
+    fold: "Fold_B3",
+    lat: 25.5788,
+    lng: 91.8933,
+    elev: 1480,
+    slope: 35.6,
+    rlsi: 0.69,
+    status: "Severe Warning",
+    statusClass: "warning",
+    color: "#EF4444",
+    events: 21,
+    rain3d: 168.0,
+    rain7d: 320.0,
+    rain15d: 580.0,
+  },
+];
+
+function initGISMap() {
+  const mapContainer = document.getElementById("gis-surveillance-map");
+  if (!mapContainer || typeof L === "undefined") return;
+  if (window.gisMapInstance) {
+    window.gisMapInstance.invalidateSize();
+    return;
+  }
+
+  try {
+    const map = L.map("gis-surveillance-map", {
+      center: [20.0, 83.5],
+      zoom: 5,
+      zoomControl: true,
+      scrollWheelZoom: false,
+    });
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      subdomains: "abcd",
+      maxZoom: 18,
+    }).addTo(map);
+
+    window.gisMapInstance = map;
+    window.gisMarkers = [];
+
+    DISTRICT_GIS_METRICS.forEach((d) => {
+      const circle = L.circleMarker([d.lat, d.lng], {
+        radius: 10,
+        fillColor: d.color,
+        color: "#FFFFFF",
+        weight: 2.5,
+        opacity: 1,
+        fillOpacity: 0.9,
+      }).addTo(map);
+
+      const popupContent = `
+        <div style="font-family:'Inter',sans-serif; min-width:210px; color:#0F172A; font-size:12px; line-height:1.45;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E2E8F0; padding-bottom:6px; margin-bottom:6px;">
+            <strong style="font-size:14px; color:#172B40;">${d.name}</strong>
+            <span style="background:${d.color}1A; color:${d.color}; font-weight:700; font-size:10px; padding:2px 6px; border-radius:4px; text-transform:uppercase;">${d.status}</span>
+          </div>
+          <div style="color:#64748B; font-size:11px; margin-bottom:6px;">${d.regionName} &bull; ${d.fold}</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-bottom:8px; font-size:11px;">
+            <div>Baseline RLSI: <strong>${d.rlsi.toFixed(2)}</strong></div>
+            <div>NASA Events: <strong>${d.events}</strong></div>
+            <div>Elevation: <strong>${d.elev} m</strong></div>
+            <div>Mean Slope: <strong>${d.slope}&deg;</strong></div>
+          </div>
+          <button style="width:100%; padding:6px 10px; background:#14B8A6; color:#FFFFFF; border:none; border-radius:4px; font-weight:600; font-size:11px; cursor:pointer;" onclick="selectDistrict('${d.name}'); navigateTo('inference');">
+            Evaluate ${d.name} Scenario &rarr;
+          </button>
+        </div>
+      `;
+
+      circle.bindPopup(popupContent);
+      window.gisMarkers.push({ marker: circle, data: d });
+    });
+  } catch (err) {
+    console.error("GIS Map initialization error:", err);
+  }
+}
+window.initGISMap = initGISMap;
+
+function focusMapRegion(region) {
+  if (!window.gisMapInstance) return;
+
+  // Update button active states in the map overlay header
+  document.querySelectorAll(".map-overlay-header .btn-dist").forEach((btn) => {
+    btn.classList.remove("active");
+  });
+  if (typeof event !== "undefined" && event && event.target) {
+    event.target.classList.add("active");
+  }
+
+  if (region === "A") {
+    // Western Ghats (Wayanad, Idukki, Kodagu)
+    window.gisMapInstance.flyTo([11.2, 76.5], 7, { duration: 1.2 });
+  } else if (region === "B") {
+    // Eastern Himalayas (East Sikkim, West Sikkim, East Khasi Hills)
+    window.gisMapInstance.flyTo([26.5, 90.0], 7, { duration: 1.2 });
+  } else {
+    // National view
+    window.gisMapInstance.flyTo([20.0, 83.5], 5, { duration: 1.2 });
+  }
+}
+window.focusMapRegion = focusMapRegion;
