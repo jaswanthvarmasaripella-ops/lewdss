@@ -1,0 +1,89 @@
+Database Details & Verified Dataset Links
+Part 1: Regional Landslide Early Warning & Decision Support System Architecture
+
+Course: CSE276 - Artificial Intelligence Foundations
+Project ID: SIH26001 · LEWDSS
+Authors: Shaik Umar Farukh (12515413), Saripella Jaswanth Varma (12513322) | Section: K3P25IL
+Target Regions: Region A (Western Ghats: Wayanad, Idukki, Kodagu) & Region B (Eastern Himalayas / Northeast: East Sikkim, West Sikkim, East Khasi Hills)
+
+The application implements a multi-tiered geospatial data and machine learning architecture:
+
+1. Geospatial & Topographic Ingestion Engine:
+- High-Resolution Digital Elevation Model: Copernicus Global DEM GLO-30 (30m spatial resolution).
+  Derived Terrain Metrics: Point elevation (m), slope gradient (degrees), aspect, terrain roughness index (TRI),
+  and multi-scale zonal statistics across 1 km, 3 km, and 5 km radial circular windows:
+  - Zonal Elevation Relief: max(elev) - min(elev)
+  - Zonal Slope Percentiles: 90th percentile slope, maximum slope, mean slope.
+- Multi-Temporal Antecedent Precipitation: CHIRPS v2.0 (Climate Hazards Group InfraRed Precipitation with Station data)
+  at 0.05° (~5.3 km) spatial resolution. Computes cumulative rainfall over 3-day (short-term triggering),
+  7-day (soil wetting), and 15-day (deep pore-pressure destabilization) antecedent temporal windows.
+
+2. State-Space Latent Soil Hydrology (Dynamic Linear Model - DLM):
+- Discrete-time state-space Kalman filter tracking latent soil saturation S_t:
+    State equation:       S_t = phi * S_{t-1} + beta * P_t + eta_t,   eta_t ~ N(0, W)
+    Observation equation: Y_t = S_t + epsilon_t,                       epsilon_t ~ N(0, V)
+  Parameters: Decay factor phi=0.88, precipitation impact beta=0.035, process variance W=0.002, observation variance V=0.015.
+- Online filtering tracks real-time innovation, filter gain K_t, and unobservable antecedent moisture state.
+
+3. Feature Engineering Framework:
+- Feature Set 1 (FS1 - 5 point features): elevation, slope, rain_3d, rain_7d, rain_15d.
+- Feature Set 2 (FS2 - 14 zonal features): FS1 + 1km/3km/5km elevation relief, 90th percentile slope, max slope.
+- Feature Set 3 (FS3 - 17 spatial rainfall features): FS2 + 3km buffer mean rainfall (3d, 7d, 15d).
+
+4. Machine Learning & Spatial Cross-Validation:
+- Spatial Leave-One-District-Out Cross-Validation (LODO-CV): Rigorous hold-out protocol where models are trained
+  on 5 districts and evaluated on the completely unseen 6th district to audit geographic generalization and domain shift.
+- Logistic Regression (Balanced): Yields 87.0% generalized recall across held-out districts with stable, monotonic
+  probability calibration (Brier score: 0.149; AUC-ROC: 0.778).
+- Random Forest: 100 estimators (max_depth=6) demonstrating high local discriminative ranking (Wayanad local AUC: 0.887)
+  with audited empirical threshold collapse across distinct geomorphological domains (Western Ghats to Himalayas).
+
+5. Explainable AI (XAI) & GeoGuard RAG AI Assistant:
+- SHAP (SHapley Additive exPlanations): TreeExplainer and KernelExplainer computing exact local additive feature
+  attributions phi_i(x) for every evaluated observation.
+- GeoGuard RAG Engine: Geotechnical Knowledge Base containing 15+ curated reference documents (IS 14458, GSI NLSM,
+  USGS Landslide Guidelines, CHIRPS specifications) indexed with BM25 + dense TF-IDF keyword vector retrieval.
+
+
+Part 2: Verified Dataset Sources & Direct Links
+
+All datasets utilized in this project are strictly from official, peer-reviewed, open-access repositories:
+
+1. Landslide Inventories & Geological Catalogs
+NASA Global Landslide Catalog (GLC):
+Dataset: https://data.nasa.gov/Earth-Science/Global-Landslide-Catalog/dd9e-wu2v
+NASA Open Data: https://catalog.data.gov/dataset/nasa-global-landslide-catalog
+Description: NASA Cooperative Open Online Landslide Repository (COOLR) covering rainfall-triggered landslide events (2004–2022).
+
+Geological Survey of India (GSI) National Landslide Susceptibility Mapping (NLSM):
+Link: https://bhukosh.gsi.gov.in/
+Description: Macro-scale (1:50,000) landslide susceptibility mapping of India covering Western Ghats and Himalayan belts.
+
+2. Digital Elevation Models & Remote Sensing
+Copernicus Global DEM GLO-30 (30m Spatial Resolution):
+AWS Open Data Registry: https://registry.opendata.aws/copernicus-dem/
+ESA Copernicus Data Space: https://dataspace.copernicus.eu/
+Description: High-resolution global digital surface model derived from WorldDEM TanDEM-X mission.
+
+USGS EarthExplorer:
+Link: https://earthexplorer.usgs.gov/
+Description: Open satellite imagery, SRTM 30m, and global elevation grids.
+
+3. High-Resolution Meteorological & Rainfall Products
+CHIRPS v2.0 (Climate Hazards Center, UC Santa Barbara):
+Dataset HTTP Archive: https://data.chc.ucsb.edu/products/CHIRPS-2.0/
+UC Santa Barbara CHC Portal: https://www.chc.ucsb.edu/data/chirps
+Description: Daily quasi-global precipitation product (0.05° resolution) combining satellite infrared with in-situ station observations.
+
+India Meteorological Department (IMD) Pune National Data Centre:
+Link: https://www.imdpune.gov.in/
+Description: Gridded daily rainfall datasets (0.25° x 0.25°) and monsoon climate observation reports.
+
+4. Disaster Management Support Portals
+ISRO Bhuvan Disaster Management Support Services (DMSS):
+Link: https://bhuvan.nrsc.gov.in/
+Description: Near-real-time satellite-derived flood and landslide emergency monitoring by the National Remote Sensing Centre (NRSC).
+
+National Disaster Management Authority (NDMA), Government of India:
+Link: https://ndma.gov.in/
+Description: Official national guidelines, disaster mitigation protocols, and hazard zone maps.

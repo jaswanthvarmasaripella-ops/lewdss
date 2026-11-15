@@ -35,3 +35,6 @@ scratch/
 
 # Preserve essential geojson and data
 !data/raw/boundaries/target_districts.geojson
+
+# Archives
+*.zip
