@@ -21,6 +21,9 @@ const state = {
   districtData: null,
   explainabilityData: null,
   allObservations: [],
+  filteredObservations: [],
+  currentObsDistrictFilter: "all",
+  currentObsSearchQuery: "",
 };
 
 // District to Spatial Validation Fold mapping
@@ -35,17 +38,14 @@ const DISTRICT_FOLD_MAP = {
 
 // View Title Dictionary
 const VIEW_TITLES = {
-  "overview": "Overview & Decision Summary",
+  "overview": "Overview & Operational Summary",
   "inference": "Relative Landslide Susceptibility Estimator",
-  "zones": "Registered Monitoring Zones",
-  "observations": "Sensor Observations & Historical Catalog",
-  "alerts": "Alert Center & NDMA Response Protocols",
+  "zones": "Registered Monitoring Zones (6 Districts)",
+  "observations": "Sensor Observations & Historical Event Catalog",
+  "alerts": "Alert Center & Operational SOPs",
   "diagnostics": "Model Diagnostics & Spatial CV Benchmark",
-  "thresholds": "Operational Decision Threshold Settings",
-  "statespace": "State-Space Hydrology Simulator (1D Kalman DLM)",
   "shap": "Explainable AI (SHAP Feature Attribution)",
-  "rag": "GeoGuard AI — Landslide Susceptibility RAG Assistant",
-  "about": "Project Reference & Viva Voce Masterclass",
+  "rag": "Decision Support Assistant (GeoGuard)",
 };
 
 // Standard Operating Procedures Guidance
@@ -324,7 +324,7 @@ function loadHistoricalExtreme() {
 window.loadHistoricalExtreme = loadHistoricalExtreme;
 
 // ---------------------------------------------------------------------------
-// All Observations Table (View 4)
+// All Observations Table (View 4 - All 6 Monitored Districts)
 // ---------------------------------------------------------------------------
 
 async function loadAllObservations() {
@@ -347,23 +347,71 @@ async function loadAllObservations() {
     } catch (_) {}
   }
 
+  // Sort by event date descending
+  allEvents.sort((a, b) => (b.event_date || "").localeCompare(a.event_date || ""));
+
   state.allObservations = allEvents;
-  renderObservationsTable(allEvents);
+  applyObservationFilters();
+}
+
+function filterObservations(district) {
+  state.currentObsDistrictFilter = district;
+  document.querySelectorAll(".btn-obs-pill").forEach((btn) => {
+    if (btn.getAttribute("data-district") === district) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+  applyObservationFilters();
+}
+window.filterObservations = filterObservations;
+
+function handleObservationSearch() {
+  const input = document.getElementById("obs-search-input");
+  state.currentObsSearchQuery = (input ? input.value : "").toLowerCase().trim();
+  applyObservationFilters();
+}
+window.handleObservationSearch = handleObservationSearch;
+
+function applyObservationFilters() {
+  let list = state.allObservations;
+  if (state.currentObsDistrictFilter && state.currentObsDistrictFilter !== "all") {
+    list = list.filter((ev) => ev.district === state.currentObsDistrictFilter);
+  }
+  if (state.currentObsSearchQuery) {
+    const q = state.currentObsSearchQuery;
+    list = list.filter((ev) => 
+      (ev.district || "").toLowerCase().includes(q) ||
+      (ev.event_date || "").toLowerCase().includes(q) ||
+      String(ev.observed_slope_deg).includes(q) ||
+      String(ev.observed_elevation_m).includes(q) ||
+      String(ev.observed_rain_3d_mm).includes(q) ||
+      String(ev.observed_rain_7d_mm).includes(q) ||
+      String(ev.observed_rain_15d_mm).includes(q)
+    );
+  }
+  state.filteredObservations = list;
+  renderObservationsTable(list);
 }
 
 function renderObservationsTable(events) {
   const tbody = document.getElementById("tbody-all-observations");
+  const countLabel = document.getElementById("obs-count-label");
   if (!tbody) return;
 
+  if (countLabel) {
+    countLabel.textContent = `Showing ${events.length} of ${state.allObservations.length} verified historical scenarios`;
+  }
+
   if (events.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:15px; color:var(--text-muted);">No records available.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:18px; color:var(--text-muted);">No records found matching filter criteria.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = events
-    .slice(0, 50)
     .map(
-      (ev, idx) => `
+      (ev) => `
       <tr>
         <td><strong>${ev.district}</strong></td>
         <td>${ev.event_date}</td>
