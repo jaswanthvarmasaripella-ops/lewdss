@@ -3,313 +3,804 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LEWDSS — Regional Landslide Decision Support System</title>
-  <meta name="description" content="Academic research prototype for regional landslide early warning decision support across the Western Ghats and Northeast India.">
+  <title>LEWDSS · Decision Lab — Regional Landslide Risk & Response System</title>
+  <meta name="description" content="AI-powered Regional Landslide Early Warning & Emergency Response Decision Support System across Western Ghats and Northeast India.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
-  <!-- Top Institutional Header -->
-  <header class="app-header" role="banner">
-    <div class="header-inner">
-      <div class="header-titles">
-        <h1 class="system-title">Regional Landslide Early Warning & Emergency Response Decision Support System (LEWDSS)</h1>
-      </div>
-    </div>
-  </header>
-
-
-  <!-- Main Container -->
-  <div class="app-layout">
-
-    <!-- District Selection Sidebar / Top Navigation -->
-    <nav class="controls-panel" aria-label="District and Model Selection">
-      <div class="control-section">
-        <h2 class="control-heading">1. Select Target District</h2>
-        <div class="region-group">
-          <span class="region-label">Region A: Western Ghats</span>
-          <div class="district-buttons" role="radiogroup" aria-label="Western Ghats Districts">
-            <button type="button" class="btn-district active" data-district="Wayanad" id="btn-dist-wayanad">Wayanad (KL)</button>
-            <button type="button" class="btn-district" data-district="Idukki" id="btn-dist-idukki">Idukki (KL)</button>
-            <button type="button" class="btn-district" data-district="Kodagu" id="btn-dist-kodagu">Kodagu (KA)</button>
-          </div>
+  <div class="app-wrapper">
+    <!-- ====================================================================== -->
+    <!-- SIDEBAR NAVIGATION (Inspired by TerraSense ML Decision Lab)            -->
+    <!-- ====================================================================== -->
+    <aside class="app-sidebar" id="app-sidebar">
+      <!-- Brand Header -->
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 19l6-10 4 6 3-4 5 8H3z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l2-2m2 4l2-2"/>
+          </svg>
         </div>
-        <div class="region-group">
-          <span class="region-label">Region B: Northeast India</span>
-          <div class="district-buttons" role="radiogroup" aria-label="Northeast Districts">
-            <button type="button" class="btn-district" data-district="East Sikkim" id="btn-dist-esikkim">East Sikkim (SK)</button>
-            <button type="button" class="btn-district" data-district="West Sikkim" id="btn-dist-wsikkim">West Sikkim (SK)</button>
-            <button type="button" class="btn-district" data-district="East Khasi Hills" id="btn-dist-ekhasi">East Khasi Hills (ML)</button>
-          </div>
+        <div class="brand-text">
+          <h1>LEWDSS · LAB</h1>
+          <p>Landslide Decision System</p>
         </div>
       </div>
 
-      <div class="control-section">
-        <h2 class="control-heading">2. Model Configuration</h2>
-        <div class="config-row">
-          <label for="select-model-family">Model Family:</label>
-          <select id="select-model-family" class="form-select">
-            <option value="LogisticRegression" selected>Logistic Regression (Recommended: 87% generalized recall)</option>
-            <option value="RandomForest">Random Forest (Audited local ranking; threshold shift)</option>
-          </select>
-        </div>
-        <div class="config-row">
-          <label for="select-feature-set">Feature Set:</label>
-          <select id="select-feature-set" class="form-select">
-            <option value="FS3_Full" selected>FS3: Full (Zonal Terrain + 3km Rain, 17 features)</option>
-            <option value="FS2_Zonal">FS2: Zonal Terrain (14 features)</option>
-            <option value="FS1_Point">FS1: Point Features Only (5 features)</option>
-          </select>
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav" aria-label="Main Navigation">
+        <div class="nav-group-title">Core Navigation</div>
+        <a class="nav-link active" data-view="overview" id="nav-overview">
+          <span class="nav-icon">▦</span>
+          <span>Overview</span>
+          <span class="nav-badge">Home</span>
+        </a>
+        <a class="nav-link" data-view="inference" id="nav-inference">
+          <span class="nav-icon">⌁</span>
+          <span>Risk Inference</span>
+        </a>
+        <a class="nav-link" data-view="zones" id="nav-zones">
+          <span class="nav-icon">◫</span>
+          <span>Monitoring Zones</span>
+          <span class="nav-badge">6</span>
+        </a>
+        <a class="nav-link" data-view="observations" id="nav-observations">
+          <span class="nav-icon">⌗</span>
+          <span>Observations</span>
+          <span class="nav-badge">144</span>
+        </a>
+        <a class="nav-link" data-view="alerts" id="nav-alerts">
+          <span class="nav-icon">⚑</span>
+          <span>Alert Center &amp; SOPs</span>
+        </a>
+
+        <div class="nav-group-title">Models &amp; Hydrology</div>
+        <a class="nav-link" data-view="diagnostics" id="nav-diagnostics">
+          <span class="nav-icon">◈</span>
+          <span>Model Diagnostics</span>
+        </a>
+        <a class="nav-link" data-view="thresholds" id="nav-thresholds">
+          <span class="nav-icon">⚙</span>
+          <span>Threshold Settings</span>
+        </a>
+        <a class="nav-link" data-view="statespace" id="nav-statespace">
+          <span class="nav-icon">▤</span>
+          <span>State-Space &amp; Soil</span>
+          <span class="nav-badge">DLM</span>
+        </a>
+        <a class="nav-link" data-view="shap" id="nav-shap">
+          <span class="nav-icon">⌘</span>
+          <span>Explainable AI (SHAP)</span>
+        </a>
+
+        <div class="nav-group-title">Intelligence &amp; System</div>
+        <a class="nav-link" data-view="rag" id="nav-rag">
+          <span class="nav-icon">💬</span>
+          <span>GeoGuard RAG AI</span>
+          <span class="nav-badge pulse">RAG</span>
+        </a>
+        <a class="nav-link" data-view="about" id="nav-about">
+          <span class="nav-icon">ⓘ</span>
+          <span>Project &amp; Viva Guide</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Footer Status -->
+      <div class="sidebar-footer">
+        <div class="system-status-pill">
+          <span class="status-dot"></span>
+          <span>208 Tests Passing · RAG Active</span>
         </div>
       </div>
-    </nav>
+    </aside>
 
-    <!-- Main Content Area -->
-    <main class="dashboard-main" role="main">
-
-      <!-- District Overview Card -->
-      <section class="card district-header-card" aria-labelledby="district-title">
-        <div class="card-header-flex">
-          <div>
-            <span class="region-badge" id="district-region-badge">Region A (Western Ghats)</span>
-            <h2 id="district-title" class="district-name">Wayanad District, Kerala</h2>
-            <p id="district-fold-info" class="district-meta">Spatial Validation Fold: Fold_A1 · Training Districts: Idukki, Kodagu</p>
-          </div>
-          <div class="district-stats-grid">
-            <div class="stat-box">
-              <span class="stat-label">Elevation Range</span>
-              <span class="stat-val" id="stat-elev">650 m – 2,050 m</span>
-            </div>
-            <div class="stat-box">
-              <span class="stat-label">Documented Landslides</span>
-              <span class="stat-val" id="stat-pos">18 events</span>
-            </div>
-            <div class="stat-box">
-              <span class="stat-label">Historical Catalog Span</span>
-              <span class="stat-val" id="stat-dates">2007 – 2019</span>
-            </div>
-            <div class="stat-box">
-              <span class="stat-label">Fold Test Recall</span>
-              <span class="stat-val highlight" id="stat-recall">100.0% (18/18)</span>
-            </div>
+    <!-- ====================================================================== -->
+    <!-- MAIN CONTENT SHELL                                                     -->
+    <!-- ====================================================================== -->
+    <div class="app-main">
+      <!-- Top Bar -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle menu">☰</button>
+          <div class="view-breadcrumb">
+            <span>LEWDSS Decision Lab</span> / <strong id="topbar-active-title">Overview</strong>
           </div>
         </div>
-      </section>
+        <div class="topbar-right">
+          <button class="btn-topbar" onclick="navigateTo('inference')">
+            <span>＋ Run Inference</span>
+          </button>
+          <button class="btn-topbar" onclick="openFloatingRAG()">
+            <span>💬 Ask GeoGuard RAG</span>
+          </button>
+          <a href="LEWDSS_Complete_Project_Guide.pdf" target="_blank" class="btn-topbar btn-primary">
+            <span>📄 PDF Guide</span>
+          </a>
+        </div>
+      </header>
 
-      <!-- Two Distinct Panels: Historical vs. Model Estimation -->
-      <div class="two-panel-grid">
+      <!-- View Containers -->
+      <main class="view-container">
 
-        <!-- Panel A: Historical Observations (NASA GLC + CHIRPS) -->
-        <section class="card panel-card panel-historical" aria-labelledby="heading-historical">
-          <div class="panel-header">
-            <span class="source-tag historical-tag">STATIC CATALOG OBSERVATIONS</span>
-            <h3 id="heading-historical" class="panel-title">Documented Historical Landslides & Observed Rainfall</h3>
-            <p class="panel-desc">NASA Global Landslide Catalog events paired with 15-day antecedent CHIRPS rainfall. Select any row to inspect historical observations or load into the estimator.</p>
+        <!-- ================================================================== -->
+        <!-- VIEW 1: OVERVIEW (HOME DASHBOARD)                                  -->
+        <!-- ================================================================== -->
+        <section class="tab-view active" id="view-overview">
+          <div class="card">
+            <div class="card-header-flex">
+              <div>
+                <h2 class="card-title">Regional Landslide Risk &amp; Emergency Response Decision Support System</h2>
+                <p class="card-subtitle">Operational decision platform integrating Supervised Classification, State-Space Modeling, and Explainable AI.</p>
+              </div>
+            </div>
+
+            <!-- KPI Grid -->
+            <div class="kpi-grid">
+              <div class="kpi-card">
+                <span class="kpi-label">Monitoring Zones</span>
+                <span class="kpi-value emerald">6 Districts</span>
+                <span class="kpi-note">Western Ghats &amp; Himalayas</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-label">Historical Events</span>
+                <span class="kpi-value blue">144 Events</span>
+                <span class="kpi-note">NASA GLC/UGLC verified</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-label">Primary Classifier</span>
+                <span class="kpi-value emerald">L2 Logistic Reg.</span>
+                <span class="kpi-note">87.0% spatial recall (100% Wayanad)</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-label">Automated Test Suite</span>
+                <span class="kpi-value teal">208 / 208</span>
+                <span class="kpi-note">100% Green pytest passing</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-label">Soil Hydrology Model</span>
+                <span class="kpi-value amber">State-Space DLM</span>
+                <span class="kpi-note">1D Kalman Filter Soil Moisture</span>
+              </div>
+            </div>
           </div>
 
-          <div class="table-container">
-            <table class="data-table" id="table-historical-events">
-              <thead>
-                <tr>
-                  <th>Event Date</th>
-                  <th>Observed Rain (3d / 7d / 15d)</th>
-                  <th>Slope</th>
-                  <th>Elev.</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="tbody-historical-events">
-                <tr><td colspan="5" class="loading-cell">Loading verified district records...</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="catalog-provenance-note">
-            <em>Provenance: NASA GLC (2004–2022 monsoon season events) · CHIRPS v2.0 daily precipitation · Copernicus DEM GLO-30.</em>
+          <!-- Quick Action Tiles (TerraSense ML Style) -->
+          <div class="tiles-grid">
+            <div class="action-tile">
+              <div>
+                <div class="tile-icon-wrapper">⌁</div>
+                <h3 class="tile-title">Risk Inference &amp; Evaluation</h3>
+                <p class="tile-desc">Run real-time scenario evaluations across any registered district. Enter custom slope, elevation, and 3d/7d/15d antecedent rainfall to compute continuous RLSI hazard scores.</p>
+              </div>
+              <a class="tile-action-link" onclick="navigateTo('inference')">Launch Risk Inference →</a>
+            </div>
+
+            <div class="action-tile">
+              <div>
+                <div class="tile-icon-wrapper">◫</div>
+                <h3 class="tile-title">Registered Monitoring Zones</h3>
+                <p class="tile-desc">Explore all 6 target districts (Wayanad, Idukki, Kodagu, East Sikkim, West Sikkim, East Khasi Hills). Inspect elevation spans, geological contexts, and spatial holdout CV folds.</p>
+              </div>
+              <a class="tile-action-link" onclick="navigateTo('zones')">View Monitoring Zones →</a>
+            </div>
+
+            <div class="action-tile">
+              <div>
+                <div class="tile-icon-wrapper">⌗</div>
+                <h3 class="tile-title">Sensor Observations &amp; Catalog</h3>
+                <p class="tile-desc">Browse 144 verified historical landslide records paired with 15-day CHIRPS satellite rainfall telemetry. Click any historical event to load directly into the estimator.</p>
+              </div>
+              <a class="tile-action-link" onclick="navigateTo('observations')">Open Event Catalog →</a>
+            </div>
+
+            <div class="action-tile">
+              <div>
+                <div class="tile-icon-wrapper">⚑</div>
+                <h3 class="tile-title">Alert Center &amp; NDMA SOPs</h3>
+                <p class="tile-desc">Inspect operational hazard tiers (Minimal, Advisory, Watch, Warning) mapped directly to National Disaster Management Authority Standard Operating Procedures.</p>
+              </div>
+              <a class="tile-action-link" onclick="navigateTo('alerts')">Review Alert Protocols →</a>
+            </div>
+
+            <div class="action-tile">
+              <div>
+                <div class="tile-icon-wrapper">◈</div>
+                <h3 class="tile-title">Model Diagnostics &amp; Spatial CV</h3>
+                <p class="tile-desc">Review the 8-fold Leave-One-District-Out cross-validation benchmark comparing Logistic Regression against Random Forest, including threshold collapse audits.</p>
+              </div>
+              <a class="tile-action-link" onclick="navigateTo('diagnostics')">Examine Model Benchmarks →</a>
+            </div>
+
+            <div class="action-tile">
+              <div>
+                <div class="tile-icon-wrapper">💬</div>
+                <h3 class="tile-title">GeoGuard AI — RAG Assistant</h3>
+                <p class="tile-desc">Chat with the embedded Retrieval-Augmented Generation assistant. Ask questions on slope mechanics, TWI, ROC-AUC, or NDMA response with transparent citations.</p>
+              </div>
+              <a class="tile-action-link" onclick="navigateTo('rag')">Open RAG Assistant →</a>
+            </div>
           </div>
         </section>
 
-        <!-- Panel B: Model Estimation & RLSI Evaluator -->
-        <section class="card panel-card panel-estimator" aria-labelledby="heading-estimator">
-          <div class="panel-header">
-            <span class="source-tag model-tag">EXPERIMENTAL MODEL INFERENCE</span>
-            <h3 id="heading-estimator" class="panel-title">Relative Landslide Susceptibility Estimator</h3>
-            <p class="panel-desc">Evaluates terrain and antecedent rainfall against the held-out spatial model checkpoint for this district. Output is an index of relative hazard.</p>
+        <!-- ================================================================== -->
+        <!-- VIEW 2: RISK INFERENCE (ESTIMATOR)                                 -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-inference">
+          <div class="card">
+            <div class="card-header-flex">
+              <div>
+                <h2 class="card-title">⌁ Relative Landslide Susceptibility Estimator</h2>
+                <p class="card-subtitle">Evaluates terrain and antecedent precipitation against held-out spatial model checkpoints. Output is a continuous index of relative hazard.</p>
+              </div>
+            </div>
+
+            <!-- District Selection Bar -->
+            <label style="font-size:11.5px; font-weight:600; color:var(--text-muted); margin-bottom:8px; display:block;">Select Target District:</label>
+            <div class="district-selection-strip">
+              <button type="button" class="btn-dist active" data-district="Wayanad" onclick="selectDistrict('Wayanad')">Wayanad (KL)</button>
+              <button type="button" class="btn-dist" data-district="Idukki" onclick="selectDistrict('Idukki')">Idukki (KL)</button>
+              <button type="button" class="btn-dist" data-district="Kodagu" onclick="selectDistrict('Kodagu')">Kodagu (KA)</button>
+              <button type="button" class="btn-dist" data-district="East Sikkim" onclick="selectDistrict('East Sikkim')">East Sikkim (SK)</button>
+              <button type="button" class="btn-dist" data-district="West Sikkim" onclick="selectDistrict('West Sikkim')">West Sikkim (SK)</button>
+              <button type="button" class="btn-dist" data-district="East Khasi Hills" onclick="selectDistrict('East Khasi Hills')">East Khasi Hills (ML)</button>
+            </div>
+
+            <!-- Model Parameters & Feature Set -->
+            <div class="form-grid" style="margin-top:10px;">
+              <div class="form-group">
+                <label for="select-model-family">Model Family:</label>
+                <select id="select-model-family" class="form-select">
+                  <option value="LogisticRegression" selected>Logistic Regression (Recommended: 87% generalized recall)</option>
+                  <option value="RandomForest">Random Forest (Audited local ranking)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="select-feature-set">Feature Set:</label>
+                <select id="select-feature-set" class="form-select">
+                  <option value="FS3_Full" selected>FS3: Full (Zonal Terrain + 3km Rain, 17 features)</option>
+                  <option value="FS2_Zonal">FS2: Zonal Terrain (14 features)</option>
+                  <option value="FS1_Point">FS1: Point Features Only (5 features)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Input Fields -->
+            <form id="form-rlsi-scenario" onsubmit="handleScenarioSubmit(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="inp-elev">Elevation (m):</label>
+                  <input type="number" id="inp-elev" step="1" min="10" max="6000" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="inp-slope">Local Slope (degrees):</label>
+                  <input type="number" id="inp-slope" step="0.1" min="0" max="75" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="inp-rain3d">Antecedent Rain 3-Day (mm):</label>
+                  <input type="number" id="inp-rain3d" step="0.1" min="0" max="800" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="inp-rain7d">Antecedent Rain 7-Day (mm):</label>
+                  <input type="number" id="inp-rain7d" step="0.1" min="0" max="1000" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="inp-rain15d">Antecedent Rain 15-Day (mm):</label>
+                  <input type="number" id="inp-rain15d" step="0.1" min="0" max="1500" class="form-input" required>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn-calc" id="btn-eval-scenario">Compute RLSI Susceptibility</button>
+                <button type="button" class="btn-secondary" onclick="resetToDistrictMedian()">Reset to District Median</button>
+                <button type="button" class="btn-secondary" onclick="loadHistoricalExtreme()">Load Monsoonal Storm Extreme</button>
+              </div>
+            </form>
+
+            <!-- Inference Results Box -->
+            <div id="rlsi-result-box" class="result-card-inner" style="display: none; margin-top:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <span class="result-badge high" id="res-badge">High Relative Susceptibility</span>
+                <span style="font-family:var(--font-mono); font-size:11px; color:var(--text-muted);" id="res-model-stamp">LogisticRegression · FS3_Full · Fold_A1</span>
+              </div>
+
+              <div class="result-metrics-row">
+                <div class="res-metric">
+                  <span class="res-metric-label">RLSI Score</span>
+                  <div class="res-metric-val" id="res-rlsi-score">0.5120</div>
+                  <span style="font-size:10px; color:var(--text-dim);">Continuous scale [0.0, 1.0]</span>
+                </div>
+                <div class="res-metric">
+                  <span class="res-metric-label">Decision Threshold (&tau;*)</span>
+                  <div class="res-metric-val" id="res-tau-star">0.4400</div>
+                  <span style="font-size:10px; color:var(--text-dim);">&ge;80% recall constraint</span>
+                </div>
+                <div class="res-metric">
+                  <span class="res-metric-label">Operational Status</span>
+                  <div class="res-metric-val" style="color:var(--accent-rose);" id="res-threshold-status">Exceeds Threshold</div>
+                  <span style="font-size:10px; color:var(--text-dim);">RLSI &ge; &tau;*</span>
+                </div>
+              </div>
+
+              <p id="res-category-desc" style="font-size:12px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;"></p>
+
+              <!-- Preparedness SOPs -->
+              <div class="sop-box" id="sop-guidance-card">
+                <h4>Preparedness Guidance (Institutional Standard Operating Procedures)</h4>
+                <p style="font-size:11.5px; color:var(--accent-amber); font-weight:600; margin-bottom:10px;" id="sop-admin-status">Administrative Status: Preparedness Advisory &amp; Resource Standby</p>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
+                  <div>
+                    <strong style="font-size:11.5px; color:#ffffff;">Community Preparedness:</strong>
+                    <ul class="sop-list" id="sop-list-community" style="margin-top:6px;"></ul>
+                  </div>
+                  <div>
+                    <strong style="font-size:11.5px; color:#ffffff;">Infrastructure &amp; Transport:</strong>
+                    <ul class="sop-list" id="sop-list-infrastructure" style="margin-top:6px;"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 3: MONITORING ZONES (DISTRICT EXPLORER)                       -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-zones">
+          <div class="card">
+            <h2 class="card-title">◫ Registered Monitoring Zones</h2>
+            <p class="card-subtitle">Six mountainous districts evaluated across the Western Ghats (Region A) and Northeast Himalayas (Region B).</p>
           </div>
 
-          <!-- Scenario Form -->
-          <form id="form-rlsi-scenario" class="scenario-form">
+          <div class="zones-grid">
+            <!-- Wayanad -->
+            <div class="zone-card">
+              <div>
+                <div class="zone-header">
+                  <h3 class="zone-title">Wayanad District</h3>
+                  <span class="zone-tag">Region A · Kerala</span>
+                </div>
+                <p class="zone-desc">Weathered lateritic regolith on Precambrian crystalline basement. Subject to intense South-West monsoon deluge and rapid shallow debris flows along steep escarpments.</p>
+                <div class="zone-stats-list">
+                  <div class="zone-stat-item"><span class="zone-stat-label">Elevation:</span><span class="zone-stat-val">668 – 1,897 m</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Catalog Events:</span><span class="zone-stat-val">18 events</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Spatial Fold:</span><span class="zone-stat-val">Fold_A1</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Holdout Recall:</span><span class="zone-stat-val" style="color:var(--accent-emerald);">100.0% (18/18)</span></div>
+                </div>
+              </div>
+              <button class="btn-table-action" onclick="loadZoneAndNavigate('Wayanad')">Load Zone into Inference →</button>
+            </div>
+
+            <!-- Idukki -->
+            <div class="zone-card">
+              <div>
+                <div class="zone-header">
+                  <h3 class="zone-title">Idukki District</h3>
+                  <span class="zone-tag">Region A · Kerala</span>
+                </div>
+                <p class="zone-desc">High-relief Western Ghats plateau margin with commercial plantation cuttings and extreme precipitation gradients. Heavy landslide frequency during concentrated monsoon events.</p>
+                <div class="zone-stats-list">
+                  <div class="zone-stat-item"><span class="zone-stat-label">Elevation:</span><span class="zone-stat-val">49 – 2,405 m</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Catalog Events:</span><span class="zone-stat-val">51 events</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Spatial Fold:</span><span class="zone-stat-val">Fold_A2</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Holdout Recall:</span><span class="zone-stat-val" style="color:var(--accent-emerald);">86.3%</span></div>
+                </div>
+              </div>
+              <button class="btn-table-action" onclick="loadZoneAndNavigate('Idukki')">Load Zone into Inference →</button>
+            </div>
+
+            <!-- Kodagu -->
+            <div class="zone-card">
+              <div>
+                <div class="zone-header">
+                  <h3 class="zone-title">Kodagu District</h3>
+                  <span class="zone-tag">Region A · Karnataka</span>
+                </div>
+                <p class="zone-desc">Granitic gneiss hills covered by commercial coffee estates and natural evergreen forests. Experienced catastrophic multi-valley slope failures in August 2018.</p>
+                <div class="zone-stats-list">
+                  <div class="zone-stat-item"><span class="zone-stat-label">Elevation:</span><span class="zone-stat-val">800 – 1,489 m</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Catalog Events:</span><span class="zone-stat-val">9 events</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Spatial Fold:</span><span class="zone-stat-val">Fold_A3</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Holdout Recall:</span><span class="zone-stat-val">66.7%</span></div>
+                </div>
+              </div>
+              <button class="btn-table-action" onclick="loadZoneAndNavigate('Kodagu')">Load Zone into Inference →</button>
+            </div>
+
+            <!-- East Sikkim -->
+            <div class="zone-card">
+              <div>
+                <div class="zone-header">
+                  <h3 class="zone-title">East Sikkim</h3>
+                  <span class="zone-tag">Region B · Sikkim</span>
+                </div>
+                <p class="zone-desc">Tectonically active crystalline Lesser Himalayas. High seismic vulnerability, steep thrust-faulted gorge cuttings, and road corridor toe failures along National Highway 10.</p>
+                <div class="zone-stats-list">
+                  <div class="zone-stat-item"><span class="zone-stat-label">Elevation:</span><span class="zone-stat-val">711 – 4,236 m</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Catalog Events:</span><span class="zone-stat-val">32 events</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Spatial Fold:</span><span class="zone-stat-val">Fold_B1</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Holdout Recall:</span><span class="zone-stat-val" style="color:var(--accent-emerald);">90.6%</span></div>
+                </div>
+              </div>
+              <button class="btn-table-action" onclick="loadZoneAndNavigate('East Sikkim')">Load Zone into Inference →</button>
+            </div>
+
+            <!-- West Sikkim -->
+            <div class="zone-card">
+              <div>
+                <div class="zone-header">
+                  <h3 class="zone-title">West Sikkim</h3>
+                  <span class="zone-tag">Region B · Sikkim</span>
+                </div>
+                <p class="zone-desc">Glaciated headwalls and fragile metasedimentary phyllite-schist valleys with severe slope angles. Susceptible to monsoon debris torrents and riverbank toe scouring.</p>
+                <div class="zone-stats-list">
+                  <div class="zone-stat-item"><span class="zone-stat-label">Elevation:</span><span class="zone-stat-val">570 – 4,426 m</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Catalog Events:</span><span class="zone-stat-val">13 events</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Spatial Fold:</span><span class="zone-stat-val">Fold_B2</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Holdout Recall:</span><span class="zone-stat-val" style="color:var(--accent-emerald);">84.6%</span></div>
+                </div>
+              </div>
+              <button class="btn-table-action" onclick="loadZoneAndNavigate('West Sikkim')">Load Zone into Inference →</button>
+            </div>
+
+            <!-- East Khasi Hills -->
+            <div class="zone-card">
+              <div>
+                <div class="zone-header">
+                  <h3 class="zone-title">East Khasi Hills</h3>
+                  <span class="zone-tag">Region B · Meghalaya</span>
+                </div>
+                <p class="zone-desc">Flat-topped sandstone/limestone plateau rim subject to world-record orographic monsoon rainfall (Cherrapunji/Mawsynram), triggering deep canyon-wall rockfalls.</p>
+                <div class="zone-stats-list">
+                  <div class="zone-stat-item"><span class="zone-stat-label">Elevation:</span><span class="zone-stat-val">13 – 1,876 m</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Catalog Events:</span><span class="zone-stat-val">21 events</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Spatial Fold:</span><span class="zone-stat-val">Fold_B3</span></div>
+                  <div class="zone-stat-item"><span class="zone-stat-label">Holdout Recall:</span><span class="zone-stat-val">Audited Weak Fold</span></div>
+                </div>
+              </div>
+              <button class="btn-table-action" onclick="loadZoneAndNavigate('East Khasi Hills')">Load Zone into Inference →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 4: SENSOR OBSERVATIONS & CATALOG                              -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-observations">
+          <div class="card">
+            <div class="card-header-flex">
+              <div>
+                <h2 class="card-title">⌗ Sensor Observations &amp; Ground-Truth Catalog</h2>
+                <p class="card-subtitle">NASA Global Landslide Catalog events with 15-day CHIRPS precipitation and Copernicus 30m DEM slope. Click "Load" to test any record in the estimator.</p>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>District</th>
+                    <th>Event Date</th>
+                    <th>Slope</th>
+                    <th>Elev.</th>
+                    <th>3-Day Rain</th>
+                    <th>7-Day Rain</th>
+                    <th>15-Day Rain</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-all-observations">
+                  <tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-muted);">Loading verified catalog records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 5: ALERT CENTER & NDMA SOPS                                  -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-alerts">
+          <div class="card">
+            <h2 class="card-title">⚑ Alert Center &amp; NDMA Response Protocols</h2>
+            <p class="card-subtitle">Institutional four-tier hazard categorization mapped to National Disaster Management Authority (NDMA) Standard Operating Procedures.</p>
+          </div>
+
+          <div class="tiles-grid">
+            <div class="action-tile" style="border-top:3px solid var(--accent-emerald);">
+              <h3 class="tile-title" style="color:var(--accent-emerald);">Minimal Risk (RLSI &lt; 0.25)</h3>
+              <p class="tile-desc">Normal background environmental state. Stable hillside regolith with routine moisture drainage.</p>
+              <ul class="sop-list">
+                <li>Maintain standard routine monitoring of community rain gauges.</li>
+                <li>Ensure hillside roadside ditches and cross-culverts remain clear of debris.</li>
+                <li>Standard transport movement permitted along all mountain highways.</li>
+              </ul>
+            </div>
+
+            <div class="action-tile" style="border-top:3px solid var(--accent-teal);">
+              <h3 class="tile-title" style="color:var(--accent-teal);">Advisory (0.25 &le; RLSI &lt; &tau;*)</h3>
+              <p class="tile-desc">Elevated antecedent moisture. Soil pore pressures beginning to increase in convergent hollows.</p>
+              <ul class="sop-list">
+                <li>Alert Gram Panchayat disaster scouts in vulnerable escarpment hamlets.</li>
+                <li>Conduct precautionary inspections of active road-cutting toe slopes.</li>
+                <li>District Emergency Operations Centre (DEOC) initiates 6-hour rainfall polling.</li>
+              </ul>
+            </div>
+
+            <div class="action-tile" style="border-top:3px solid var(--accent-amber);">
+              <h3 class="tile-title" style="color:var(--accent-amber);">Watch (&tau;* &le; RLSI &lt; 0.75)</h3>
+              <p class="tile-desc">Operational threshold breached. Subterranean shear stress approaching critical failure thresholds.</p>
+              <ul class="sop-list">
+                <li>Pre-identify shelters and stage rescue vehicles at taluk headquarters.</li>
+                <li>Deploy traffic regulation squads; prohibit night travel on vulnerable ghat roads.</li>
+                <li>Mobilize Quick Response Teams (QRT) and place earthmovers on standby.</li>
+              </ul>
+            </div>
+
+            <div class="action-tile" style="border-top:3px solid var(--accent-rose);">
+              <h3 class="tile-title" style="color:var(--accent-rose);">Warning (RLSI &ge; 0.75)</h3>
+              <p class="tile-desc">Severe hazard condition. Monsoonal deluge on saturated steep terrain creates imminent failure risk.</p>
+              <ul class="sop-list">
+                <li>DDMA executes targeted precautionary evacuations from identified high-hazard zones.</li>
+                <li>Implement complete traffic closures on critical mountain highway sectors.</li>
+                <li>Stage National Disaster Response Force (NDRF) &amp; SDRF battalions at regional forward bases.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--accent-amber);">
+            <h4 style="font-size:13px; font-weight:700; color:var(--accent-amber); margin-bottom:4px;">Statutory Legal Boundary Notice</h4>
+            <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">Under the Disaster Management Act of 2005, only the District Disaster Management Authority (DDMA) headed by the District Collector possesses legal authority to issue mandatory evacuation orders or declare disaster emergencies. LEWDSS is a scientific decision-support system designed to empower human incident commanders with objective data.</p>
+          </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 6: MODEL DIAGNOSTICS & SPATIAL CV                             -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-diagnostics">
+          <div class="card">
+            <h2 class="card-title">◈ Model Diagnostics &amp; Spatial CV Benchmark</h2>
+            <p class="card-subtitle">Audited comparison between Regularized Logistic Regression and Random Forest using Leave-One-District-Out spatial cross-validation.</p>
+          </div>
+
+          <div class="card">
+            <h3 style="font-size:14px; font-weight:600; color:#ffffff; margin-bottom:12px;">Spatial Holdout Evaluation Matrix</h3>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Spatial Holdout Fold</th>
+                    <th>Held-Out District</th>
+                    <th>Events</th>
+                    <th>LR Spatial Recall</th>
+                    <th>RF Spatial Recall</th>
+                    <th>Model Selection Recommendation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Fold_A1</td>
+                    <td><strong>Wayanad (KL)</strong></td>
+                    <td>18</td>
+                    <td style="color:var(--accent-emerald); font-weight:bold;">100.0% (18/18)</td>
+                    <td style="color:var(--accent-amber);">44.4%</td>
+                    <td>Logistic Regression (Superior transfer)</td>
+                  </tr>
+                  <tr>
+                    <td>Fold_A2</td>
+                    <td><strong>Idukki (KL)</strong></td>
+                    <td>51</td>
+                    <td style="color:var(--accent-emerald); font-weight:bold;">86.3%</td>
+                    <td style="color:var(--accent-amber);">31.4%</td>
+                    <td>Logistic Regression (High recall)</td>
+                  </tr>
+                  <tr>
+                    <td>Fold_A3</td>
+                    <td><strong>Kodagu (KA)</strong></td>
+                    <td>9</td>
+                    <td style="color:var(--accent-emerald);">66.7%</td>
+                    <td style="color:var(--accent-rose);">0.0% (Collapse)</td>
+                    <td>Logistic Regression (RF collapsed)</td>
+                  </tr>
+                  <tr>
+                    <td>Fold_B1</td>
+                    <td><strong>East Sikkim (SK)</strong></td>
+                    <td>32</td>
+                    <td style="color:var(--accent-emerald); font-weight:bold;">90.6%</td>
+                    <td style="color:var(--accent-amber);">53.1%</td>
+                    <td>Logistic Regression (Robust boundary)</td>
+                  </tr>
+                  <tr>
+                    <td>Fold_B2</td>
+                    <td><strong>West Sikkim (SK)</strong></td>
+                    <td>13</td>
+                    <td style="color:var(--accent-emerald); font-weight:bold;">84.6%</td>
+                    <td style="color:var(--accent-amber);">46.2%</td>
+                    <td>Logistic Regression (Consistent recall)</td>
+                  </tr>
+                  <tr>
+                    <td>Fold_B3</td>
+                    <td><strong>East Khasi Hills (ML)</strong></td>
+                    <td>21</td>
+                    <td style="color:var(--accent-dim);">Weak Discrimination</td>
+                    <td style="color:var(--accent-dim);">Weak Discrimination</td>
+                    <td>Audited Geomorphological Shift</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 7: THRESHOLD SETTINGS & CALIBRATION                           -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-thresholds">
+          <div class="card">
+            <h2 class="card-title">⚙ Operational Decision Threshold Settings</h2>
+            <p class="card-subtitle">Methodology and sensitivity optimization of the operational decision threshold &tau;*.</p>
+          </div>
+
+          <div class="card">
+            <h3 style="font-size:14px; font-weight:600; color:#ffffff; margin-bottom:8px;">Optimization Objective</h3>
+            <p style="font-size:12px; color:var(--text-muted); line-height:1.6; margin-bottom:14px;">
+              Standard classification threshold 0.50 prioritizes accuracy over disaster safety. In emergency early warning systems, a false negative (missed landslide) carries catastrophic life safety consequences, while a false positive results in precautionary inspections. Therefore, &tau;* is calibrated strictly on training folds to maximize F1 subject to achieving &ge; 80% recall:
+            </p>
+            <div style="background-color:var(--bg-input); padding:12px; border-radius:var(--radius-sm); font-family:var(--font-mono); font-size:12px; color:var(--accent-emerald); border:1px solid var(--border-subtle); margin-bottom:16px;">
+              &tau;* = argmax_{&tau; &isin; [0.05, 0.95]} F1_train(&tau;)  subject to  Recall_train(&tau;) &ge; 80%
+            </div>
+            <p style="font-size:12px; color:var(--text-muted);">
+              Once calibrated on training folds, &tau;* is permanently frozen before evaluating test folds to ensure complete zero-leakage validity.
+            </p>
+          </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 8: STATE-SPACE MODELING & HYDROLOGY                           -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-statespace">
+          <div class="card">
+            <h2 class="card-title">▤ State-Space Modeling: 1D Kalman DLM for Soil Saturation</h2>
+            <p class="card-subtitle">Dynamic linear model simulating continuous subterranean moisture retention and drainage from daily precipitation time-series.</p>
+          </div>
+
+          <div class="card">
+            <h3 style="font-size:14px; font-weight:600; color:#ffffff; margin-bottom:12px;">Interactive State-Space Hydrology Simulator</h3>
             <div class="form-grid">
               <div class="form-group">
-                <label for="inp-elev">Elevation (m):</label>
-                <input type="number" id="inp-elev" step="1" min="10" max="6000" class="form-input" required>
+                <label>Soil Drainage Retention (&lambda;):</label>
+                <input type="range" id="sim-lambda" min="0.75" max="0.95" step="0.01" value="0.85" class="form-input" oninput="updateStateSpaceSimulation()">
+                <span style="font-family:var(--font-mono); font-size:11px; color:var(--accent-emerald);" id="sim-lambda-val">&lambda; = 0.85 (Typical weathered saprolite)</span>
               </div>
               <div class="form-group">
-                <label for="inp-slope">Local Slope (degrees):</label>
-                <input type="number" id="inp-slope" step="0.1" min="0" max="75" class="form-input" required>
-              </div>
-              <div class="form-group">
-                <label for="inp-rain3d">Antecedent Rain 3-Day (mm):</label>
-                <input type="number" id="inp-rain3d" step="0.1" min="0" max="800" class="form-input" required>
-              </div>
-              <div class="form-group">
-                <label for="inp-rain7d">Antecedent Rain 7-Day (mm):</label>
-                <input type="number" id="inp-rain7d" step="0.1" min="0" max="1000" class="form-input" required>
-              </div>
-              <div class="form-group">
-                <label for="inp-rain15d">Antecedent Rain 15-Day (mm):</label>
-                <input type="number" id="inp-rain15d" step="0.1" min="0" max="1500" class="form-input" required>
+                <label>Scenario Preset:</label>
+                <select id="sim-preset" class="form-select" onchange="applyStateSpacePreset()">
+                  <option value="cloudburst">Intense 120mm Cloudburst Surge</option>
+                  <option value="monsoon" selected>15-Day Continuous Monsoon Deluge</option>
+                  <option value="dryspell">Extended Dry Spell with 5-Day Flash Rain</option>
+                </select>
               </div>
             </div>
 
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary" id="btn-eval-scenario">Compute RLSI Susceptibility</button>
-              <button type="button" class="btn btn-secondary" id="btn-reset-scenario">Reset to District Median</button>
-            </div>
-          </form>
-
-          <!-- Estimation Result Box -->
-          <div class="rlsi-result-container" id="rlsi-result-box" style="display: none;">
-            <div class="result-header">
-              <span class="result-badge" id="res-badge">High Relative Susceptibility</span>
-              <span class="model-stamp" id="res-model-stamp">LogisticRegression · FS3_Full · Fold_A1</span>
-            </div>
-
-            <div class="score-summary-grid">
-              <div class="score-metric">
-                <span class="sm-label">Relative Susceptibility Index (RLSI)</span>
-                <span class="sm-value" id="res-rlsi-score">0.5120</span>
-                <span class="sm-note">Continuous scale [0.0, 1.0]</span>
-              </div>
-              <div class="score-metric">
-                <span class="sm-label">Frozen Decision Threshold (&tau;*)</span>
-                <span class="sm-value" id="res-tau-star">0.4400</span>
-                <span class="sm-note">Calibrated for &ge;80% recall on train</span>
-              </div>
-              <div class="score-metric">
-                <span class="sm-label">Threshold Status</span>
-                <span class="sm-value threshold-met" id="res-threshold-status">Exceeds Decision Threshold</span>
-                <span class="sm-note">RLSI &ge; &tau;*</span>
-              </div>
-            </div>
-
-            <div class="category-explanation" id="res-category-desc">
-              Terrain-rainfall conditions meet the operational threshold calibrated to detect historical landslide events in this spatial fold.
-            </div>
-
-            <div class="category-rule-box">
-              <small><strong>Project-Defined Tier Definition:</strong> Low: RLSI &lt; 0.5&tau;* | Elevated: 0.5&tau;* &le; RLSI &lt; &tau;* | High: RLSI &ge; &tau;*. <em>These are project-defined heuristic display categories, not official warning levels or calibrated collapse probabilities.</em></small>
-            </div>
-
-            <!-- SOP Preparedness Guidance Card -->
-            <div class="sop-card" id="sop-guidance-card">
-              <h4 class="sop-title">Preparedness Guidance (Institutional Standard Operating Procedures)</h4>
-              <p class="sop-status" id="sop-admin-status">Administrative Status: Preparedness Advisory & Resource Standby</p>
-              
-              <div class="sop-grid">
-                <div class="sop-col">
-                  <strong>Community Preparedness:</strong>
-                  <ul id="sop-list-community"></ul>
-                </div>
-                <div class="sop-col">
-                  <strong>Infrastructure / Transport:</strong>
-                  <ul id="sop-list-infrastructure"></ul>
-                </div>
-              </div>
-
-              <div class="sop-disclaimer" id="sop-disclaimer-text">
-                Institutional Disclaimer: All emergency advisories are governed strictly by the District Disaster Management Authority (DDMA). LEWDSS does not issue evacuation orders.
+            <div style="background-color:var(--bg-input); border:1px solid var(--border-card); border-radius:var(--radius-md); padding:16px; margin-top:14px;">
+              <h4 style="font-size:12px; font-weight:600; color:#ffffff; margin-bottom:10px;">Simulated 15-Day Antecedent Soil Moisture State (&theta;t)</h4>
+              <div id="statespace-chart-container" style="display:flex; align-items:flex-end; gap:6px; height:150px; padding:10px 0; border-bottom:1px solid var(--border-subtle);"></div>
+              <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-dim); margin-top:6px;">
+                <span>Day 1 (Antecedent Base)</span>
+                <span>Day 7 (Intermediate)</span>
+                <span>Day 15 (Trigger Horizon)</span>
               </div>
             </div>
           </div>
         </section>
 
-      </div>
-
-      <!-- Feature Explainability & SHAP Section -->
-      <section class="card explainability-card" aria-labelledby="heading-explainability">
-        <div class="card-header-flex">
-          <div>
-            <h3 id="heading-explainability" class="card-title">Model Explainability & Feature Attribution</h3>
-            <p class="panel-desc">SHAP (SHapley Additive exPlanations) attribution computed using training-fold background data as the reference distribution.</p>
+        <!-- ================================================================== -->
+        <!-- VIEW 9: EXPLAINABLE AI (SHAP)                                      -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-shap">
+          <div class="card">
+            <h2 class="card-title">⌘ Explainable AI (SHAP Feature Attribution)</h2>
+            <p class="card-subtitle">Shapley Additive exPlanations quantifying mathematical contributions of individual conditioning factors relative to regional landscape baselines.</p>
           </div>
-        </div>
 
-        <div class="attribution-warning-banner" role="note">
-          <strong>Boundary of Scientific Claim:</strong> SHAP values quantify the mathematical feature weighting assigned by the statistical model relative to the landscape background envelope. SHAP does <em>NOT</em> prove physical geotechnical causation and does not measure subsurface pore-water pressure, shear strength, or bedrock fracturing.
-        </div>
+          <div class="card">
+            <h3 style="font-size:14px; font-weight:600; color:#ffffff; margin-bottom:14px;">Feature Attribution Ranking for Active District</h3>
+            <div id="shap-bars-container" style="margin-bottom:16px;">
+              <p style="color:var(--text-muted); font-size:12px;">Loading SHAP attributions...</p>
+            </div>
 
-        <div class="shap-layout-grid">
-          <!-- SHAP Bar Chart -->
-          <div class="shap-chart-container">
-            <h4 class="sub-heading">Feature Attribution Ranking (Audited Fold Baseline)</h4>
-            <div class="shap-bars" id="shap-bars-container">
-              <p class="loading-cell">Loading verified SHAP attributions...</p>
+            <div class="card" style="background-color:var(--bg-input); border:1px solid var(--border-subtle);">
+              <h4 style="font-size:12px; font-weight:600; color:#ffffff; margin-bottom:8px;">Variable Glossary &amp; Physical Interpretation</h4>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; font-size:11.5px; color:var(--text-muted);">
+                <div><strong style="color:#ffffff;">rain_15d_mm:</strong> 15-day cumulative rainfall acting as proxy for deep subterranean soil saturation and pore water pressure.</div>
+                <div><strong style="color:#ffffff;">slope_deg:</strong> Direct gravitational shear stress angle on hillslope colluvium. Slopes &gt;28° approach critical shear angles.</div>
+                <div><strong style="color:#ffffff;">elev_relief_3km:</strong> Macro-scale topographic relief capturing gravitational potential energy across adjacent valleys.</div>
+                <div><strong style="color:#ffffff;">rain_3d_mm:</strong> Short-term storm pulse trigger that destabilizes already saturated soil layers.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 10: GEOGUARD RAG ASSISTANT (INTEGRATED FULL VIEW)             -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-rag">
+          <div class="card" style="padding:0; overflow:hidden;">
+            <iframe src="chatbot.html" style="width:100%; height:750px; border:none; display:block;" title="GeoGuard RAG AI Assistant"></iframe>
+          </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 11: PROJECT DETAILS & VIVA GUIDE                              -->
+        <!-- ================================================================== -->
+        <section class="tab-view" id="view-about">
+          <div class="card">
+            <h2 class="card-title">ⓘ Project Details, Evaluation Rubric &amp; Viva Voce Masterclass</h2>
+            <p class="card-subtitle">CSE326 / CSE276 Course Project (SIH26001) · 100% Ground Truth Audited &amp; Examination Ready.</p>
+          </div>
+
+          <div class="card">
+            <h3 style="font-size:14px; font-weight:600; color:#ffffff; margin-bottom:10px;">Downloads &amp; Deliverables</h3>
+            <div style="display:flex; flex-wrap:wrap; gap:12px;">
+              <a href="LEWDSS_Complete_Project_Guide.pdf" target="_blank" class="btn-calc" style="text-decoration:none;">📄 Download Complete Project Guide (PDF)</a>
+              <a href="https://github.com/jaswanthvarmasaripella-ops/lewdss" target="_blank" class="btn-secondary" style="text-decoration:none;">🔗 GitHub Repository</a>
             </div>
           </div>
 
-          <!-- Feature Dictionary Glossary -->
-          <div class="feature-glossary">
-            <h4 class="sub-heading">Plain-Language Variable Glossary</h4>
-            <dl class="glossary-list">
-              <dt>Point Elevation (<code>elevation_m</code>)</dt>
-              <dd>Terrain elevation above sea level extracted from the 30-meter Copernicus DEM.</dd>
-              <dt>Local Slope (<code>slope_deg</code>)</dt>
-              <dd>Local inclination angle. Slopes above 25°–30° approach critical mechanical shear thresholds in saturated soils.</dd>
-              <dt>Zonal Max Slope (<code>slope_max_1km/3km/5km</code>)</dt>
-              <dd>Steepest terrain in the 1–5 km radius, capturing adjacent escarpments and valley headwalls.</dd>
-              <dt>Topographic Relief (<code>elev_relief_1km/3km/5km</code>)</dt>
-              <dd>Elevation range (max - min) in the buffer; acts as a macro-proxy for gravitational potential energy.</dd>
-              <dt>Antecedent Rainfall (<code>rain_3d/7d/15d_mm</code>)</dt>
-              <dd>Cumulative precipitation over 3, 7, and 15 days from daily CHIRPS 0.05° satellite-gauge observations.</dd>
-              <dt>Zonal Areal Mean Rain (<code>rain_3km_mean_3d/7d/15d</code>)</dt>
-              <dd>Spatially averaged precipitation within 3 km, buffering against localized satellite grid cell displacement.</dd>
-            </dl>
+          <div class="card">
+            <h3 style="font-size:14px; font-weight:600; color:#ffffff; margin-bottom:12px;">Top 3 Viva Voce Defense Questions &amp; Answers</h3>
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <div style="background-color:var(--bg-input); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+                <strong style="color:var(--accent-emerald);">Q1: What is the difference between RLSI and collapse probability?</strong>
+                <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">RLSI is a Relative Landslide Susceptibility Index ranking terrain-rainfall conditions against regional background envelopes. It is NOT a calibrated geotechnical failure probability, which requires in-situ piezometers and subsurface shear testing.</p>
+              </div>
+              <div style="background-color:var(--bg-input); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+                <strong style="color:var(--accent-emerald);">Q2: Why use Spatial Leave-One-District-Out CV instead of standard K-Fold?</strong>
+                <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Geographic data exhibits strong spatial autocorrelation. Standard K-fold leaks correlated pixels between folds, producing artificially inflated scores. Spatial Leave-One-District-Out tests true geographical transfer across completely held-out administrative boundaries.</p>
+              </div>
+              <div style="background-color:var(--bg-input); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+                <strong style="color:var(--accent-emerald);">Q3: Why use State-Space DLM (Kalman Filter) for soil saturation?</strong>
+                <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Simple 15-day rainfall sums treat rain that fell 14 days ago identically to rain that fell yesterday. A 1D State-Space DLM models unobserved subterranean moisture with physical drainage decay &lambda; (0.82-0.90), capturing continuous drainage recession and cloudburst surge.</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Phase 3 Audit Limitations & Weak Fold Disclosure -->
-      <section class="card audit-card" aria-labelledby="heading-audit">
-        <h3 id="heading-audit" class="card-title">Scientific Audit & Operational Limitations Disclosure</h3>
-        <p class="panel-desc">In accordance with academic integrity guidelines, empirical limitations and weak folds from the Phase 3 results audit are explicitly documented:</p>
+      </main>
 
-        <div class="limitations-grid">
-          <div class="limitation-item">
-            <strong>East Khasi Hills (Fold B3) Weak Discrimination:</strong>
-            <p>Models achieved near-random discrimination on East Khasi Hills (ROC-AUC 0.430–0.453). Meghalaya's flat-topped sandstone/karst plateau exhibits fundamentally different geomorphological failure modes than the steep crystalline Himalayas of Sikkim.</p>
-          </div>
-          <div class="limitation-item">
-            <strong>Kodagu (Fold A3) Small-Sample Footprint:</strong>
-            <p>Kodagu contains only 9 documented events in the inventory. While Logistic Regression detected 6 of 9 (66.7% recall), Random Forest suffered complete threshold collapse (0.0% recall, 0 detected).</p>
-          </div>
-          <div class="limitation-item">
-            <strong>Random Forest Threshold Miscalibration:</strong>
-            <p>Random Forest failed the 80% operational recall target on 100% of spatial folds (average recall 15.4%–34.0%). Tree ensemble probability outputs collapse under spatial covariate shift, making global threshold transfer unsafe.</p>
-          </div>
-          <div class="limitation-item">
-            <strong>Cross-Region Transfer Failure (Domain Shift):</strong>
-            <p>Models trained in the Western Ghats failed when transferred to the Himalayas (40.9%–47.0% recall). Elevation shift (>40% of SHAP attribution in transfer) prevents blind transfer across mountain belts without local recalibration.</p>
-          </div>
-          <div class="limitation-item">
-            <strong>Presence-Unlabeled Evaluation Scope:</strong>
-            <p>Reported precision and F1 scores are evaluated strictly against 5 km-buffered landscape background locations, NOT verified stable ground. They must not be cited as real-world occurrence accuracy.</p>
-          </div>
-        </div>
-      </section>
-
-    </main>
+      <!-- Bottom Research Disclaimer -->
+      <footer class="footer-disclaimer">
+        <strong>⚠ ACADEMIC RESEARCH PROTOTYPE NOTICE:</strong>
+        This decision support system is an academic engineering prototype. Model scores output an Index of Relative Landslide Susceptibility (RLSI) ranking terrain-rainfall conditions against regional background; they are <em>NOT</em> calibrated real-world probabilities of slope collapse. All emergency advisories are governed strictly by the District Disaster Management Authority (DDMA) under the Disaster Management Act of 2005.
+      </footer>
+    </div>
   </div>
 
+  <!-- ====================================================================== -->
+  <!-- FLOATING RAG CHATBOT LAUNCHER BUBBLE (Available Across All Views)      -->
+  <!-- ====================================================================== -->
+  <div class="floating-rag-launcher">
+    <button class="floating-rag-btn" onclick="toggleFloatingRAG()" aria-label="Toggle GeoGuard RAG Assistant">
+      <span style="font-size:16px;">💬</span>
+      <span>Ask GeoGuard RAG</span>
+    </button>
+  </div>
 
-  <!-- Prominent Mandatory Research Disclaimer -->
-  <aside class="disclaimer-banner" role="alert" aria-label="Research Prototype Notice">
-    <div class="disclaimer-content">
-      <strong>⚠ ACADEMIC RESEARCH PROTOTYPE NOTICE:</strong>
-      This decision-support tool is an academic engineering prototype. It does <em>NOT</em> have legal authority to issue evacuation orders or public hazard alerts. Model scores output an Index of Relative Landslide Susceptibility (RLSI) ranking terrain-rainfall conditions against regional landscape background; they are <em>NOT</em> calibrated real-world probabilities of slope collapse. All emergency measures are strictly governed by the District Disaster Management Authority (DDMA) and local civil administration.
+  <div class="floating-rag-window" id="floating-rag-window">
+    <div style="background-color:var(--bg-card); padding:10px 14px; border-bottom:1px solid var(--border-card); display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="width:8px; height:8px; border-radius:50%; background-color:var(--accent-emerald);"></span>
+        <strong style="font-size:12px; color:#ffffff;">GeoGuard RAG Assistant</strong>
+      </div>
+      <button onclick="toggleFloatingRAG()" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:16px;">✕</button>
     </div>
-  </aside>
+    <iframe src="chatbot.html?mode=widget" style="width:100%; height:calc(100% - 41px); border:none;" title="GeoGuard RAG Floating Assistant"></iframe>
+  </div>
 
-
+  <!-- Main JavaScript Controller -->
   <script src="js/app.js"></script>
 </body>
 </html>

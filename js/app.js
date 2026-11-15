@@ -1,23 +1,26 @@
 /**
- * LEWDSS Frontend Application Logic
- * Regional Landslide Early Warning & Emergency Response Decision Support System
+ * LEWDSS · DECISION LAB — Frontend Application Controller
+ * Inspired by TerraSense ML Architecture
  * 
  * Provides:
- * - Dynamic district selection and profile rendering.
- * - Historical NASA GLC catalog event browsing and scenario loading.
- * - Dual-mode scenario evaluation: live REST API when available, or instant
- *   client-side mathematical inference when hosted statically (e.g., GitHub Pages).
- * - Project-defined RLSI categorization and NDMA-aligned SOP guidance display.
- * - SHAP feature attribution visualization with attribution-vs-causation boundaries.
+ * - Multi-tab view routing (Overview, Risk Inference, Monitoring Zones, Observations,
+ *   Alerts & SOPs, Model Diagnostics, Threshold Settings, State-Space DLM, SHAP, RAG AI, About).
+ * - Dual-mode scenario inference: Live REST API when running server, client-side
+ *   mathematical engine when hosted statically (e.g., GitHub Pages).
+ * - Interactive 1D Kalman Filter State-Space Soil Moisture Simulator.
+ * - Floating GeoGuard RAG Assistant window & embedded RAG integration.
+ * - NASA GLC 144 events catalog browser with instant scenario loader.
  */
 
 // Application State
 const state = {
+  currentView: "overview",
   selectedDistrict: "Wayanad",
   selectedModelFamily: "LogisticRegression",
   selectedFeatureSet: "FS3_Full",
   districtData: null,
   explainabilityData: null,
+  allObservations: [],
 };
 
 // District to Spatial Validation Fold mapping
@@ -30,11 +33,26 @@ const DISTRICT_FOLD_MAP = {
   "East Khasi Hills": "Fold_B3",
 };
 
-// NDMA-aligned Standard Operating Procedures guidance
+// View Title Dictionary
+const VIEW_TITLES = {
+  "overview": "Overview & Decision Summary",
+  "inference": "Relative Landslide Susceptibility Estimator",
+  "zones": "Registered Monitoring Zones",
+  "observations": "Sensor Observations & Historical Catalog",
+  "alerts": "Alert Center & NDMA Response Protocols",
+  "diagnostics": "Model Diagnostics & Spatial CV Benchmark",
+  "thresholds": "Operational Decision Threshold Settings",
+  "statespace": "State-Space Hydrology Simulator (1D Kalman DLM)",
+  "shap": "Explainable AI (SHAP Feature Attribution)",
+  "rag": "GeoGuard AI — Landslide Susceptibility RAG Assistant",
+  "about": "Project Reference & Viva Voce Masterclass",
+};
+
+// Standard Operating Procedures Guidance
 const SOP_GUIDANCE = {
   LOW: {
-    tier_name: "Low Relative Susceptibility",
-    badge_color: "green",
+    tier_name: "Minimal Relative Susceptibility",
+    badge_color: "low",
     administrative_status: "Normal Seasonal Monitoring",
     community_actions: [
       "Maintain routine clearance of roadside ditches, culverts, and domestic rainwater drains.",
@@ -45,151 +63,172 @@ const SOP_GUIDANCE = {
       "Normal traffic operations on ghat and mountain roads.",
       "Routine maintenance inspection of slope reinforcement netting and culverts along key highway corridors.",
     ],
-    emergency_desk_checklist: [
-      "Standard monitoring of daily Indian Meteorological Department (IMD) district rainfall bulletins.",
-      "Maintain baseline inventory of emergency machinery (excavators, backhoes) at taluk headquarters.",
-    ],
   },
   ELEVATED: {
     tier_name: "Elevated Relative Susceptibility",
-    badge_color: "amber",
+    badge_color: "elevated",
     administrative_status: "Heightened Vigilance & Advisory Mode",
     community_actions: [
-      "Advise residents living near steep, modified, or previously failed slopes to monitor for fresh ground cracks.",
-      "Avoid non-essential nighttime travel along steep mountain roads during periods of continuous rainfall.",
-      "Ensure household emergency battery packs, flashlights, and mobile communications remain charged.",
-      "Identify nearest designated community relief shelters and primary evacuation walking routes.",
+      "Advise residents living near steep or modified slopes to monitor for fresh ground cracks.",
+      "Avoid non-essential nighttime travel along steep mountain roads during continuous rainfall.",
+      "Ensure household emergency battery packs, flashlights, and communications remain charged.",
     ],
     infrastructure_actions: [
-      "Deploy road maintenance inspection teams along vulnerable highway stretches with known chronic slide history.",
+      "Deploy road maintenance inspection teams along vulnerable highway stretches with known slide history.",
       "Verify that earthmoving equipment and operators are on stand-by at taluk public works depots.",
-      "Install temporary cautionary signage along identified steep cuttings with loose boulders or saturated soils.",
-    ],
-    emergency_desk_checklist: [
-      "Track 24-hour and 72-hour rainfall accumulation against regional historical flash flood/landslide averages.",
-      "Establish active communication check-ins between District Emergency Operations Centre (DEOC) and taluk tehsildars.",
-      "Verify satellite phone communication readiness for remote hillside villages vulnerable to road cutoffs.",
+      "Install temporary cautionary signage along steep road cuttings with loose boulders or saturated soils.",
     ],
   },
   HIGH: {
     tier_name: "High Relative Susceptibility",
-    badge_color: "red",
+    badge_color: "high",
     administrative_status: "Preparedness Advisory & Resource Standby",
     community_actions: [
-      "Review family emergency communication plan and keep essential medications, identity documents, and emergency bags accessible.",
-      "Heed official notifications from District Collector / DDMA regarding potential localized precautionary relocation.",
-      "Immediately report rapid water color changes (sudden mud surges in clear mountain streams) or ground rumbling to local authorities.",
+      "Keep essential medications, identity documents, and emergency supplies accessible.",
+      "Heed official notifications from District Collector / DDMA regarding localized precautionary relocation.",
+      "Immediately report rapid water color changes (sudden mud surges in clear mountain streams) or ground rumbling.",
       "Stay clear of river channels and steep ravines susceptible to debris flows during intense cloudbursts.",
     ],
     infrastructure_actions: [
-      "Position heavy earthmoving equipment and debris clearance squads at strategic junctions along critical arterial highways.",
-      "Coordinate with Traffic Police for possible restricted/regulated heavy-vehicle movement on vulnerable ghat routes.",
+      "Position heavy earthmoving equipment and debris clearance squads at strategic highway junctions.",
+      "Coordinate with Traffic Police for restricted/regulated heavy-vehicle movement on ghat routes.",
       "Inspect bridge abutments and mountain stream crossings for debris damming or backwater accumulation.",
-    ],
-    emergency_desk_checklist: [
-      "Activate emergency relief centers / relief camps in secure, low-hazard taluk school buildings or auditoriums.",
-      "Coordinate inter-agency stand-by status with National Disaster Response Force (NDRF) / State Disaster Response Force (SDRF).",
-      "Prepare official advisory bulletins for dissemination through DDMA authorized public broadcast channels.",
     ],
   },
 };
 
-const INSTITUTIONAL_DISCLAIMER =
-  "Institutional Disclaimer: All emergency advisories are governed strictly by the District Disaster Management Authority (DDMA). LEWDSS does not issue evacuation orders.";
-
-// In-memory cache for client-side model parameter files
 const modelCache = new Map();
 
-// DOM Element References
-const dom = {
-  districtButtons: document.querySelectorAll(".btn-district"),
-  selectModel: document.getElementById("select-model-family"),
-  selectFeatureSet: document.getElementById("select-feature-set"),
+// ---------------------------------------------------------------------------
+// Initialization & Navigation Routing
+// ---------------------------------------------------------------------------
 
-  // Header Stats
-  regionBadge: document.getElementById("district-region-badge"),
-  districtTitle: document.getElementById("district-title"),
-  districtFoldInfo: document.getElementById("district-fold-info"),
-  statElev: document.getElementById("stat-elev"),
-  statPos: document.getElementById("stat-pos"),
-  statDates: document.getElementById("stat-dates"),
-  statRecall: document.getElementById("stat-recall"),
-
-  // Historical Table
-  tbodyEvents: document.getElementById("tbody-historical-events"),
-
-  // Scenario Form & Inputs
-  formScenario: document.getElementById("form-rlsi-scenario"),
-  inpElev: document.getElementById("inp-elev"),
-  inpSlope: document.getElementById("inp-slope"),
-  inpRain3d: document.getElementById("inp-rain3d"),
-  inpRain7d: document.getElementById("inp-rain7d"),
-  inpRain15d: document.getElementById("inp-rain15d"),
-  btnReset: document.getElementById("btn-reset-scenario"),
-
-  // Results Elements
-  resultBox: document.getElementById("rlsi-result-box"),
-  resBadge: document.getElementById("res-badge"),
-  resModelStamp: document.getElementById("res-model-stamp"),
-  resRlsiScore: document.getElementById("res-rlsi-score"),
-  resTauStar: document.getElementById("res-tau-star"),
-  resThresholdStatus: document.getElementById("res-threshold-status"),
-  resCategoryDesc: document.getElementById("res-category-desc"),
-
-  // SOP Guidance
-  sopAdminStatus: document.getElementById("sop-admin-status"),
-  sopListCommunity: document.getElementById("sop-list-community"),
-  sopListInfrastructure: document.getElementById("sop-list-infrastructure"),
-  sopDisclaimer: document.getElementById("sop-disclaimer-text"),
-
-  // SHAP Container
-  shapBarsContainer: document.getElementById("shap-bars-container"),
-};
-
-// Initialize Application
 document.addEventListener("DOMContentLoaded", () => {
-  setupEventListeners();
+  setupNavigation();
+  setupModelControls();
   loadDistrict(state.selectedDistrict);
+  loadAllObservations();
+  initSimulations();
+
+  // Handle URL hash on initial load
+  const initialHash = window.location.hash.replace("#", "");
+  if (initialHash && VIEW_TITLES[initialHash]) {
+    navigateTo(initialHash);
+  }
 });
 
-function setupEventListeners() {
-  // District Switchers
-  dom.districtButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      dom.districtButtons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      const dName = btn.getAttribute("data-district");
-      state.selectedDistrict = dName;
-      loadDistrict(dName);
+function setupNavigation() {
+  const navLinks = document.querySelectorAll(".sidebar-nav .nav-link");
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const targetView = link.getAttribute("data-view");
+      navigateTo(targetView);
     });
   });
 
-  // Model and Feature Set Configuration
-  dom.selectModel.addEventListener("change", (e) => {
-    state.selectedModelFamily = e.target.value;
-    updateShapView();
-    updateRecallStat();
-  });
-
-  dom.selectFeatureSet.addEventListener("change", (e) => {
-    state.selectedFeatureSet = e.target.value;
-    updateRecallStat();
-  });
-
-  // Scenario Form Submit
-  dom.formScenario.addEventListener("submit", (e) => {
-    e.preventDefault();
-    evaluateScenario();
-  });
-
-  // Reset Button
-  dom.btnReset.addEventListener("click", () => {
-    resetScenarioToDistrictMedian();
+  window.addEventListener("hashchange", () => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash && VIEW_TITLES[hash] && hash !== state.currentView) {
+      navigateTo(hash, false);
+    }
   });
 }
 
+function navigateTo(viewId, updateHash = true) {
+  if (!VIEW_TITLES[viewId]) viewId = "overview";
+  state.currentView = viewId;
+
+  // 1. Update navigation active state
+  document.querySelectorAll(".sidebar-nav .nav-link").forEach((link) => {
+    if (link.getAttribute("data-view") === viewId) {
+      link.classList.add("active");
+    } else {
+      link.classList.remove("active");
+    }
+  });
+
+  // 2. Switch visible view
+  document.querySelectorAll(".tab-view").forEach((section) => {
+    section.classList.remove("active");
+  });
+  const activeSection = document.getElementById(`view-${viewId}`);
+  if (activeSection) {
+    activeSection.classList.add("active");
+  }
+
+  // 3. Update topbar breadcrumb
+  const breadcrumb = document.getElementById("topbar-active-title");
+  if (breadcrumb) {
+    breadcrumb.textContent = VIEW_TITLES[viewId];
+  }
+
+  // 4. Update browser URL hash
+  if (updateHash) {
+    window.location.hash = viewId;
+  }
+
+  // 5. Scroll to top of main area
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Close mobile sidebar if open
+  const sidebar = document.getElementById("app-sidebar");
+  if (sidebar) sidebar.classList.remove("mobile-open");
+}
+
+window.navigateTo = navigateTo;
+
+function toggleMobileSidebar() {
+  const sidebar = document.getElementById("app-sidebar");
+  if (sidebar) {
+    sidebar.classList.toggle("mobile-open");
+  }
+}
+window.toggleMobileSidebar = toggleMobileSidebar;
+
 // ---------------------------------------------------------------------------
-// Data Fetching & District Loading (Hybrid: API + Static Fallback)
+// Model Controls & District Selection
+// ---------------------------------------------------------------------------
+
+function setupModelControls() {
+  const selectModel = document.getElementById("select-model-family");
+  const selectFeatureSet = document.getElementById("select-feature-set");
+
+  if (selectModel) {
+    selectModel.addEventListener("change", (e) => {
+      state.selectedModelFamily = e.target.value;
+      updateShapView();
+    });
+  }
+
+  if (selectFeatureSet) {
+    selectFeatureSet.addEventListener("change", (e) => {
+      state.selectedFeatureSet = e.target.value;
+    });
+  }
+}
+
+function selectDistrict(dName) {
+  state.selectedDistrict = dName;
+  document.querySelectorAll(".district-selection-strip .btn-dist").forEach((btn) => {
+    if (btn.getAttribute("data-district") === dName) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+  loadDistrict(dName);
+}
+window.selectDistrict = selectDistrict;
+
+function loadZoneAndNavigate(zoneName) {
+  selectDistrict(zoneName);
+  navigateTo("inference");
+}
+window.loadZoneAndNavigate = loadZoneAndNavigate;
+
+// ---------------------------------------------------------------------------
+// Data Fetching: District Profiles & SHAP Attributions
 // ---------------------------------------------------------------------------
 
 async function loadDistrict(districtName) {
@@ -197,53 +236,44 @@ async function loadDistrict(districtName) {
     let distData = null;
     let expData = null;
 
-    // Detect if running statically (e.g., GitHub Pages, local file, or without backend)
     const isStaticHost =
       window.location.protocol === "file:" ||
       window.location.hostname.endsWith("github.io") ||
       window.location.hostname.endsWith("pages.dev");
 
-    // Try API first if not strictly on a static host
+    // Try API first if not strictly static
     if (!isStaticHost) {
       try {
         const distRes = await fetch(`/api/districts/${encodeURIComponent(districtName)}`);
         if (distRes.ok) distData = await distRes.json();
-      } catch (_) {
-        // Fall back to static
-      }
+      } catch (_) {}
     }
 
-    // Static fallback
+    // Static JSON fallback
     if (!distData) {
       const safeName = districtName.replace(/ /g, "_");
       let res = await fetch(`./data/districts/${encodeURIComponent(districtName)}.json`);
-      if (!res.ok) {
-        res = await fetch(`./data/districts/${safeName}.json`);
-      }
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      distData = await res.json();
+      if (!res.ok) res = await fetch(`./data/districts/${safeName}.json`);
+      if (res.ok) distData = await res.json();
     }
 
-    state.districtData = distData;
-    renderDistrictOverview();
-    renderHistoricalEventsTable();
+    if (distData) {
+      state.districtData = distData;
+      resetToDistrictMedian();
+    }
 
-    // 2. Fetch explainability SHAP attributions
+    // Load explainability data
     if (!isStaticHost) {
       try {
         const expRes = await fetch(`/api/explainability/${encodeURIComponent(districtName)}`);
         if (expRes.ok) expData = await expRes.json();
-      } catch (_) {
-        // Fall back to static
-      }
+      } catch (_) {}
     }
 
     if (!expData) {
       const safeName = districtName.replace(/ /g, "_");
       let expRes = await fetch(`./data/explainability/${encodeURIComponent(districtName)}.json`);
-      if (!expRes.ok) {
-        expRes = await fetch(`./data/explainability/${safeName}.json`);
-      }
+      if (!expRes.ok) expRes = await fetch(`./data/explainability/${safeName}.json`);
       if (expRes.ok) expData = await expRes.json();
     }
 
@@ -251,153 +281,138 @@ async function loadDistrict(districtName) {
       state.explainabilityData = expData;
       updateShapView();
     }
-
-    // 3. Reset scenario inputs
-    resetScenarioToDistrictMedian();
   } catch (err) {
-    console.error("Failed loading district data:", err);
-    dom.tbodyEvents.innerHTML = `<tr><td colspan="5" class="loading-cell" style="color:#cf222e;">Failed loading district data: ${err.message}.</td></tr>`;
+    console.error("Error loading district:", err);
   }
 }
 
-// ---------------------------------------------------------------------------
-// Rendering Functions
-// ---------------------------------------------------------------------------
-
-function renderDistrictOverview() {
-  const d = state.districtData;
-  if (!d) return;
-
-  dom.regionBadge.textContent = d.region;
-  dom.districtTitle.textContent = `${d.district} District, ${d.state}`;
-  dom.districtFoldInfo.textContent = `Spatial Validation Fold: ${d.primary_fold} · Trained on: ${d.train_districts.join(", ")}`;
-
-  const topo = d.topographic_profile || {};
-  dom.statElev.textContent = `${topo.elevation_min_m || 0} m – ${topo.elevation_max_m || 0} m`;
-  dom.statPos.textContent = `${d.n_historical_events} documented events`;
-
-  // Catalog dates span
-  if (d.historical_positive_events && d.historical_positive_events.length > 0) {
-    const dates = d.historical_positive_events.map((e) => e.event_date).sort();
-    const startYear = dates[0].substring(0, 4);
-    const endYear = dates[dates.length - 1].substring(0, 4);
-    dom.statDates.textContent = `${startYear} – ${endYear}`;
-  } else {
-    dom.statDates.textContent = "N/A";
-  }
-
-  updateRecallStat();
-}
-
-function updateRecallStat() {
-  const d = state.districtData;
-  if (!d || !d.audited_fold_metrics) return;
-
-  const key = `${state.selectedModelFamily}_${state.selectedFeatureSet}`;
-  const metrics = d.audited_fold_metrics[key];
-  if (metrics) {
-    const recallPct = (metrics.recall * 100).toFixed(1);
-    const tp = metrics.tp;
-    const totalPos = metrics.tp + metrics.fn;
-    dom.statRecall.textContent = `${recallPct}% (${tp}/${totalPos})`;
-    if (metrics.target_recall_met) {
-      dom.statRecall.style.color = "var(--color-primary)";
-    } else {
-      dom.statRecall.style.color = "var(--color-hazard-high)";
-    }
-  } else {
-    dom.statRecall.textContent = "Audited in Fold";
-  }
-}
-
-function renderHistoricalEventsTable() {
-  const d = state.districtData;
-  if (!d || !d.historical_positive_events) return;
-
-  const events = d.historical_positive_events;
-  if (events.length === 0) {
-    dom.tbodyEvents.innerHTML = `<tr><td colspan="5" class="loading-cell">No documented historical events in this district.</td></tr>`;
-    return;
-  }
-
-  let html = "";
-  events.forEach((ev, idx) => {
-    html += `
-      <tr data-idx="${idx}">
-        <td><strong>${ev.event_date}</strong><br><small style="color:var(--color-text-muted);">${ev.event_id}</small></td>
-        <td><code>${ev.observed_rain_3d_mm} / ${ev.observed_rain_7d_mm} / ${ev.observed_rain_15d_mm} mm</code></td>
-        <td>${ev.observed_slope_deg}&deg;</td>
-        <td>${ev.observed_elevation_m} m</td>
-        <td>
-          <button type="button" class="btn-table-action" onclick="loadEventIntoScenario(${idx})">Load Scenario</button>
-        </td>
-      </tr>
-    `;
-  });
-
-  dom.tbodyEvents.innerHTML = html;
-}
-
-// Global hook for row button
-window.loadEventIntoScenario = function (idx) {
-  const d = state.districtData;
-  if (!d || !d.historical_positive_events) return;
-  const ev = d.historical_positive_events[idx];
-  if (!ev) return;
-
-  dom.inpElev.value = ev.observed_elevation_m;
-  dom.inpSlope.value = ev.observed_slope_deg;
-  dom.inpRain3d.value = ev.observed_rain_3d_mm;
-  dom.inpRain7d.value = ev.observed_rain_7d_mm;
-  dom.inpRain15d.value = ev.observed_rain_15d_mm;
-
-  // Highlight selected table row
-  const rows = dom.tbodyEvents.querySelectorAll("tr");
-  rows.forEach((r) => r.classList.remove("selected"));
-  if (rows[idx]) rows[idx].classList.add("selected");
-
-  // Automatically trigger evaluation for convenient inspection
-  evaluateScenario();
-};
-
-function resetScenarioToDistrictMedian() {
+function resetToDistrictMedian() {
   const d = state.districtData;
   if (!d) return;
 
   const topo = d.topographic_profile || {};
-  dom.inpElev.value = topo.elevation_mean_m || 1000;
-  dom.inpSlope.value = topo.slope_mean_deg || 20;
+  document.getElementById("inp-elev").value = Math.round(topo.elevation_mean_m || 1050);
+  document.getElementById("inp-slope").value = (topo.slope_mean_deg || 22.5).toFixed(1);
 
-  // If historical events exist, use median rainfall, else baseline
   if (d.historical_positive_events && d.historical_positive_events.length > 0) {
     const midIdx = Math.floor(d.historical_positive_events.length / 2);
     const midEv = d.historical_positive_events[midIdx];
-    dom.inpRain3d.value = midEv.observed_rain_3d_mm;
-    dom.inpRain7d.value = midEv.observed_rain_7d_mm;
-    dom.inpRain15d.value = midEv.observed_rain_15d_mm;
+    document.getElementById("inp-rain3d").value = midEv.observed_rain_3d_mm;
+    document.getElementById("inp-rain7d").value = midEv.observed_rain_7d_mm;
+    document.getElementById("inp-rain15d").value = midEv.observed_rain_15d_mm;
   } else {
-    dom.inpRain3d.value = 50.0;
-    dom.inpRain7d.value = 120.0;
-    dom.inpRain15d.value = 220.0;
+    document.getElementById("inp-rain3d").value = 45.0;
+    document.getElementById("inp-rain7d").value = 110.0;
+    document.getElementById("inp-rain15d").value = 210.0;
+  }
+}
+window.resetToDistrictMedian = resetToDistrictMedian;
+
+function loadHistoricalExtreme() {
+  const d = state.districtData;
+  if (!d) return;
+
+  const topo = d.topographic_profile || {};
+  document.getElementById("inp-elev").value = Math.round(topo.elevation_max_m ? topo.elevation_max_m * 0.85 : 1450);
+  document.getElementById("inp-slope").value = 34.5;
+  document.getElementById("inp-rain3d").value = 210.0;
+  document.getElementById("inp-rain7d").value = 380.0;
+  document.getElementById("inp-rain15d").value = 520.0;
+
+  evaluateScenario();
+}
+window.loadHistoricalExtreme = loadHistoricalExtreme;
+
+// ---------------------------------------------------------------------------
+// All Observations Table (View 4)
+// ---------------------------------------------------------------------------
+
+async function loadAllObservations() {
+  const districts = ["Wayanad", "Idukki", "Kodagu", "East Sikkim", "West Sikkim", "East Khasi Hills"];
+  const allEvents = [];
+
+  for (const dName of districts) {
+    try {
+      const safeName = dName.replace(/ /g, "_");
+      let res = await fetch(`./data/districts/${encodeURIComponent(dName)}.json`);
+      if (!res.ok) res = await fetch(`./data/districts/${safeName}.json`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.historical_positive_events) {
+          json.historical_positive_events.forEach((ev) => {
+            allEvents.push({ ...ev, district: dName });
+          });
+        }
+      }
+    } catch (_) {}
   }
 
-  // Clear row highlights
-  const rows = dom.tbodyEvents.querySelectorAll("tr");
-  rows.forEach((r) => r.classList.remove("selected"));
+  state.allObservations = allEvents;
+  renderObservationsTable(allEvents);
 }
 
+function renderObservationsTable(events) {
+  const tbody = document.getElementById("tbody-all-observations");
+  if (!tbody) return;
+
+  if (events.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:15px; color:var(--text-muted);">No records available.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = events
+    .slice(0, 50)
+    .map(
+      (ev, idx) => `
+      <tr>
+        <td><strong>${ev.district}</strong></td>
+        <td>${ev.event_date}</td>
+        <td>${ev.observed_slope_deg}&deg;</td>
+        <td>${ev.observed_elevation_m} m</td>
+        <td>${ev.observed_rain_3d_mm} mm</td>
+        <td>${ev.observed_rain_7d_mm} mm</td>
+        <td>${ev.observed_rain_15d_mm} mm</td>
+        <td>
+          <button class="btn-table-action" onclick="loadObsRecordIntoInference('${ev.district}', ${ev.observed_elevation_m}, ${ev.observed_slope_deg}, ${ev.observed_rain_3d_mm}, ${ev.observed_rain_7d_mm}, ${ev.observed_rain_15d_mm})">
+            Load Scenario →
+          </button>
+        </td>
+      </tr>
+    `
+    )
+    .join("");
+}
+
+function loadObsRecordIntoInference(district, elev, slope, r3d, r7d, r15d) {
+  selectDistrict(district);
+  document.getElementById("inp-elev").value = elev;
+  document.getElementById("inp-slope").value = slope;
+  document.getElementById("inp-rain3d").value = r3d;
+  document.getElementById("inp-rain7d").value = r7d;
+  document.getElementById("inp-rain15d").value = r15d;
+
+  navigateTo("inference");
+  evaluateScenario();
+}
+window.loadObsRecordIntoInference = loadObsRecordIntoInference;
+
 // ---------------------------------------------------------------------------
-// Scenario Evaluation (Dual Mode: REST API + Client-Side Math Engine)
+// Scenario Inference & Math Engine
 // ---------------------------------------------------------------------------
+
+function handleScenarioSubmit(e) {
+  e.preventDefault();
+  evaluateScenario();
+}
+window.handleScenarioSubmit = handleScenarioSubmit;
 
 async function evaluateScenario() {
-  const elev = parseFloat(dom.inpElev.value);
-  const slope = parseFloat(dom.inpSlope.value);
-  const r3d = parseFloat(dom.inpRain3d.value);
-  const r7d = parseFloat(dom.inpRain7d.value);
-  const r15d = parseFloat(dom.inpRain15d.value);
+  const elev = parseFloat(document.getElementById("inp-elev").value);
+  const slope = parseFloat(document.getElementById("inp-slope").value);
+  const r3d = parseFloat(document.getElementById("inp-rain3d").value);
+  const r7d = parseFloat(document.getElementById("inp-rain7d").value);
+  const r15d = parseFloat(document.getElementById("inp-rain15d").value);
 
-  // Construct full 17 feature dictionary
   const features = {
     elevation_m: elev,
     slope_deg: slope,
@@ -432,7 +447,6 @@ async function evaluateScenario() {
       window.location.hostname.endsWith("github.io") ||
       window.location.hostname.endsWith("pages.dev");
 
-    // 1. If not strictly static, try live API server
     if (!isStaticHost) {
       try {
         const res = await fetch("/api/predict/rlsi", {
@@ -440,29 +454,21 @@ async function evaluateScenario() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (res.ok) {
-          data = await res.json();
-        }
-      } catch (_) {
-        // Fall back to client-side mathematical evaluation
-      }
+        if (res.ok) data = await res.json();
+      } catch (_) {}
     }
 
-    // 2. Client-side evaluation engine (runs on GitHub Pages without any backend server)
     if (!data) {
       data = await evaluateScenarioClientSide(payload);
     }
 
-    renderRlsiResult(data);
+    renderInferenceResult(data);
   } catch (err) {
-    alert(`Scenario evaluation error: ${err.message}`);
+    console.error("Evaluation error:", err);
   }
 }
+window.evaluateScenario = evaluateScenario;
 
-/**
- * Pure client-side model inference engine matching Python scikit-learn models.
- * Operates with 100% mathematical fidelity on frozen checkpoint parameters.
- */
 async function evaluateScenarioClientSide(payload) {
   const { district, model_family, feature_set, features } = payload;
   const fold_id = DISTRICT_FOLD_MAP[district];
@@ -472,14 +478,11 @@ async function evaluateScenarioClientSide(payload) {
   let modelData = modelCache.get(modelKey);
   if (!modelData) {
     const res = await fetch(`./data/models/${modelKey}.json`);
-    if (!res.ok) {
-      throw new Error(`Failed to load model file (${res.status})`);
-    }
+    if (!res.ok) throw new Error(`Model file not found: ${modelKey}`);
     modelData = await res.json();
     modelCache.set(modelKey, modelData);
   }
 
-  // Feature vector in exact schema order & StandardScaler transformation
   const scaled = modelData.features.map((f, i) => {
     const val = features[f] !== undefined ? features[f] : 0.0;
     return (val - modelData.scaler_mean[i]) / modelData.scaler_scale[i];
@@ -488,155 +491,218 @@ async function evaluateScenarioClientSide(payload) {
   let rlsi_score = 0.5;
 
   if (model_family === "LogisticRegression") {
-    // Linear predictor z = w0 + sum(wi * xi)
     let z = modelData.intercept;
     for (let i = 0; i < scaled.length; i++) {
       z += modelData.coef[i] * scaled[i];
     }
-    // Sigmoid probability
     rlsi_score = 1.0 / (1.0 + Math.exp(-z));
   } else if (model_family === "RandomForest") {
-    // Ensemble tree traversal
     let treeSum = 0.0;
     for (const tree of modelData.trees) {
-      let node = 0;
-      while (tree.left[node] !== -1) {
-        const featIdx = tree.feature[node];
-        const thresh = tree.threshold[node];
-        if (scaled[featIdx] <= thresh) {
-          node = tree.left[node];
+      let nodeIdx = 0;
+      while (tree.children_left[nodeIdx] !== -1) {
+        const featureIdx = tree.feature[nodeIdx];
+        const threshold = tree.threshold[nodeIdx];
+        if (scaled[featureIdx] <= threshold) {
+          nodeIdx = tree.children_left[nodeIdx];
         } else {
-          node = tree.right[node];
+          nodeIdx = tree.children_right[nodeIdx];
         }
       }
-      treeSum += tree.prob[node];
+      treeSum += tree.value[nodeIdx];
     }
     rlsi_score = treeSum / modelData.trees.length;
   }
 
-  // Frozen operational decision threshold
   const tau_star = modelData.tau_star;
-  let category_name = "";
-  let category_code = "";
-  let category_desc = "";
+  const exceeds = rlsi_score >= tau_star;
 
+  let tier = "LOW";
   if (rlsi_score >= tau_star) {
-    category_name = "High Relative Susceptibility";
-    category_code = "HIGH";
-    category_desc = `Score (${rlsi_score.toFixed(3)}) meets or exceeds the empirical decision threshold (tau* = ${tau_star.toFixed(3)}). Terrain and antecedent precipitation reflect conditions associated with historical landslide events.`;
+    tier = "HIGH";
   } else if (rlsi_score >= 0.5 * tau_star) {
-    category_name = "Elevated Relative Susceptibility";
-    category_code = "ELEVATED";
-    category_desc = `Score (${rlsi_score.toFixed(3)}) is between 50% of threshold and threshold (0.5*tau* = ${(0.5 * tau_star).toFixed(3)}, tau* = ${tau_star.toFixed(3)}). Conditions are elevated relative to median landscape background; heightened monitoring recommended.`;
-  } else {
-    category_name = "Low Relative Susceptibility";
-    category_code = "LOW";
-    category_desc = `Score (${rlsi_score.toFixed(3)}) is below 50% of threshold (0.5*tau* = ${(0.5 * tau_star).toFixed(3)}). Conditions are within the baseline regional landscape background envelope.`;
+    tier = "ELEVATED";
   }
 
-  const sop = SOP_GUIDANCE[category_code] || SOP_GUIDANCE.LOW;
+  const sop = SOP_GUIDANCE[tier];
 
   return {
+    status: "success",
+    district,
+    model_family,
+    feature_set,
+    fold_id,
     rlsi_score: parseFloat(rlsi_score.toFixed(4)),
-    frozen_threshold_tau: parseFloat(tau_star.toFixed(4)),
-    exceeds_threshold: rlsi_score >= tau_star,
-    category: category_name,
-    category_code: category_code,
-    category_description: category_desc,
-    model_family: model_family,
-    feature_set: feature_set,
-    fold_id: fold_id,
-    sop_preparedness_guidance: {
-      category_code: category_code,
-      tier_name: sop.tier_name,
-      badge_color: sop.badge_color,
+    decision_threshold: parseFloat(tau_star.toFixed(4)),
+    exceeds_threshold: exceeds,
+    category: sop.tier_name,
+    category_description: exceeds
+      ? "Terrain-rainfall conditions meet the operational threshold calibrated to detect historical landslide events in this spatial fold."
+      : "Current scenario remains below the operational threshold for this district fold.",
+    sop_guidance: {
       administrative_status: sop.administrative_status,
-      community_actions: [...sop.community_actions],
-      infrastructure_actions: [...sop.infrastructure_actions],
-      emergency_desk_checklist: [...sop.emergency_desk_checklist],
-      institutional_disclaimer: INSTITUTIONAL_DISCLAIMER,
+      community_actions: sop.community_actions,
+      infrastructure_actions: sop.infrastructure_actions,
     },
   };
 }
 
-function renderRlsiResult(data) {
-  dom.resultBox.style.display = "block";
-  dom.resModelStamp.textContent = `${data.model_family} · ${data.feature_set} · ${data.fold_id}`;
-  dom.resRlsiScore.textContent = data.rlsi_score.toFixed(4);
-  dom.resTauStar.textContent = data.frozen_threshold_tau.toFixed(4);
+function renderInferenceResult(data) {
+  const resultBox = document.getElementById("rlsi-result-box");
+  const badge = document.getElementById("res-badge");
+  const modelStamp = document.getElementById("res-model-stamp");
+  const rlsiVal = document.getElementById("res-rlsi-score");
+  const tauVal = document.getElementById("res-tau-star");
+  const statusVal = document.getElementById("res-threshold-status");
+  const descVal = document.getElementById("res-category-desc");
+  const sopAdmin = document.getElementById("sop-admin-status");
+  const sopComm = document.getElementById("sop-list-community");
+  const sopInfra = document.getElementById("sop-list-infrastructure");
 
-  // Badge Styling
-  dom.resBadge.textContent = data.category;
-  dom.resBadge.className = "result-badge";
-  if (data.category_code === "HIGH") {
-    dom.resBadge.classList.add("badge-high");
-    dom.resThresholdStatus.textContent = "Exceeds Decision Threshold (RLSI ≥ τ*)";
-    dom.resThresholdStatus.className = "sm-value threshold-met";
-  } else if (data.category_code === "ELEVATED") {
-    dom.resBadge.classList.add("badge-elevated");
-    dom.resThresholdStatus.textContent = "Elevated Range (0.5τ* ≤ RLSI < τ*)";
-    dom.resThresholdStatus.className = "sm-value";
-    dom.resThresholdStatus.style.color = "var(--color-hazard-elevated)";
+  resultBox.style.display = "block";
+  badge.textContent = data.category;
+  badge.className = `result-badge ${data.exceeds_threshold ? "high" : "low"}`;
+
+  modelStamp.textContent = `${data.model_family} · ${data.feature_set} · ${data.fold_id}`;
+  rlsiVal.textContent = data.rlsi_score.toFixed(4);
+  tauVal.textContent = data.decision_threshold.toFixed(4);
+
+  if (data.exceeds_threshold) {
+    statusVal.textContent = "Exceeds Threshold";
+    statusVal.style.color = "var(--accent-rose)";
   } else {
-    dom.resBadge.classList.add("badge-low");
-    dom.resThresholdStatus.textContent = "Within Background (RLSI < 0.5τ*)";
-    dom.resThresholdStatus.className = "sm-value threshold-unmet";
+    statusVal.textContent = "Below Threshold (Safe)";
+    statusVal.style.color = "var(--accent-emerald)";
   }
 
-  dom.resCategoryDesc.textContent = data.category_description;
+  descVal.textContent = data.category_description;
 
-  // Render SOP Preparedness Guidance
-  const sop = data.sop_preparedness_guidance;
-  if (sop) {
-    dom.sopAdminStatus.textContent = `Administrative Status: ${sop.administrative_status}`;
-    dom.sopListCommunity.innerHTML = sop.community_actions.map((a) => `<li>${a}</li>`).join("");
-    dom.sopListInfrastructure.innerHTML = sop.infrastructure_actions.map((a) => `<li>${a}</li>`).join("");
-    dom.sopDisclaimer.textContent = sop.institutional_disclaimer;
-  }
+  const sop = data.sop_guidance || {};
+  sopAdmin.textContent = `Administrative Status: ${sop.administrative_status || "Standard Standby"}`;
 
-  // Scroll smoothly to results
-  dom.resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  sopComm.innerHTML = (sop.community_actions || []).map((a) => `<li>${a}</li>`).join("");
+  sopInfra.innerHTML = (sop.infrastructure_actions || []).map((a) => `<li>${a}</li>`).join("");
+
+  resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 // ---------------------------------------------------------------------------
-// SHAP Explainability View
+// SHAP Feature Attribution Rendering (View 9)
 // ---------------------------------------------------------------------------
 
 function updateShapView() {
+  const container = document.getElementById("shap-bars-container");
+  if (!container || !state.explainabilityData) return;
+
   const exp = state.explainabilityData;
-  if (!exp || !exp.analyses) return;
+  const modelKey = state.selectedModelFamily === "LogisticRegression" ? "logistic_regression" : "random_forest";
+  const modelInfo = exp[modelKey];
 
-  // Find analysis matching selected model family (prefer FS3_Full, fallback to FS1_Point)
-  let matchingAnalysis = exp.analyses.find(
-    (a) => a.model_family === state.selectedModelFamily && a.feature_set === "FS3_Full"
-  );
-  if (!matchingAnalysis) {
-    matchingAnalysis = exp.analyses.find(
-      (a) => a.model_family === state.selectedModelFamily
-    );
-  }
-
-  if (!matchingAnalysis || !matchingAnalysis.feature_attribution_ranking) {
-    dom.shapBarsContainer.innerHTML = `<p class="loading-cell">No SHAP attribution found for ${state.selectedModelFamily}.</p>`;
+  if (!modelInfo || !modelInfo.top_features) {
+    container.innerHTML = `<p style="color:var(--text-muted); font-size:12px;">No SHAP data available for this model.</p>`;
     return;
   }
 
-  const ranking = matchingAnalysis.feature_attribution_ranking.slice(0, 6);
-  const maxVal = Math.max(...ranking.map((r) => r.mean_abs_shap), 0.001);
+  const features = modelInfo.top_features;
+  const maxVal = Math.max(...features.map((f) => Math.abs(f.importance_score || f.mean_abs_shap || 0.1)));
 
-  let html = "";
-  ranking.forEach((r) => {
-    const pct = ((r.mean_abs_shap / maxVal) * 100).toFixed(1);
-    html += `
-      <div class="shap-row">
-        <span class="shap-feat-name" title="${r.feature}">${r.feature}</span>
-        <div class="shap-bar-track">
+  container.innerHTML = features
+    .slice(0, 8)
+    .map((f) => {
+      const val = f.importance_score || f.mean_abs_shap || 0.05;
+      const pct = Math.min(100, Math.max(10, Math.round((val / maxVal) * 100)));
+      return `
+      <div class="shap-bar-row">
+        <div class="shap-meta">
+          <span class="shap-feature-name">${f.feature_name}</span>
+          <span class="shap-feature-val">${val.toFixed(4)}</span>
+        </div>
+        <div class="shap-bar-bg">
           <div class="shap-bar-fill" style="width: ${pct}%;"></div>
         </div>
-        <span class="shap-val-text">${r.mean_abs_shap.toFixed(3)}</span>
       </div>
     `;
-  });
-
-  dom.shapBarsContainer.innerHTML = html;
+    })
+    .join("");
 }
+
+// ---------------------------------------------------------------------------
+// Interactive State-Space Hydrology Simulator (View 8)
+// ---------------------------------------------------------------------------
+
+function initSimulations() {
+  updateStateSpaceSimulation();
+}
+
+const PRESET_RAINFALL = {
+  cloudburst: [5, 8, 4, 10, 6, 8, 12, 15, 20, 25, 30, 45, 120, 40, 15],
+  monsoon: [25, 35, 40, 50, 45, 60, 55, 70, 65, 80, 75, 90, 85, 95, 110],
+  dryspell: [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 45, 80, 95, 60, 25],
+};
+
+function applyStateSpacePreset() {
+  const preset = document.getElementById("sim-preset").value;
+  updateStateSpaceSimulation();
+}
+window.applyStateSpacePreset = applyStateSpacePreset;
+
+function updateStateSpaceSimulation() {
+  const lambdaEl = document.getElementById("sim-lambda");
+  const lambdaValEl = document.getElementById("sim-lambda-val");
+  const presetEl = document.getElementById("sim-preset");
+  const chartEl = document.getElementById("statespace-chart-container");
+  if (!lambdaEl || !chartEl) return;
+
+  const lambda = parseFloat(lambdaEl.value);
+  lambdaValEl.textContent = `λ = ${lambda.toFixed(2)} (Soil Retention Parameter)`;
+
+  const presetKey = presetEl ? presetEl.value : "monsoon";
+  const rainSeries = PRESET_RAINFALL[presetKey] || PRESET_RAINFALL.monsoon;
+
+  // 1D Kalman DLM simulation: theta_t = lambda * theta_{t-1} + (1 - lambda) * P_t
+  const theta = [];
+  let currentTheta = 15.0; // initial baseline moisture
+
+  for (let t = 0; t < rainSeries.length; t++) {
+    const P_t = rainSeries[t];
+    currentTheta = lambda * currentTheta + (1.0 - lambda) * P_t;
+    theta.push(currentTheta);
+  }
+
+  const maxTheta = Math.max(...theta, 80);
+
+  chartEl.innerHTML = theta
+    .map((val, idx) => {
+      const heightPct = Math.min(100, Math.max(12, Math.round((val / maxTheta) * 100)));
+      const rain = rainSeries[idx];
+      return `
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end;" title="Day ${idx + 1}: Rain ${rain}mm, Saturation θ=${val.toFixed(1)}">
+        <div style="font-size:9px; color:var(--text-dim); margin-bottom:2px;">${val.toFixed(0)}</div>
+        <div style="width:100%; max-width:24px; height:${heightPct}%; background:linear-gradient(180deg, var(--accent-emerald), var(--accent-teal)); border-radius:3px 3px 0 0;"></div>
+        <div style="font-size:9px; color:var(--text-muted); margin-top:4px;">D${idx + 1}</div>
+      </div>
+    `;
+    })
+    .join("");
+}
+window.updateStateSpaceSimulation = updateStateSpaceSimulation;
+
+// ---------------------------------------------------------------------------
+// Floating RAG Chatbot Controller
+// ---------------------------------------------------------------------------
+
+function toggleFloatingRAG() {
+  const win = document.getElementById("floating-rag-window");
+  if (win) {
+    win.classList.toggle("open");
+  }
+}
+window.toggleFloatingRAG = toggleFloatingRAG;
+
+function openFloatingRAG() {
+  const win = document.getElementById("floating-rag-window");
+  if (win) {
+    win.classList.add("open");
+  }
+}
+window.openFloatingRAG = openFloatingRAG;

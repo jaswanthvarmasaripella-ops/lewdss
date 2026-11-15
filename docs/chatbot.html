@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoGuard AI — Landslide Susceptibility RAG Assistant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* Custom scrollbar styling for sleek dark/light geospatial UI */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.35);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.55);
+    }
+    @keyframes pulseDot {
+      0%, 80%, 100% { transform: scale(0.75); opacity: 0.4; }
+      40% { transform: scale(1.1); opacity: 1; }
+    }
+    .typing-dot:nth-child(1) { animation: pulseDot 1.3s infinite ease-in-out 0s; }
+    .typing-dot:nth-child(2) { animation: pulseDot 1.3s infinite ease-in-out 0.2s; }
+    .typing-dot:nth-child(3) { animation: pulseDot 1.3s infinite ease-in-out 0.4s; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-200 overflow-hidden">
+
+  <!-- Notification Toast Container (Replaces alert/confirm) -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Widget Launcher Bubble (Visible in ?mode=widget or when previewing floating widget) -->
+  <div id="widget-launcher-wrapper" class="hidden fixed bottom-5 right-5 z-40">
+    <button id="widget-toggle-btn" onclick="toggleWidgetChat()" aria-label="Toggle Landslide AI Assistant"
+      class="group flex items-center gap-3 bg-gradient-to-br from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-semibold px-4 py-3.5 rounded-full shadow-2xl shadow-emerald-950/60 transition-all duration-200 hover:scale-105 active:scale-95">
+      <span class="relative flex h-3 w-3">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-950 opacity-50"></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-slate-950"></span>
+      </span>
+      <span id="widget-btn-label" class="text-sm tracking-tight">Ask GeoGuard RAG</span>
+      <svg class="w-5 h-5 transition-transform duration-200 group-hover:rotate-12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Main Application Shell (Adapts seamlessly between Full-Screen Mode & Floating Widget Mode) -->
+  <div id="app-shell" class="w-full h-screen flex flex-col bg-slate-900/95 border-slate-800 transition-all duration-300">
+
+    <!-- Top Navigation / Header -->
+    <header class="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-800/90 shrink-0">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/40 flex items-center justify-center shrink-0">
+          <!-- Mountain / Landslide Contour SVG Icon -->
+          <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 19l6-10 4 6 3-4 5 8H3z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l2-2m2 4l2-2" />
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm sm:text-base font-bold text-white truncate">GeoGuard RAG</h1>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shrink-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              RAG Active
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 truncate">Landslide Susceptibility &amp; Geotechnical AI</p>
+        </div>
+      </div>
+
+      <!-- Header Action Buttons -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <!-- Back to Decision Lab -->
+        <a href="index.html" title="Back to Main Dashboard"
+          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700/80 text-slate-200 border border-slate-700/80 transition">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span class="hidden sm:inline">Main Dashboard</span>
+        </a>
+
+        <!-- Knowledge Base Drawer Trigger -->
+        <button onclick="openModal('kb-modal')" title="Manage RAG Knowledge Base"
+          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700/80 text-slate-200 border border-slate-700/80 transition">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          <span class="hidden sm:inline">Knowledge Base</span>
+          <span id="kb-count-badge" class="px-1.5 py-0.2 rounded-md bg-slate-950 text-amber-300 font-mono text-[11px]">0</span>
+        </button>
+
+        <!-- Embed / Antigravity Integration Modal Trigger -->
+        <button onclick="openModal('embed-modal')" title="Embed & Antigravity Integration"
+          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/35 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          </svg>
+          <span class="hidden sm:inline">Embed / Link</span>
+        </button>
+
+        <!-- Clear Chat -->
+        <button onclick="clearChat()" title="Reset Conversation"
+          class="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+
+        <!-- Minimize button shown only when in floating widget mode -->
+        <button id="widget-close-btn" onclick="toggleWidgetChat()" title="Minimize Widget"
+          class="hidden p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Risk Legend Status Strip -->
+    <div class="px-4 py-2 bg-slate-950/70 border-b border-slate-800/80 flex items-center justify-between gap-2 overflow-x-auto text-[11px] shrink-0">
+      <span class="text-slate-400 font-medium shrink-0">Susceptibility Scale:</span>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <span class="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-medium">Very Low</span>
+        <span class="px-2 py-0.5 rounded-md bg-teal-500/15 text-teal-300 border border-teal-500/30 font-medium">Low</span>
+        <span class="px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 font-medium">Moderate</span>
+        <span class="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-300 border border-orange-500/30 font-medium">High</span>
+        <span class="px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-300 border border-rose-500/30 font-medium">Very High</span>
+      </div>
+    </div>
+
+    <!-- Main Scrollable Chat Feed -->
+    <main id="chat-feed" class="flex-1 overflow-y-auto px-4 py-5 space-y-5 scroll-smooth">
+      <!-- Welcome Hero Card -->
+      <div class="max-w-3xl mx-auto bg-gradient-to-b from-slate-800/70 to-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
+        <div class="flex items-start gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center shrink-0 mt-0.5">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div class="space-y-2">
+            <h2 class="text-sm sm:text-base font-semibold text-white">Welcome to the Landslide Susceptibility RAG Assistant</h2>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Ask me anything about terrain conditioning factors (Slope, TWI, SPI, NDVI, Lithology), ML susceptibility modeling (Logistic Regression, Random Forest, Spatial Cross-Validation), State-Space soil moisture tracking (DLM/Kalman filter), or NDMA emergency response protocols. Every answer is retrieved from your domain knowledge base with transparent source citations.
+            </p>
+            <div class="pt-1 flex flex-wrap items-center gap-2 text-[11px] text-slate-400">
+              <span class="inline-flex items-center gap-1 bg-slate-950/80 px-2.5 py-1 rounded-lg border border-slate-800">
+                <span class="text-emerald-400 font-semibold">Step 1:</span> Click <strong>Knowledge Base</strong> to inspect indexed project docs
+              </span>
+              <span class="inline-flex items-center gap-1 bg-slate-950/80 px-2.5 py-1 rounded-lg border border-slate-800">
+                <span class="text-amber-400 font-semibold">Step 2:</span> Click <strong>Embed / Link</strong> to test widget mode or share
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages container -->
+      <div id="messages-list" class="max-w-3xl mx-auto space-y-4"></div>
+    </main>
+
+    <!-- Quick Prompt Chips & Input Composer -->
+    <footer class="bg-slate-900 border-t border-slate-800/90 px-4 pt-2.5 pb-3.5 shrink-0">
+      <div class="max-w-3xl mx-auto space-y-2.5">
+        <!-- Quick Suggested Prompts -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+          <button onclick="sendQuickPrompt('How is landslide susceptibility calculated?')"
+            class="shrink-0 text-xs px-3 py-1.5 rounded-full bg-slate-800/90 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 border border-slate-700/80 hover:border-emerald-500/40 transition">
+            How is landslide susceptibility calculated?
+          </button>
+          <button onclick="sendQuickPrompt('Why use State-Space DLM for soil saturation?')"
+            class="shrink-0 text-xs px-3 py-1.5 rounded-full bg-slate-800/90 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 border border-slate-700/80 hover:border-emerald-500/40 transition">
+            State-Space DLM for soil saturation
+          </button>
+          <button onclick="sendQuickPrompt('Explain Spatial Cross-Validation and Wayanad results')"
+            class="shrink-0 text-xs px-3 py-1.5 rounded-full bg-slate-800/90 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 border border-slate-700/80 hover:border-emerald-500/40 transition">
+            Spatial CV &amp; Wayanad (100% recall)
+          </button>
+          <button onclick="sendQuickPrompt('Explain High vs. Very High susceptibility zones & NDMA SOPs')"
+            class="shrink-0 text-xs px-3 py-1.5 rounded-full bg-slate-800/90 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 border border-slate-700/80 hover:border-emerald-500/40 transition">
+            Risk Zones &amp; NDMA SOPs
+          </button>
+        </div>
+
+        <!-- Input Bar -->
+        <form id="chat-form" onsubmit="handleChatSubmit(event)" class="relative flex items-end gap-2">
+          <div class="relative flex-1">
+            <textarea id="user-input" rows="1" placeholder="Ask about slope thresholds, TWI, State-Space DLM, Wayanad or risk zones..."
+              onkeydown="handleTextareaKeydown(event)"
+              oninput="autoResizeTextarea(this)"
+              class="w-full resize-none rounded-2xl bg-slate-950 border border-slate-700/90 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm text-slate-100 placeholder-slate-500 px-4 py-3 pr-12 outline-none transition max-h-32"></textarea>
+          </div>
+          <button id="send-btn" type="submit"
+            class="h-11 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 font-semibold text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/50 transition shrink-0">
+            <span class="hidden sm:inline">Ask</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: KNOWLEDGE BASE & CUSTOM DOCUMENT MANAGER                     -->
+  <!-- ===================================================================== -->
+  <div id="kb-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+            RAG Knowledge Base &amp; Study Area Documents
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">Add your project-specific dataset details, regional thresholds, or model metrics. Indexed instantly in-browser via TF-IDF.</p>
+        </div>
+        <button onclick="closeModal('kb-modal')" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 overflow-y-auto space-y-5 flex-1">
+        <!-- Add New Document Chunk Form -->
+        <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-emerald-400">+ Add Custom Project Knowledge</h4>
+            <label class="cursor-pointer inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+              <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              Upload .txt / .md / .json
+              <input type="file" accept=".txt,.md,.json,.csv" onchange="handleFileUpload(event)" class="hidden" />
+            </label>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input id="new-doc-title" type="text" placeholder="Section Title (e.g., Western Ghats Study Area Model)"
+              class="w-full rounded-xl bg-slate-900 border border-slate-700 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 outline-none" />
+            <input id="new-doc-category" type="text" placeholder="Category (e.g., Local Study Area, Dataset, Thresholds)"
+              class="w-full rounded-xl bg-slate-900 border border-slate-700 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 outline-none" />
+          </div>
+          <textarea id="new-doc-content" rows="3" placeholder="Paste your project notes, regional rainfall thresholds, DEM resolution (e.g., 30m Copernicus), model ROC-AUC score, or mitigation guidelines..."
+            class="w-full rounded-xl bg-slate-900 border border-slate-700 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 outline-none"></textarea>
+          <div class="flex justify-end gap-2">
+            <button onclick="resetDefaultKB()" class="px-3 py-1.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition">
+              Restore Defaults
+            </button>
+            <button onclick="addCustomDocument()" class="px-4 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">
+              Index into RAG Engine
+            </button>
+          </div>
+        </div>
+
+        <!-- Indexed Documents List -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Indexed Knowledge Chunks (<span id="kb-modal-count">0</span>)</h4>
+            <span class="text-[11px] text-slate-500">Top 3 matching chunks are injected per query</span>
+          </div>
+          <div id="kb-documents-list" class="space-y-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: EMBED & ANTIGRAVITY INTEGRATION GUIDE                        -->
+  <!-- ===================================================================== -->
+  <div id="embed-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-white">Embed &amp; Antigravity Integration</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Share this link with Antigravity or paste the iframe snippet into your Landslide Susceptibility Estimator website.</p>
+        </div>
+        <button onclick="closeModal('embed-modal')" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-4 text-xs">
+        <!-- Live Preview Mode Toggle -->
+        <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <p class="font-semibold text-emerald-300">Test Floating Widget Mode (?mode=widget)</p>
+            <p class="text-slate-300 mt-0.5">Preview how the chatbot appears as a floating corner bubble on your existing site.</p>
+          </div>
+          <button onclick="togglePreviewWidgetMode()" id="preview-mode-btn"
+            class="shrink-0 px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition">
+            Switch to Widget Mode
+          </button>
+        </div>
+
+        <!-- Direct URL for Antigravity -->
+        <div class="space-y-1.5">
+          <label class="font-semibold text-slate-200 block">1. Direct Chatbot Link (Give this URL to Antigravity)</label>
+          <p class="text-slate-400">Tell Antigravity: <em class="text-slate-200">"Embed this chatbot URL as a floating bottom-right assistant widget on my Landslide Susceptibility Estimator website."</em></p>
+          <div class="flex items-center gap-2">
+            <input id="shareable-url-input" type="text" readonly
+              class="flex-1 font-mono text-[11px] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-emerald-300 outline-none" />
+            <button onclick="copyTextFromInput('shareable-url-input')"
+              class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium border border-slate-700 transition shrink-0">
+              Copy URL
+            </button>
+          </div>
+        </div>
+
+        <!-- Ready-to-paste Floating Widget Iframe Snippet -->
+        <div class="space-y-1.5">
+          <label class="font-semibold text-slate-200 block">2. Floating Bottom-Right Widget Snippet (HTML)</label>
+          <div class="relative">
+            <textarea id="iframe-widget-snippet" rows="5" readonly
+              class="w-full font-mono text-[11px] bg-slate-950 border border-slate-700 rounded-xl p-3 text-slate-300 outline-none"></textarea>
+            <button onclick="copyTextFromInput('iframe-widget-snippet')"
+              class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-medium border border-slate-700 transition">
+              Copy Code
+            </button>
+          </div>
+        </div>
+
+        <!-- Inline Panel Iframe Snippet -->
+        <div class="space-y-1.5">
+          <label class="font-semibold text-slate-200 block">3. Sidebar / Section Embed Snippet (Full Height)</label>
+          <div class="relative">
+            <textarea id="iframe-inline-snippet" rows="3" readonly
+              class="w-full font-mono text-[11px] bg-slate-950 border border-slate-700 rounded-xl p-3 text-slate-300 outline-none"></textarea>
+            <button onclick="copyTextFromInput('iframe-inline-snippet')"
+              class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-medium border border-slate-700 transition">
+              Copy Code
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ============================================================================
+     * 1. DOMAIN-SPECIFIC RAG KNOWLEDGE BASE (LANDSLIDE SUSCEPTIBILITY & LEWDSS)
+     * ============================================================================
+     */
+    const DEFAULT_KNOWLEDGE_BASE = [
+      {
+        id: 'doc-1',
+        title: 'Landslide Susceptibility Calculation & Methodology',
+        category: 'Core Methodology',
+        content:
+          'Landslide susceptibility estimation evaluates the spatial probability of slope failure occurring in a given terrain based on local geo-environmental conditioning factors. The standard workflow combines Digital Elevation Model (DEM) derivatives, geological maps, hydrological indices, land cover, and historical landslide inventory points inside a GIS or Machine Learning pipeline to generate a continuous Susceptibility Index (0.0 to 1.0), which is then classified into five zones: Very Low, Low, Moderate, High, and Very High using Natural Breaks (Jenks) or quantile classification.'
+      },
+      {
+        id: 'doc-2',
+        title: 'Topographic Factors: Slope Angle, Aspect & Elevation',
+        category: 'Conditioning Factors',
+        content:
+          'Slope Angle is the single most influential topographic factor controlling shear stress on hillslopes; susceptibility rises sharply on slopes between 25° and 55°, whereas cliffs above 70° often expose bare bedrock with thin soil cover. Slope Aspect controls exposure to sunlight, prevailing monsoon winds, drying cycles, and soil moisture retention. Elevation affects microclimate, freeze-thaw cycles, vegetation density, and orographic rainfall intensity.'
+      },
+      {
+        id: 'doc-3',
+        title: 'Hydrological Indices: TWI, SPI & Rainfall Triggering',
+        category: 'Hydrology & Triggers',
+        content:
+          'Topographic Wetness Index (TWI = ln(a / tan(β))) quantifies steady-state soil moisture accumulation and pore-water pressure buildup in convergent hollows; high TWI values indicate saturated zones prone to shallow translational slides. Stream Power Index (SPI = A * tan(β)) measures the erosive power of flowing water and toe-undercutting along drainage channels. Rainfall Intensity-Duration (I-D) thresholds and Antecedent Precipitation Index (API over 7 to 15 days) serve as primary dynamic triggers that reduce soil matric suction and shear strength.'
+      },
+      {
+        id: 'doc-4',
+        title: 'Lithology, Soil Type & Distance to Tectonic Faults',
+        category: 'Geology & Structure',
+        content:
+          'Lithology governs rock mass strength, permeability, and weathering rates. Weak, fractured, or clay-rich formations (such as weathered shale, phyllite, schist, colluvium, and deeply weathered basalt/granite saprolite) exhibit high landslide susceptibility compared to massive unfractured quartzite or gneiss. Proximity to geological faults, lineaments, and thrust zones (typically within 0–500 meters) significantly increases slope instability due to intense rock shearing, seismic shaking amplification, and preferential groundwater seepage.'
+      },
+      {
+        id: 'doc-5',
+        title: 'Vegetation (NDVI), LULC & Anthropogenic Road Cutting',
+        category: 'Land Cover & Human Impact',
+        content:
+          'Normalized Difference Vegetation Index (NDVI) reflects canopy density and root reinforcement; deep-rooted forests increase soil cohesion and intercept rainfall, whereas low NDVI (< 0.2) bare soil or degraded scrubland faces elevated erosion and shallow failure risk. Land Use/Land Cover (LULC) changes—such as deforestation, terraced agriculture on steep slopes, and unmanaged urbanization—destabilize natural drainage. Distance to Roads is a critical anthropogenic factor: hillslope road-cutting removes lateral toe support and concentrates runoff, causing high failure density within 0–150 meters of mountain highways.'
+      },
+      {
+        id: 'doc-6',
+        title: 'Machine Learning Models for Susceptibility Mapping',
+        category: 'Modeling & Algorithms',
+        content:
+          'Commonly used models in Landslide Susceptibility Estimators include: (1) Random Forest (RF) — an ensemble of decision trees resilient to multicollinearity and capable of ranking factor importance via Gini impurity; (2) XGBoost / Gradient Boosting — builds sequential trees that minimize residual error and often achieves top predictive accuracy; (3) Logistic Regression (LR) — provides interpretable linear log-odds coefficients for each conditioning factor; and (4) Convolutional Neural Networks (CNN) — extracts spatial neighborhood patterns directly from multi-channel raster patches.'
+      },
+      {
+        id: 'doc-7',
+        title: 'Model Validation: ROC-AUC & Spatial Cross-Validation',
+        category: 'Validation & Accuracy',
+        content:
+          'Model performance is primarily evaluated using the Receiver Operating Characteristic - Area Under the Curve (ROC-AUC), plotting True Positive Rate (Sensitivity) against False Positive Rate (1 - Specificity). In geographic applications, standard random K-fold cross-validation causes massive data leakage due to spatial autocorrelation. Spatial Leave-One-District-Out cross-validation is mandatory to test true generalization across held-out geographical zones.'
+      },
+      {
+        id: 'doc-8',
+        title: 'Susceptibility Risk Zones: High vs. Very High & Mitigation',
+        category: 'Risk Zones & Mitigation',
+        content:
+          'Susceptibility Zones classify terrain hazard levels: Very Low & Low zones feature gentle slopes, stable bedrock, and dense vegetation suitable for standard development. Moderate zones require site-specific drainage checks before construction. High Susceptibility zones (probability ~0.60–0.80) exhibit steep slopes, weathered soil, or proximity to roads/streams; they require engineered retaining walls, subsurface horizontal drains, and bio-engineering. Very High Susceptibility zones (probability > 0.80) represent critical hazard corridors where new construction should be prohibited, slopes stabilized with soil nailing, and real-time early warning systems deployed.'
+      },
+      {
+        id: 'doc-9',
+        title: 'LEWDSS Project Overview & Two Study Regions',
+        category: 'LEWDSS Architecture',
+        content:
+          'LEWDSS (Regional Landslide Early Warning & Emergency Response Decision Support System) covers two distinct physiographic zones: Region A (Western Ghats: Wayanad, Idukki, Kodagu) and Region B (Northeast India: East Sikkim, West Sikkim, East Khasi Hills). Ingests NASA GLC/UGLC 144 verified events, Copernicus 30m DEM, and CHIRPS 0.05° daily precipitation to compute Relative Landslide Susceptibility Index (RLSI) scores with zero-leakage spatial validation.'
+      },
+      {
+        id: 'doc-10',
+        title: 'Spatial Cross-Validation & Wayanad Model Generalization',
+        category: 'LEWDSS Modeling',
+        content:
+          'L2-regularized Logistic Regression achieved 87.0% generalized spatial recall across within-region holdout folds (ROC-AUC 0.8012, PR-AUC 0.6341). On Wayanad (Fold A1), it successfully detected 100.0% of documented historical events (18/18) with a frozen decision threshold tau*=0.4400. In contrast, Random Forest suffered leaf probability compression under spatial covariate shift, failing the 80% operational recall constraint.'
+      },
+      {
+        id: 'doc-11',
+        title: 'State-Space Modeling: Soil Saturation DLM (Kalman Filter)',
+        category: 'State-Space Modeling',
+        content:
+          'LEWDSS implements SoilSaturationDLM, a 1-Dimensional Linear Dynamic State-Space Model and Kalman Filter in src/state_space/dlm.py. It tracks subterranean soil moisture saturation theta_t driven by daily precipitation P_t: State Equation: theta_t = lambda * theta_{t-1} + (1 - lambda) * P_t + w_t. Measurement Equation: y_t = theta_t + v_t. Drainage retention lambda in [0.82, 0.90] models exponential recession during dry spells and surge under cloudburst deluge, replacing static 15-day sums with physically grounded continuous drainage.'
+      },
+      {
+        id: 'doc-12',
+        title: 'Operational Decision Threshold tau* & NDMA Standard Operating Procedures',
+        category: 'Decision Support & SOPs',
+        content:
+          'The operational decision threshold tau* is calibrated strictly on training folds to maximize F1 subject to achieved training recall >= 80%. When RLSI exceeds tau*, LEWDSS maps output into 4 alert tiers (Minimal, Advisory, Watch, Warning) paired with NDMA-aligned Standard Operating Procedures for community evacuation, highway clearing, and DEOC command mobilization. Statutorily, only the District Disaster Management Authority (DDMA) holds executive evacuation authority.'
+      }
+    ];
+
+    let knowledgeBase = [];
+    let chatHistory = [];
+    let isWidgetMode = false;
+    let isWidgetOpen = false;
+    let isGenerating = false;
+
+    /**
+     * ============================================================================
+     * 2. CLIENT-SIDE TF-IDF + COSINE SIMILARITY RETRIEVAL ENGINE
+     * ============================================================================
+     */
+    const STOP_WORDS = new Set([
+      'the', 'is', 'in', 'at', 'of', 'on', 'and', 'a', 'to', 'for', 'with', 'as',
+      'by', 'that', 'this', 'it', 'from', 'or', 'an', 'be', 'are', 'was', 'were',
+      'how', 'what', 'why', 'when', 'where', 'which', 'who', 'whom', 'can', 'do',
+      'does', 'did', 'into', 'than', 'then', 'so', 'such', 'their', 'there', 'these',
+      'those', 'my', 'your', 'our', 'we', 'you', 'i', 'me', 'about', 'explain', 'tell'
+    ]);
+
+    function tokenize(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, ' ')
+        .split(/\s+/)
+        .filter((w) => w.length > 1 && !STOP_WORDS.has(w))
+        .map((w) => {
+          if (w.endsWith('ing') && w.length > 5) return w.slice(0, -3);
+          if (w.endsWith('ies') && w.length > 4) return w.slice(0, -3) + 'y';
+          if (w.endsWith('es') && w.length > 4) return w.slice(0, -2);
+          if (w.endsWith('s') && w.length > 3 && !w.endsWith('ss')) return w.slice(0, -1);
+          return w;
+        });
+    }
+
+    function retrieveRelevantChunks(query, topK = 3) {
+      const queryTokens = tokenize(query);
+      if (queryTokens.length === 0 || knowledgeBase.length === 0) {
+        return knowledgeBase.slice(0, topK).map((doc) => ({ doc, score: 0.15 }));
+      }
+
+      const N = knowledgeBase.length;
+      const docTokensList = knowledgeBase.map((doc) => {
+        const combinedText = `${doc.title} ${doc.title} ${doc.category} ${doc.content}`;
+        return tokenize(combinedText);
+      });
+
+      const df = {};
+      docTokensList.forEach((tokens) => {
+        const unique = new Set(tokens);
+        unique.forEach((t) => {
+          df[t] = (df[t] || 0) + 1;
+        });
+      });
+
+      const idf = {};
+      Object.keys(df).forEach((term) => {
+        idf[term] = Math.log((N + 1) / (df[term] + 0.5)) + 1;
+      });
+
+      const qTf = {};
+      queryTokens.forEach((t) => {
+        qTf[t] = (qTf[t] || 0) + 1;
+      });
+      const qVec = {};
+      let qNorm = 0;
+      Object.keys(qTf).forEach((t) => {
+        const weight = (1 + Math.log(qTf[t])) * (idf[t] || Math.log(N + 1) + 1);
+        qVec[t] = weight;
+        qNorm += weight * weight;
+      });
+      qNorm = Math.sqrt(qNorm) || 1;
+
+      const scored = knowledgeBase.map((doc, idx) => {
+        const tokens = docTokensList[idx];
+        const dTf = {};
+        tokens.forEach((t) => {
+          dTf[t] = (dTf[t] || 0) + 1;
+        });
+
+        let dot = 0;
+        let dNorm = 0;
+        Object.keys(dTf).forEach((t) => {
+          const w = (1 + Math.log(dTf[t])) * (idf[t] || 1);
+          dNorm += w * w;
+          if (qVec[t]) {
+            dot += w * qVec[t];
+          }
+        });
+        dNorm = Math.sqrt(dNorm) || 1;
+
+        const similarity = dot / (qNorm * dNorm);
+        return { doc, score: similarity };
+      });
+
+      return scored
+        .sort((a, b) => b.score - a.score)
+        .slice(0, topK);
+    }
+
+    /**
+     * ============================================================================
+     * 3. GEMINI API / LOCAL RAG SYNTHESIZER
+     * ============================================================================
+     */
+    async function generateGroundedResponse(userQuestion, retrievedChunks) {
+      const apiKey = ""; // Optional runtime API key
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const contextBlock = retrievedChunks
+        .map(
+          (item, i) =>
+            `[Source ${i + 1}: ${item.doc.title} | Category: ${item.doc.category} | Relevance: ${Math.round(
+              item.score * 100
+            )}%]\n${item.doc.content}`
+        )
+        .join('\n\n');
+
+      const systemInstruction = `You are GeoGuard AI, an expert Geospatial & Geotechnical Engineering Assistant embedded inside the LEWDSS Landslide Susceptibility & Decision Support System.
+Your primary responsibility is to answer user questions accurately, clearly, and concisely using the RETRIEVED KNOWLEDGE BASE CONTEXT provided below.
+
+Rules:
+1. Ground your explanation primarily in the retrieved context chunks and explicitly reference the relevant Source titles (e.g., according to *Topographic Factors: Slope Angle, Aspect & Elevation* or *State-Space Modeling: Soil Saturation DLM*).
+2. If the user asks a broader landslide/GIS question not fully covered in the snippets, supplement smoothly with established geotechnical engineering knowledge while noting what comes from the knowledge base.
+3. Format responses cleanly with short paragraphs, bullet points, and bold key terms so they look great inside both a compact chat widget and full screen.
+4. Keep answers actionable, clear, and well-structured.`;
+
+      const promptWithRag = `RETRIEVED KNOWLEDGE BASE CONTEXT:
+${contextBlock}
+
+USER QUESTION:
+${userQuestion}`;
+
+      if (apiKey && apiKey.length > 5) {
+        const contents = [
+          ...chatHistory.slice(-6).map((msg) => ({
+            role: msg.role === 'user' ? 'user' : 'model',
+            parts: [{ text: msg.text }],
+          })),
+          {
+            role: 'user',
+            parts: [{ text: promptWithRag }],
+          },
+        ];
+
+        const payload = {
+          contents,
+          systemInstruction: {
+            parts: [{ text: systemInstruction }],
+          },
+        };
+
+        const delays = [1000, 2000, 4000];
+        for (let attempt = 0; attempt <= delays.length; attempt++) {
+          try {
+            const response = await fetch(apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const result = await response.json();
+            const answerText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (answerText) return answerText;
+            throw new Error('Empty response');
+          } catch (err) {
+            if (attempt < delays.length) {
+              await new Promise((res) => setTimeout(res, delays[attempt]));
+            }
+          }
+        }
+      }
+
+      // If no API key or offline, use our high-fidelity local grounded RAG synthesizer
+      return buildLocalRagFallback(userQuestion, retrievedChunks);
+    }
+
+    function buildLocalRagFallback(question, chunks) {
+      if (!chunks || chunks.length === 0) {
+        return 'No directly matching documents were found in the local knowledge base. Please add project documentation in the Knowledge Base tab or refine your query.';
+      }
+      const primary = chunks[0].doc;
+      const secondary = chunks[1]?.doc;
+      const tertiary = chunks[2]?.doc;
+
+      let reply = `Based on retrieved knowledge from **${primary.title}** (*${primary.category}*):\n\n${primary.content}`;
+      if (secondary && chunks[1].score > 0.08) {
+        reply += `\n\n**Additional Evidence (${secondary.title}):**\n${secondary.content}`;
+      }
+      if (tertiary && chunks[2].score > 0.12) {
+        reply += `\n\n**Operational Context (${tertiary.title}):**\n${tertiary.content}`;
+      }
+      return reply;
+    }
+
+    /**
+     * ============================================================================
+     * 4. CHAT UI RENDERING & INTERACTION LOGIC
+     * ============================================================================
+     */
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatMarkdown(text) {
+      let html = escapeHtml(text);
+      html = html.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-950 text-emerald-300 font-mono text-xs">$1</code>');
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-white">$1</strong>');
+      html = html.replace(/\*([^*]+)\*/g, '<em class="italic text-slate-200">$1</em>');
+      const lines = html.split('\n');
+      let inList = false;
+      const formattedLines = lines.map((line) => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('- ') || trimmed.startsWith('• ') || /^\d+\.\s/.test(trimmed)) {
+          const content = trimmed.replace(/^(- |• |\d+\.\s)/, '');
+          if (!inList) {
+            inList = true;
+            return `<ul class="list-disc pl-5 space-y-1 my-1.5 text-slate-200"><li>${content}</li>`;
+          }
+          return `<li>${content}</li>`;
+        } else {
+          if (inList) {
+            inList = false;
+            return `</ul><p class="mt-1.5">${line}</p>`;
+          }
+          return trimmed === '' ? '<div class="h-1.5"></div>' : `<p>${line}</p>`;
+        }
+      });
+      if (inList) formattedLines.push('</ul>');
+      return formattedLines.join('');
+    }
+
+    function appendUserMessage(text) {
+      const list = document.getElementById('messages-list');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flex justify-end';
+      wrapper.innerHTML = `
+        <div class="max-w-[85%] sm:max-w-[78%] rounded-2xl rounded-tr-sm bg-emerald-600 text-white px-4 py-3 text-xs sm:text-sm shadow-md leading-relaxed">
+          ${escapeHtml(text)}
+        </div>
+      `;
+      list.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function appendTypingIndicator() {
+      const list = document.getElementById('messages-list');
+      const loader = document.createElement('div');
+      loader.id = 'typing-indicator';
+      loader.className = 'flex items-start gap-2.5';
+      loader.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 19l6-10 4 6 3-4 5 8H3z" />
+          </svg>
+        </div>
+        <div class="rounded-2xl rounded-tl-sm bg-slate-800/90 border border-slate-700/80 px-4 py-3 flex items-center gap-2">
+          <span class="text-xs text-slate-400 mr-1">Retrieving RAG sources</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 typing-dot"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 typing-dot"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 typing-dot"></span>
+        </div>
+      `;
+      list.appendChild(loader);
+      scrollToBottom();
+    }
+
+    function removeTypingIndicator() {
+      const el = document.getElementById('typing-indicator');
+      if (el) el.remove();
+    }
+
+    function appendAssistantMessage(answerText, retrievedChunks) {
+      const list = document.getElementById('messages-list');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flex items-start gap-2.5';
+
+      const citationsHtml = retrievedChunks
+        .map((item, idx) => {
+          const pct = Math.max(12, Math.min(99, Math.round(item.score * 100)));
+          const badgeColor =
+            pct >= 45
+              ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+              : pct >= 25
+              ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+              : 'bg-slate-800 text-slate-300 border-slate-700';
+
+          return `
+            <details class="group bg-slate-950/80 border border-slate-800 rounded-xl overflow-hidden">
+              <summary class="cursor-pointer list-none px-3 py-2 flex items-center justify-between gap-2 text-[11px] hover:bg-slate-900/90 transition">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="font-mono text-slate-500">[${idx + 1}]</span>
+                  <span class="font-medium text-slate-200 truncate">${escapeHtml(item.doc.title)}</span>
+                </div>
+                <span class="shrink-0 px-2 py-0.5 rounded-md border font-mono text-[10px] ${badgeColor}">
+                  ${pct}% match
+                </span>
+              </summary>
+              <div class="px-3 pb-2.5 pt-1 text-[11px] text-slate-400 border-t border-slate-800/80 leading-relaxed">
+                <span class="inline-block text-[10px] uppercase tracking-wider text-amber-400/90 font-semibold mb-1">${escapeHtml(
+                  item.doc.category
+                )}</span>
+                <p>${escapeHtml(item.doc.content)}</p>
+              </div>
+            </details>
+          `;
+        })
+        .join('');
+
+      wrapper.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 19l6-10 4 6 3-4 5 8H3z" />
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0 max-w-[90%] sm:max-w-[85%] space-y-2.5">
+          <div class="rounded-2xl rounded-tl-sm bg-slate-800/85 border border-slate-700/80 px-4 py-3.5 text-xs sm:text-sm text-slate-200 leading-relaxed shadow-md">
+            ${formatMarkdown(answerText)}
+          </div>
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 px-1">
+              <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Retrieved Knowledge Sources (Click to inspect chunk)</span>
+            </div>
+            <div class="grid grid-cols-1 gap-1.5">
+              ${citationsHtml}
+            </div>
+          </div>
+        </div>
+      `;
+      list.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    async function processUserQuery(question) {
+      const cleanQuestion = question.trim();
+      if (!cleanQuestion || isGenerating) return;
+
+      isGenerating = true;
+      document.getElementById('send-btn').disabled = true;
+
+      appendUserMessage(cleanQuestion);
+      appendTypingIndicator();
+
+      const retrievedChunks = retrieveRelevantChunks(cleanQuestion, 3);
+      const aiResponse = await generateGroundedResponse(cleanQuestion, retrievedChunks);
+
+      chatHistory.push({ role: 'user', text: cleanQuestion });
+      chatHistory.push({ role: 'model', text: aiResponse });
+
+      removeTypingIndicator();
+      appendAssistantMessage(aiResponse, retrievedChunks);
+
+      isGenerating = false;
+      document.getElementById('send-btn').disabled = false;
+    }
+
+    function handleChatSubmit(event) {
+      event.preventDefault();
+      const input = document.getElementById('user-input');
+      const text = input.value;
+      if (!text.trim()) return;
+      input.value = '';
+      input.style.height = 'auto';
+      processUserQuery(text);
+    }
+
+    function sendQuickPrompt(promptText) {
+      processUserQuery(promptText);
+    }
+
+    function handleTextareaKeydown(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        handleChatSubmit(event);
+      }
+    }
+
+    function autoResizeTextarea(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 128) + 'px';
+    }
+
+    function scrollToBottom() {
+      const feed = document.getElementById('chat-feed');
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function clearChat() {
+      chatHistory = [];
+      document.getElementById('messages-list').innerHTML = '';
+      showToast('Conversation cleared', 'info');
+    }
+
+    /**
+     * ============================================================================
+     * 5. KNOWLEDGE BASE PERSISTENCE & MANAGEMENT
+     * ============================================================================
+     */
+    function loadKnowledgeBase() {
+      try {
+        const saved = localStorage.getItem('geoguard_rag_kb_v2');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            knowledgeBase = parsed;
+            renderKnowledgeBaseUI();
+            return;
+          }
+        }
+      } catch (e) {}
+      knowledgeBase = [...DEFAULT_KNOWLEDGE_BASE];
+      renderKnowledgeBaseUI();
+    }
+
+    function saveKnowledgeBase() {
+      try {
+        localStorage.setItem('geoguard_rag_kb_v2', JSON.stringify(knowledgeBase));
+      } catch (e) {}
+      renderKnowledgeBaseUI();
+    }
+
+    function renderKnowledgeBaseUI() {
+      document.getElementById('kb-count-badge').textContent = knowledgeBase.length;
+      document.getElementById('kb-modal-count').textContent = knowledgeBase.length;
+
+      const listEl = document.getElementById('kb-documents-list');
+      listEl.innerHTML = knowledgeBase
+        .map(
+          (doc) => `
+        <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start justify-between gap-3">
+          <div class="min-w-0 space-y-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-semibold text-white">${escapeHtml(doc.title)}</span>
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/25">
+                ${escapeHtml(doc.category)}
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">${escapeHtml(doc.content)}</p>
+          </div>
+          <button onclick="deleteDocument('${doc.id}')" title="Remove Chunk"
+            class="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-slate-900 shrink-0 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </div>
+      `
+        )
+        .join('');
+    }
+
+    function addCustomDocument() {
+      const titleInput = document.getElementById('new-doc-title');
+      const catInput = document.getElementById('new-doc-category');
+      const contentInput = document.getElementById('new-doc-content');
+
+      const title = titleInput.value.trim();
+      const category = catInput.value.trim() || 'Custom Study Area';
+      const content = contentInput.value.trim();
+
+      if (!title || !content) {
+        showToast('Please enter both a section title and content.', 'error');
+        return;
+      }
+
+      const chunks = chunkText(content, 650);
+      chunks.forEach((chunkStr, i) => {
+        knowledgeBase.unshift({
+          id: 'custom-' + Date.now() + '-' + i,
+          title: chunks.length > 1 ? `${title} (Part ${i + 1})` : title,
+          category,
+          content: chunkStr,
+        });
+      });
+
+      titleInput.value = '';
+      catInput.value = '';
+      contentInput.value = '';
+      saveKnowledgeBase();
+      showToast(`Indexed ${chunks.length} new chunk(s) into RAG engine!`, 'success');
+    }
+
+    function chunkText(text, maxLen = 650) {
+      if (text.length <= maxLen) return [text];
+      const sentences = text.match(/[^.!?]+[.!?]+|\s*[^.!?]+$/g) || [text];
+      const chunks = [];
+      let current = '';
+      sentences.forEach((sentence) => {
+        if ((current + sentence).length > maxLen && current.length > 0) {
+          chunks.push(current.trim());
+          current = sentence;
+        } else {
+          current += ' ' + sentence;
+        }
+      });
+      if (current.trim()) chunks.push(current.trim());
+      return chunks;
+    }
+
+    function handleFileUpload(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const rawText = String(e.target?.result || '').trim();
+        if (!rawText) {
+          showToast('Uploaded file is empty.', 'error');
+          return;
+        }
+        document.getElementById('new-doc-title').value = file.name.replace(/\.[^/.]+$/, '');
+        document.getElementById('new-doc-category').value = 'Uploaded File';
+        document.getElementById('new-doc-content').value = rawText.slice(0, 6000);
+        showToast(`Loaded "${file.name}". Click "Index into RAG Engine" to save.`, 'info');
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function deleteDocument(id) {
+      knowledgeBase = knowledgeBase.filter((d) => d.id !== id);
+      saveKnowledgeBase();
+      showToast('Knowledge chunk removed.', 'info');
+    }
+
+    function resetDefaultKB() {
+      knowledgeBase = [...DEFAULT_KNOWLEDGE_BASE];
+      saveKnowledgeBase();
+      showToast('Restored default Landslide Susceptibility knowledge base.', 'success');
+    }
+
+    /**
+     * ============================================================================
+     * 6. EMBED / WIDGET MODE & ANTIGRAVITY SNIPPET GENERATOR
+     * ============================================================================
+     */
+    function applyLayoutMode(widgetEnabled) {
+      isWidgetMode = widgetEnabled;
+      const shell = document.getElementById('app-shell');
+      const launcher = document.getElementById('widget-launcher-wrapper');
+      const closeBtn = document.getElementById('widget-close-btn');
+      const previewBtn = document.getElementById('preview-mode-btn');
+
+      if (isWidgetMode) {
+        launcher.classList.remove('hidden');
+        closeBtn.classList.remove('hidden');
+        if (previewBtn) previewBtn.textContent = 'Switch to Full-Screen Mode';
+
+        shell.className =
+          'fixed bottom-20 right-5 z-40 w-[calc(100vw-2.5rem)] sm:w-[420px] h-[580px] max-h-[calc(100vh-6.5rem)] flex flex-col bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl transition-all duration-300';
+        if (!isWidgetOpen) {
+          shell.classList.add('hidden');
+        }
+      } else {
+        launcher.classList.add('hidden');
+        closeBtn.classList.add('hidden');
+        if (previewBtn) previewBtn.textContent = 'Switch to Widget Mode';
+
+        shell.className =
+          'w-full h-screen flex flex-col bg-slate-900/95 border-slate-800 transition-all duration-300';
+      }
+    }
+
+    function toggleWidgetChat() {
+      isWidgetOpen = !isWidgetOpen;
+      const shell = document.getElementById('app-shell');
+      const label = document.getElementById('widget-btn-label');
+      if (isWidgetOpen) {
+        shell.classList.remove('hidden');
+        label.textContent = 'Close Assistant';
+        scrollToBottom();
+      } else {
+        shell.classList.add('hidden');
+        label.textContent = 'Ask GeoGuard RAG';
+      }
+    }
+
+    function togglePreviewWidgetMode() {
+      isWidgetOpen = true;
+      applyLayoutMode(!isWidgetMode);
+      closeModal('embed-modal');
+      showToast(
+        isWidgetMode
+          ? 'Previewing Floating Widget Mode (?mode=widget)'
+          : 'Switched back to Full-Screen Mode',
+        'info'
+      );
+    }
+
+    function populateEmbedSnippets() {
+      const baseUrl = window.location.href.split('?')[0];
+      const widgetUrl = `${baseUrl}?mode=widget`;
+
+      document.getElementById('shareable-url-input').value = baseUrl;
+
+      document.getElementById('iframe-widget-snippet').value =
+        `<!-- GeoGuard Landslide RAG Chatbot Widget -->\n` +
+        `<iframe src="${widgetUrl}"\n` +
+        `  title="Landslide Susceptibility AI Assistant"\n` +
+        `  style="position:fixed;bottom:0;right:0;width:440px;height:640px;max-width:100vw;max-height:100vh;border:none;z-index:9999;background:transparent;"\n` +
+        `  allow="clipboard-write"></iframe>`;
+
+      document.getElementById('iframe-inline-snippet').value =
+        `<iframe src="${baseUrl}"\n` +
+        `  title="Landslide Susceptibility RAG Chatbot"\n` +
+        `  style="width:100%;height:650px;border:1px solid #1e293b;border-radius:16px;"></iframe>`;
+    }
+
+    function openModal(id) {
+      if (id === 'embed-modal') populateEmbedSnippets();
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function copyTextFromInput(elementId) {
+      const el = document.getElementById(elementId);
+      el.select();
+      el.setSelectionRange(0, 99999);
+      try {
+        document.execCommand('copy');
+        showToast('Copied to clipboard!', 'success');
+      } catch (err) {
+        showToast('Unable to copy automatically. Please press Ctrl+C.', 'error');
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors =
+        type === 'success'
+          ? 'bg-emerald-950/95 border-emerald-500/50 text-emerald-200'
+          : type === 'error'
+          ? 'bg-rose-950/95 border-rose-500/50 text-rose-200'
+          : 'bg-slate-900/95 border-slate-700 text-slate-200';
+
+      toast.className = `pointer-events-auto px-3.5 py-2.5 rounded-xl border text-xs font-medium shadow-xl backdrop-blur-md transition-all duration-300 ${colors}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-6px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 2800);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadKnowledgeBase();
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') === 'widget') {
+        isWidgetOpen = false;
+        applyLayoutMode(true);
+      } else {
+        applyLayoutMode(false);
+      }
+    });
+  </script>
+</body>
+</html>

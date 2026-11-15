@@ -36,16 +36,25 @@ from src.decision_support.rlsi_engine import (
 )
 from src.decision_support.sop_guidance import get_sop_guidance, INSTITUTIONAL_DISCLAIMER
 from src.models.spatial_cv import FEATURE_SETS
+from src.rag.engine import RAGEngine
 
 DATASET_PATH = PROJECT_ROOT / "data/processed/dataset_v1_features.csv"
 RESULTS_JSON_PATH = PROJECT_ROOT / "reports/phase3_experiment_results.json"
 SHAP_JSON_PATH = PROJECT_ROOT / "reports/phase3_shap_summary.json"
 FRONTEND_DIR = PROJECT_ROOT / "frontend"
 
-# Cache loaded dataset and JSON metadata
+# Cache loaded dataset, JSON metadata, and RAG engine
 _DATASET_CACHE: Optional[pd.DataFrame] = None
 _RESULTS_CACHE: Optional[Dict[str, Any]] = None
 _SHAP_CACHE: Optional[Dict[str, Any]] = None
+_RAG_ENGINE: Optional[RAGEngine] = None
+
+
+def get_rag_engine() -> RAGEngine:
+    global _RAG_ENGINE
+    if _RAG_ENGINE is None:
+        _RAG_ENGINE = RAGEngine()
+    return _RAG_ENGINE
 
 
 def get_dataset() -> pd.DataFrame:
@@ -129,6 +138,8 @@ class LEWDSSRequestHandler(BaseHTTPRequestHandler):
             self._handle_explainability(district_name)
         elif path == "/api/models/audit":
             self._handle_audit()
+        elif path == "/api/rag/knowledge":
+            self._handle_rag_knowledge()
         elif path.startswith("/api/"):
             self._send_error(f"Unknown API endpoint: {path}", status=404)
         else:
@@ -136,12 +147,14 @@ class LEWDSSRequestHandler(BaseHTTPRequestHandler):
             self._serve_static(path)
 
     def do_POST(self):
-        """Handle POST requests for model inference."""
+        """Handle POST requests for model inference and RAG queries."""
         parsed = urlparse(self.path)
         path = unquote(parsed.path).rstrip("/")
 
         if path == "/api/predict/rlsi":
             self._handle_predict_rlsi()
+        elif path == "/api/rag/query":
+            self._handle_rag_query()
         else:
             self._send_error(f"Unknown POST endpoint: {path}", status=404)
 
@@ -374,6 +387,38 @@ class LEWDSSRequestHandler(BaseHTTPRequestHandler):
         rlsi_res["district_scenario"] = district
 
         self._send_json(rlsi_res)
+
+    def _handle_rag_knowledge(self):
+        """Return the list of indexed RAG knowledge chunks."""
+        rag = get_rag_engine()
+        self._send_json({
+            "total_chunks": len(rag.corpus),
+            "knowledge_base": rag.corpus
+        })
+
+    def _handle_rag_query(self):
+        """Handle natural language query retrieval and grounded response."""
+        content_length = int(self.headers.get("Content-Length", 0))
+        if content_length == 0:
+            self._send_error("Empty request body. Expected JSON with 'query'.", status=400)
+            return
+
+        try:
+            body = self.rfile.read(content_length).decode("utf-8")
+            data = json.loads(body)
+        except Exception as e:
+            self._send_error(f"Malformed JSON: {e}", status=400)
+            return
+
+        query = data.get("query", "").strip()
+        if not query:
+            self._send_error("Missing 'query' string in request body.", status=400)
+            return
+
+        top_k = int(data.get("top_k", 3))
+        rag = get_rag_engine()
+        response = rag.answer_query(query, top_k=top_k)
+        self._send_json(response)
 
     def _serve_static(self, path: str):
         """Serve static files from the frontend directory."""
